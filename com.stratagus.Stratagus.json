@@ -1,0 +1,154 @@
+{
+    "id": "com.stratagus.Stratagus",
+    "branch": "stable",
+    "runtime": "org.freedesktop.Platform",
+    "sdk": "org.freedesktop.Sdk",
+    "runtime-version": "1.6",
+    "sdk-extensions": [
+        "org.freedesktop.Sdk.Extension.ImageMagick"
+    ],
+    "finish-args": [
+        "--socket=x11", "--share=ipc",
+        "--device=dri",
+        "--socket=pulseaudio",
+        "--persist=.stratagus"
+    ],
+    "command": "stratagus",
+    "modules": [
+        {
+            "name": "lua",
+            "buildsystem": "cmake-ninja",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/LuaDist/lua/archive/5.1.4.tar.gz",
+                    "sha256": "f89b27c7973325c30e63117f41588108fcbfaf31bc1dad65cf1fba0ff97f35cb"
+                }
+            ],
+            "cleanup": [
+                "/include",
+                "/share/lua"
+            ]
+        },
+        {
+            "name": "tolua++",
+            "buildsystem": "cmake-ninja",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/LuaDist/toluapp/archive/1.0.93.tar.gz",
+                    "sha256": "0a1ff87cb74e7531aec57e2a7cfdf282116647dea3b46223e3cc7c362b55b5bb"
+                }
+            ],
+            "cleanup": [
+                "/include",
+                "/share/toluapp"
+            ]
+        },
+        "../shared-modules/SDL/SDL-1.2.15.json",
+        "../shared-modules/glu/glu-9.0.0.json",
+        {
+            "name": "stormlib",
+            "buildsystem": "cmake-ninja",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/ladislav-zezula/StormLib/archive/v9.22.tar.gz",
+                    "sha256": "7ed583aae5549ba1abc68a8fc9a642b28323cdf835941bd9b2b549a7b623e53d"
+                }
+            ],
+            "cleanup": [
+                "/include",
+                "/lib/*.a",
+                "/lib/*.la"
+            ]
+        },
+        {
+            "name": "stratagus",
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
+            "config-opts": [
+                "-DENABLE_USEGAMEDIR=OFF",
+                "-DENABLE_DEV=ON",
+                "-DGAMEDIR=/app/bin"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/Wargus/stratagus.git",
+                    "tag": "v2.4.1"
+                }
+            ],
+            "cleanup": [
+                "/include"
+            ]
+        },
+        {
+            "name": "wargus",
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
+            "config-opts": [
+                "-DGAMEDIR=/app/bin"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/Wargus/wargus.git",
+                    "tag": "v2.4.1"
+                }
+            ],
+            "post-install": [
+                "install -Dm644 /app/share/pixmaps/wargus.png /app/share/icons/hicolor/64x64/apps/com.stratagus.Stratagus-wargus.png",
+                "sed 's/Icon=/Icon=com.stratagus.Stratagus-/g' -i /app/share/applications/wargus.desktop",
+                "mv /app/share/applications/{,com.stratagus.Stratagus-}wargus.desktop"
+            ]
+        },
+        {
+            "name": "stargus",
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
+            "config-opts": [
+                "-DGAMEDIR=/app/bin"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/Wargus/stargus.git",
+                    "tag": "v2.4.1"
+                }
+            ],
+            "post-install": [
+                "mv /app/games/stargus /app/bin/",
+                "rmdir /app/games",
+                "install -Dm644 /app/share/pixmaps/stargus.png /app/share/icons/hicolor/32x32/apps/com.stratagus.Stratagus-stargus.png",
+                "sed 's/Icon=/Icon=com.stratagus.Stratagus-/g' -i /app/share/applications/stargus.desktop",
+                "mv /app/share/applications/{,com.stratagus.Stratagus-}stargus.desktop"
+            ]
+        },
+        {
+            "name": "war1gus",
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
+            "config-opts": [
+                "-DGAMEDIR=/app/bin"
+            ],
+            "build-options" : {
+                "env": {
+                    "PATH": "/usr/lib/sdk/ImageMagick/bin:/app/bin:/usr/bin"
+                }
+            },
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/Wargus/war1gus.git",
+                    "tag": "v2.4.1"
+                }
+            ],
+            "post-install": [
+                "install -Dm644 /app/share/pixmaps/war1gus.png /app/share/icons/hicolor/32x32/apps/com.stratagus.Stratagus-war1gus.png",
+                "sed 's/Icon=/Icon=com.stratagus.Stratagus-/g' -i /app/share/applications/war1gus.desktop",
+                "mv /app/share/applications/{,com.stratagus.Stratagus-}war1gus.desktop"
+            ]
+        }
+    ]
+}
