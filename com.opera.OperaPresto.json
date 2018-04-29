@@ -1,0 +1,45 @@
+{
+    "id": "com.opera.OperaPresto",
+    "runtime": "org.freedesktop.Platform",
+    "runtime-version": "1.6",
+    "sdk": "org.freedesktop.Sdk",
+    "command": "opera",
+    "rename-desktop-file": "opera-browser.desktop",
+    "rename-icon": "opera-browser",
+    "finish-args": [
+        "--socket=x11", "--share=ipc",
+        "--share=network",
+        "--socket=pulseaudio",
+        "--device=all",
+        "--persist=.opera"
+    ],
+    "separate-locales": false,
+    "modules": [
+        {
+            "name": "opera",
+            "buildsystem": "simple",
+            "build-commands": [
+                "./install --system --text --unattended --prefix /app --repackage /app"
+            ],
+            "build-options": {
+                "strip": false,
+                "no-debuginfo": true
+            },
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://get.geo.opera.com/pub/opera/linux/1216/opera-12.16-1860.x86_64.linux.tar.bz2",
+                    "sha1": "cfa5d60b10a348a575b64671ca75b7dd784c4586"
+                }
+            ],
+            "post-install": [
+                "for f in /app/share/icons/hicolor/*/mimetypes/opera-extension.{png,svg}; do mv $f ${f/opera-/com.opera.OperaPresto-}; done",
+                "mv /app/share/mime/packages/{opera,com.opera.OperaPresto}-extension.xml"
+            ],
+            "cleanup": [
+                "/bin/uninstall-opera",
+                "/share/man"
+            ]
+        }
+    ]
+}
