@@ -1,0 +1,77 @@
+{
+    "app-id": "net.rpcs3.RPCS3",
+    "runtime": "org.kde.Platform",
+    "runtime-version": "5.10",
+    "sdk": "org.kde.Sdk",
+    "command": "rpcs3",
+    "rename-desktop-file": "rpcs3.desktop",
+    "rename-appdata-file": "rpcs3.appdata.xml",
+    "rename-icon": "rpcs3",
+    "finish-args": [
+        "--device=all",
+        "--socket=pulseaudio",
+        "--socket=x11", "--share=ipc",
+        "--socket=wayland"
+    ],
+    "modules": [
+        "../shared-modules/glu/glu-9.0.0.json",
+        "../shared-modules/glew/glew.json",
+        "../shared-modules/udev/udev-175.json",
+        {
+            "name": "evdev",
+            "config-opts": ["--disable-static"],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://freedesktop.org/software/libevdev/libevdev-1.5.7.tar.xz",
+                    "sha256": "a1e59e37a2f0d397ffd7e83b73af0e638db83b8dd08902ef0f651a21cc1dd422"
+                }
+            ],
+            "cleanup": [
+                "/bin",
+                "/include",
+                "/lib/pkgconfig",
+                "/lib/*.la",
+                "/share/man"
+            ]
+        },
+        {
+            "name": "rpcs3",
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
+            "config-opts": [
+                "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
+                "-DUSE_ALSA=OFF",
+                "-DUSE_SYSTEM_LIBPNG=ON",
+                "-DCMAKE_C_COMPILER=clang",
+                "-DCMAKE_CXX_COMPILER=clang++",
+                "-DUSE_NATIVE_INSTRUCTIONS=ON"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/RPCS3/rpcs3.git"
+                }
+            ],
+            "cleanup": [
+                "/lib/*.a", "/lib/*.la",
+                "/include/llvm", "/include/llvm-c",
+                "/lib/cmake",
+                "/bin/llvm*"
+            ]
+        },
+        {
+            "name": "rpcs3-metadata",
+            "buildsystem": "simple",
+            "build-commands": [
+                "install -Dm644 net.rpcs3.RPCS3.appdata.xml /app/share/appdata/rpcs3.appdata.xml"
+            ],
+            "sources": [
+                {
+                    "type": "file",
+                    "path": "net.rpcs3.RPCS3.appdata.xml"
+                }
+            ]
+        }
+    ]
+}

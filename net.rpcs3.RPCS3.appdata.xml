@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+    <id>net.rpcs3.RPCS3.desktop</id>
+    <name>RPCS3</name>
+    <summary>A PlayStation 3 emulator</summary>
+    <description>
+        <p>The world's first open-source PlayStation 3 emulator/debugger written in C++ for Windows and Linux.</p>
+        <p>You can find some basic information in our website. For discussion about this emulator and PS3 emulation please visit our forums and our Discord server.</p>
+    </description>
+    <categories>
+        <category>Game</category>
+        <category>Emulator</category>
+    </categories>
+    <metadata_license>CC0-1.0</metadata_license>
+    <project_license>GPL-2.0</project_license>
+    <url type="homepage">https://rpcs3.net/</url>
+    <url type="bugtracker">https://github.com/RPCS3/rpcs3/issues</url>
+    <url type="help">https://rpcs3.net/quickstart</url>
+    <launchable type="desktop-id">net.rpcs3.RPCS3.desktop</launchable>
+    <screenshots>
+        <screenshot type="default">
+            <image>https://rpcs3.net/blog/wp-content/uploads/2017/05/progress/vklinux.jpg</image>
+        </screenshot>
+    </screenshots>
+</component>
