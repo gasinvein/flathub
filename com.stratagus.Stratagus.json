@@ -53,14 +53,7 @@
                     "sha256": "eb153673ba7ab20ad2551453dbbbf05d5050630b369116230bb2589a6318b0a5"
                 }
             ],
-            "cleanup": [
-                "/include",
-                "/lib/pkgconfig",
-                "/lib/*.a",
-                "/lib/*.la",
-                "/share/man",
-                "/share/doc"
-            ]
+            "cleanup": [ "*" ]
         },
         {
             "name": "fluidsynth",
@@ -97,7 +90,9 @@
                 "/include",
                 "/lib/pkgconfig",
                 "/lib/*.a",
-                "/lib/*.la"
+                "/lib/*.la",
+                "/share/man",
+                "/share/info"
             ]
         },
         {
@@ -113,7 +108,8 @@
                 "/include",
                 "/lib/pkgconfig",
                 "/lib/*.a",
-                "/lib/*.la"
+                "/lib/*.la",
+                "/share/man"
             ]
         },
         {
@@ -152,7 +148,8 @@
                 "/include",
                 "/lib/pkgconfig",
                 "/lib/*.a",
-                "/lib/*.la"
+                "/lib/*.la",
+                "/man"
             ]
         },
         {
@@ -180,7 +177,8 @@
                 "/include",
                 "/lib/pkgconfig",
                 "/lib/*.a",
-                "/lib/*.la"
+                "/lib/*.la",
+                "/man"
             ]
         },
         {
@@ -282,6 +280,20 @@
                 "install -Dm644 /app/share/pixmaps/war1gus.png /app/share/icons/hicolor/64x64/apps/com.stratagus.Stratagus-war1gus.png",
                 "sed 's/Icon=/Icon=com.stratagus.Stratagus-/g' -i /app/share/applications/war1gus.desktop",
                 "mv /app/share/applications/{,com.stratagus.Stratagus-}war1gus.desktop"
+            ]
+        },
+        {
+            "name": "timgm6mb-soundfont",
+            "buildsystem": "simple",
+            "build-commands": [
+                "install -Dm644 TimGM6mb.sf2 /app/share/soundfonts/TimGM6mb.sf2"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "http://http.debian.net/debian/pool/main/t/timgm6mb-soundfont/timgm6mb-soundfont_1.3.orig.tar.gz",
+                    "sha1": "2ba5e0070863970055c74d5a8ed84538e14f6124"
+                }
             ]
         }
     ]
