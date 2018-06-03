@@ -4,9 +4,6 @@
     "runtime": "org.freedesktop.Platform",
     "sdk": "org.freedesktop.Sdk",
     "runtime-version": "1.6",
-    "sdk-extensions": [
-        "org.freedesktop.Sdk.Extension.ImageMagick"
-    ],
     "finish-args": [
         "--socket=x11", "--share=ipc",
         "--device=dri",
@@ -45,11 +42,32 @@
                 "/share/toluapp"
             ]
         },
-        "../shared-modules/SDL/SDL-1.2.15.json",
-        "../shared-modules/glu/glu-9.0.0.json",
+        "shared-modules/SDL/SDL-1.2.15.json",
+        "shared-modules/glu/glu-9.0.0.json",
+        {
+            "name": "imagemagick",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/ImageMagick/ImageMagick/archive/7.0.7-35.tar.gz",
+                    "sha256": "eb153673ba7ab20ad2551453dbbbf05d5050630b369116230bb2589a6318b0a5"
+                }
+            ],
+            "cleanup": [
+                "/include",
+                "/lib/pkgconfig",
+                "/lib/*.a",
+                "/lib/*.la",
+                "/share/man",
+                "/share/doc"
+            ]
+        },
         {
             "name": "stormlib",
             "buildsystem": "cmake-ninja",
+            "config-opts": [
+                "-DBUILD_SHARED_LIBS=BOOL:ON"
+            ],
             "sources": [
                 {
                     "type": "archive",
@@ -132,11 +150,6 @@
             "config-opts": [
                 "-DGAMEDIR=/app/bin"
             ],
-            "build-options" : {
-                "env": {
-                    "PATH": "/usr/lib/sdk/ImageMagick/bin:/app/bin:/usr/bin"
-                }
-            },
             "sources": [
                 {
                     "type": "git",
