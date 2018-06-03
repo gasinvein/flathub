@@ -63,6 +63,60 @@
             ]
         },
         {
+            "name": "fluidsynth",
+            "buildsystem": "cmake-ninja",
+            "config-opts": [
+                "-DBUILD_SHARED_LIBS=BOOL:ON",
+                "-DLIB_SUFFIX="
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/FluidSynth/fluidsynth/archive/v1.1.11.tar.gz",
+                    "sha256": "da8878ff374d12392eecf87e96bad8711b8e76a154c25a571dd8614d1af80de8"
+                }
+            ],
+            "cleanup": [
+                "/include",
+                "/lib/pkgconfig",
+                "/lib/*.a",
+                "/lib/*.la",
+                "/share/man"
+            ]
+        },
+        {
+            "name": "libmikmod",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://downloads.sourceforge.net/mikmod/libmikmod-3.3.11.1.tar.gz",
+                    "sha256": "ad9d64dfc8f83684876419ea7cd4ff4a41d8bcd8c23ef37ecb3a200a16b46d19"
+                }
+            ],
+            "cleanup": [
+                "/include",
+                "/lib/pkgconfig",
+                "/lib/*.a",
+                "/lib/*.la"
+            ]
+        },
+        {
+            "name": "libmng",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "http://downloads.sourceforge.net/sourceforge/libmng/libmng-2.0.3.tar.xz",
+                    "sha1": "0f141482ffcef6f8cd4413f945a59310ac2e49af"
+                }
+            ],
+            "cleanup": [
+                "/include",
+                "/lib/pkgconfig",
+                "/lib/*.a",
+                "/lib/*.la"
+            ]
+        },
+        {
             "name": "stormlib",
             "buildsystem": "cmake-ninja",
             "config-opts": [
@@ -158,7 +212,7 @@
                 }
             ],
             "post-install": [
-                "install -Dm644 /app/share/pixmaps/war1gus.png /app/share/icons/hicolor/32x32/apps/com.stratagus.Stratagus-war1gus.png",
+                "install -Dm644 /app/share/pixmaps/war1gus.png /app/share/icons/hicolor/64x64/apps/com.stratagus.Stratagus-war1gus.png",
                 "sed 's/Icon=/Icon=com.stratagus.Stratagus-/g' -i /app/share/applications/war1gus.desktop",
                 "mv /app/share/applications/{,com.stratagus.Stratagus-}war1gus.desktop"
             ]
