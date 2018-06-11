@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<component type="desktop">
+<component type="desktop-application">
     <id>net.rpcs3.RPCS3.desktop</id>
     <name>RPCS3</name>
-    <summary>A PlayStation 3 emulator</summary>
+    <summary>Open-source Sony PlayStation 3 Emulator</summary>
     <description>
-        <p>The world's first open-source PlayStation 3 emulator/debugger written in C++ for Windows and Linux.</p>
-        <p>You can find some basic information in our website. For discussion about this emulator and PS3 emulation please visit our forums and our Discord server.</p>
+        <p>RPCS3 is an experimental open-source Sony PlayStation 3 emulator and debugger written in C++ for Windows and Linux. RPCS3 started development in May of 2011 by its founders DH and Hykem. The emulator is currently capable of running over 1800 commercial titles powered by Vulkan and OpenGL.</p>
+        <p>The goal of this project is to experiment, research, and educate on the topic of PlayStation 3 emulation that can be performed on compatible devices and operating systems. All information was obtained legally by purchasing PlayStation 3 hardware and software. Additional information was obtained from various sources on the internet that include but is not limited to system hardware and software documentation. Most of this information can be found on the PlayStation 3 Developer Wiki.</p>
     </description>
     <categories>
         <category>Game</category>
