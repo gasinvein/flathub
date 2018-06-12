@@ -1,0 +1,33 @@
+{
+    "name": "gstreamer-0.10-plugins-good",
+    "rm-configure": true,
+    "sources": [
+        {
+            "type": "archive",
+            "url": "https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-0.10.31.tar.xz",
+            "md5": "555845ceab722e517040bab57f9ace95"
+        },
+        {
+            "type": "patch",
+            "path": "gst-plugins-good-0.10.31-fix-v4l2_munmap.patch"
+        },
+        {
+            "type": "patch",
+            "path": "gst-plugins-good-0.10.31-v4l2src-fix.patch"
+        },
+        {
+            "type": "patch",
+            "path": "gst-plugins-good-0.10.31-Some-blind-compilation-fixes.patch"
+        },
+        {
+            "type": "patch",
+            "path": "gst-plugins-good-0.10.31-v4l2object-Don-t-probe-UVC-devices-for-being-interla.patch"
+        }
+    ],
+    "cleanup": [
+        "/include",
+        "/lib/pkgconfig",
+        "*.a",
+        "*.la"
+    ]
+}

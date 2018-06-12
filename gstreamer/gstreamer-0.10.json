@@ -1,0 +1,28 @@
+{
+    "name": "gstreamer-0.10",
+    "config-opts": [
+        "--disable-tests",
+        "--disable-examples"
+    ],
+    "rm-configure": true,
+    "sources": [
+        {
+            "type": "archive",
+            "url": "https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-0.10.36.tar.xz",
+            "md5": "15389c73e091b1dda915279c388b9cb2"
+        },
+        {
+            "type": "patch",
+            "path": "gstreamer-0.10.36-bison3.patch"
+        }
+    ],
+    "cleanup": [
+        "/include",
+        "/lib/pkgconfig",
+        "/share/aclocal",
+        "*.a",
+        "*.la",
+        "/share/gtk-doc",
+        "/share/man"
+    ]
+}

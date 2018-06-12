@@ -11,17 +11,24 @@
         "--share=network",
         "--socket=pulseaudio",
         "--device=all",
+        "--env=GST_PLUGIN_SYSTEM_PATH=/app/lib/gstreamer-0.10",
         "--persist=.opera"
     ],
-    "separate-locales": false,
     "modules": [
-        "shared-modules/gtk2/gtk2.json",
-        "shared-modules/gtk2/gnome-themes-standard.json",
+        "gtk2/gtk2.json",
+        "gtk2/gnome-themes-standard.json",
+        "gstreamer/gstreamer-0.10.json",
+        "gstreamer/gstreamer-0.10-plugins-base.json",
+        "gstreamer/gstreamer-0.10-plugins-good.json",
         {
             "name": "opera",
             "buildsystem": "simple",
             "build-commands": [
                 "./install --system --text --unattended --prefix /app --repackage /app"
+            ],
+            "post-install": [
+                "for f in /app/share/icons/hicolor/*/mimetypes/opera-extension.{png,svg}; do mv $f ${f/opera-/com.opera.OperaPresto-}; done",
+                "mv /app/share/mime/packages/{opera,com.opera.OperaPresto}-extension.xml"
             ],
             "build-options": {
                 "strip": false,
@@ -30,13 +37,16 @@
             "sources": [
                 {
                     "type": "archive",
+                    "only-arches": [ "x86_64" ],
                     "url": "https://get.geo.opera.com/pub/opera/linux/1216/opera-12.16-1860.x86_64.linux.tar.bz2",
-                    "sha1": "cfa5d60b10a348a575b64671ca75b7dd784c4586"
+                    "sha256": "29088a65ce0ba6781bf6aeff6f744cc5b59511ee1c43ea97564665c8bf0a73b0"
+                },
+                {
+                    "type": "archive",
+                    "only-arches": [ "i386" ],
+                    "url": "https://get.geo.opera.com/pub/opera/linux/1216/opera-12.16-1860.i386.linux.tar.bz2",
+                    "sha256": "b0c3736f5cb6609b704aa814b9aecbad520e8e56122f3896b2f1d9191afc57a1"
                 }
-            ],
-            "post-install": [
-                "for f in /app/share/icons/hicolor/*/mimetypes/opera-extension.{png,svg}; do mv $f ${f/opera-/com.opera.OperaPresto-}; done",
-                "mv /app/share/mime/packages/{opera,com.opera.OperaPresto}-extension.xml"
             ],
             "cleanup": [
                 "/bin/uninstall-opera",

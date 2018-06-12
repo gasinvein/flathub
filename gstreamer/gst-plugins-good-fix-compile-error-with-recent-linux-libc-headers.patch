@@ -1,0 +1,81 @@
+From patchwork Wed Sep  5 17:50:11 2012
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: gst-plugins-good: fix compile error with recent linux-libc-headers
+Date: Wed, 05 Sep 2012 17:50:11 -0000
+From: =?utf-8?q?Andreas_M=C3=BCller_=3Cschnitzeltony=40googlemail=2Ecom=3E?=
+X-Patchwork-Id: 35979
+Message-Id: <1346867411-8227-1-git-send-email-schnitzeltony@googlemail.com>
+To: openembedded-core@lists.openembedded.org
+
+With linux-libc-headers-3.5.0 (for tests) the error message was:
+
+| gstv4l2bufferpool.c: In function 'gst_v4l2_buffer_new':
+| gstv4l2bufferpool.c:184:3: error: 'struct v4l2_buffer' has no member named 'input'
+
+Signed-off-by: Andreas Müller <schnitzeltony@googlemail.com>
+
+---
+...ild-with-recent-kernels-the-v4l2_buffer-i.patch |   33 ++++++++++++++++++++
+ .../gstreamer/gst-plugins-good_0.10.31.bb          |    4 ++-
+ 2 files changed, 36 insertions(+), 1 deletions(-)
+ create mode 100644 meta/recipes-multimedia/gstreamer/gst-plugins-good-0.10.31/0001-v4l2-fix-build-with-recent-kernels-the-v4l2_buffer-i.patch
+
+diff --git a/meta/recipes-multimedia/gstreamer/gst-plugins-good-0.10.31/0001-v4l2-fix-build-with-recent-kernels-the-v4l2_buffer-i.patch b/meta/recipes-multimedia/gstreamer/gst-plugins-good-0.10.31/0001-v4l2-fix-build-with-recent-kernels-the-v4l2_buffer-i.patch
+new file mode 100644
+index 0000000..6456d3c
+--- /dev/null
++++ b/meta/recipes-multimedia/gstreamer/gst-plugins-good-0.10.31/0001-v4l2-fix-build-with-recent-kernels-the-v4l2_buffer-i.patch
+@@ -0,0 +1,33 @@
++From 12d18fe4e98e7c232d59b56d529a0521f293fe6d Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Andreas=20M=C3=BCller?= <schnitzeltony@googlemail.com>
++Date: Wed, 5 Sep 2012 18:54:42 +0200
++Subject: [PATCH] v4l2: fix build with recent kernels, the v4l2_buffer input
++ field was removed
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Upstream-Status: Backport
++
++[1] http://cgit.freedesktop.org/gstreamer/gst-plugins-good/commit/?id=9f2aa8d47f835ea155aaf635f618c0fc1ca87012
++
++Signed-off-by: Andreas Müller <schnitzeltony@googlemail.com>
++---
++ sys/v4l2/gstv4l2bufferpool.c |    1 -
++ 1 files changed, 0 insertions(+), 1 deletions(-)
++
++diff --git a/sys/v4l2/gstv4l2bufferpool.c b/sys/v4l2/gstv4l2bufferpool.c
++index b81c6a4..51cc0ce 100644
++--- a/sys/v4l2/gstv4l2bufferpool.c
+++++ b/sys/v4l2/gstv4l2bufferpool.c
++@@ -181,7 +181,6 @@ gst_v4l2_buffer_new (GstV4l2BufferPool * pool, guint index, GstCaps * caps)
++     GST_LOG_OBJECT (pool->v4l2elem, "  MMAP offset:  %u",
++         ret->vbuffer.m.offset);
++   GST_LOG_OBJECT (pool->v4l2elem, "  length:    %u", ret->vbuffer.length);
++-  GST_LOG_OBJECT (pool->v4l2elem, "  input:     %u", ret->vbuffer.input);
++ 
++   data = (guint8 *) v4l2_mmap (0, ret->vbuffer.length,
++       PROT_READ | PROT_WRITE, MAP_SHARED, pool->video_fd,
++-- 
++1.7.6.5
++
+diff --git a/meta/recipes-multimedia/gstreamer/gst-plugins-good_0.10.31.bb b/meta/recipes-multimedia/gstreamer/gst-plugins-good_0.10.31.bb
+index ac63f94..abcd836 100644
+--- a/meta/recipes-multimedia/gstreamer/gst-plugins-good_0.10.31.bb
++++ b/meta/recipes-multimedia/gstreamer/gst-plugins-good_0.10.31.bb
+@@ -7,10 +7,12 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=a6f89e2100d9b6cdffcea4f398e37343 \
+ 
+ DEPENDS += "gst-plugins-base gconf cairo jpeg libpng gtk+ zlib libid3tag flac \
+ 	    speex libsoup-2.4 pulseaudio"
+-PR = "r2"
++PR = "r3"
+ 
+ inherit gettext gconf
+ 
++SRC_URI += "file://0001-v4l2-fix-build-with-recent-kernels-the-v4l2_buffer-i.patch"
++
+ EXTRA_OECONF += "--disable-aalib --disable-esd --disable-shout2 --disable-libcaca --disable-hal --without-check \
+                  --disable-orc"
+ 
