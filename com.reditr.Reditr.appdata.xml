@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+    <id>com.reditr.Reditr.desktop</id>
+    <name>Reditr</name>
+    <summary>Reddit desktop client</summary>
+    <description>
+        <p>Expirience Reddit without a browser.</p>
+    </description>
+    <launchable type="desktop-id">com.reditr.Reditr.desktop</launchable>
+    <categories>
+        <category>Network</category>
+        <category>News</category>
+    </categories>
+    <project_license>LicenseRef-proprietary=http://reditr.com/tos</project_license>
+    <metadata_license>CC0-1.0</metadata_license>
+    ⁠<developer_name>⁠Axosoft</developer_name>
+    <url type="homepage">http://reditr.com</url>
+    <url type="help">https://www.reddit.com/r/reditr</url>
+    <url type="bugtracker">https://www.reddit.com/r/reditrbugs/</url>
+    <screenshots>
+        <screenshot type="default">
+            <image>http://i1-linux.softpedia-static.com/screenshots/Reditr_1.png</image>
+        </screenshot>
+    </screenshots>
+</component>
