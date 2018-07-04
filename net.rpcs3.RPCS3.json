@@ -14,9 +14,9 @@
         "--socket=wayland"
     ],
     "modules": [
-        "../shared-modules/glu/glu-9.0.0.json",
-        "../shared-modules/glew/glew.json",
-        "../shared-modules/udev/udev-175.json",
+        "shared-modules/glu/glu-9.0.0.json",
+        "shared-modules/glew/glew.json",
+        "shared-modules/udev/udev-175.json",
         {
             "name": "evdev",
             "config-opts": ["--disable-static"],
