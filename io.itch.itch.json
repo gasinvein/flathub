@@ -1,0 +1,53 @@
+{
+    "app-id": "io.itch.itch",
+    "runtime": "org.freedesktop.Platform",
+    "runtime-version": "1.6",
+    "sdk": "org.freedesktop.Sdk",
+    "base": "io.atom.electron.BaseApp",
+    "base-version": "stable",
+    "branch": "stable",
+    "command": "itch",
+    "rename-icon": "itch",
+    "rename-appdata-file": "itch.appdata.xml",
+    "finish-args": [
+        "--share=ipc",
+        "--socket=x11",
+        "--device=all",
+        "--share=network",
+        "--talk-name=org.gnome.GConf",
+        "--talk-name=org.gtk.Notifications",
+        "--talk-name=org.freedesktop.Notifications",
+        "--talk-name=org.kde.StatusNotifierWatcher",
+        "--talk-name=org.gtk.vfs",
+        "--talk-name=org.gtk.vfs.*",
+        "--env=ELECTRON_TRASH=gio"
+    ],
+    "modules": [
+        {
+            "name": "itch",
+            "buildsystem": "simple",
+            "build-commands": [
+                "ar x itch.deb",
+                "tar -xf data.tar.xz --transform='flags=r;s|usr/||' -C /app",
+                "rmdir /app/usr",
+                "rm itch.deb data.tar.xz control.tar.gz debian-binary"
+            ],
+            "sources": [
+                {
+                    "type": "file",
+                    "only-arches": [ "i386" ],
+                    "dest-filename": "itch.deb",
+                    "url": "https://dl.bintray.com/itchio/deb/itch_23.6.3_i386.deb",
+                    "sha256": "ee31ad51d2aee275f1f9087bea601389821b5b89168952a6c068f937c3522aec"
+                },
+                {
+                    "type": "file",
+                    "only-arches": [ "x86_64" ],
+                    "dest-filename": "itch.deb",
+                    "url": "https://dl.bintray.com/itchio/deb/itch_23.6.3_amd64.deb",
+                    "sha256": "53c47f7c21261850c44f37c5fcc055eda3f67bbf79bc596292f48d3b5f31e8e9"
+                }
+            ]
+        }
+    ]
+}
