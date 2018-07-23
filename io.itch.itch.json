@@ -3,6 +3,9 @@
     "runtime": "org.freedesktop.Platform",
     "runtime-version": "1.6",
     "sdk": "org.freedesktop.Sdk",
+    "sdk-extensions" : [
+        "org.freedesktop.Sdk.Extension.golang"
+    ],
     "base": "io.atom.electron.BaseApp",
     "base-version": "stable",
     "branch": "stable",
@@ -13,6 +16,7 @@
         "--share=ipc",
         "--socket=x11",
         "--device=all",
+        "--socket=pulseaudio",
         "--share=network",
         "--talk-name=org.gnome.GConf",
         "--talk-name=org.gtk.Notifications",
@@ -20,9 +24,86 @@
         "--talk-name=org.kde.StatusNotifierWatcher",
         "--talk-name=org.gtk.vfs",
         "--talk-name=org.gtk.vfs.*",
-        "--env=ELECTRON_TRASH=gio"
+        "--env=ELECTRON_TRASH=gio",
+        "--persist=."
     ],
     "modules": [
+        {
+            "name": "butler",
+            "buildsystem": "simple",
+            "build-options": {
+                "env": {
+                    "GOPATH": "/run/build/butler"
+                }
+            },
+            "build-commands" : [
+                ". /usr/lib/sdk/golang/enable.sh; go build github.com/itchio/butler",
+                "install -Dm0755 butler -t /app/bin/"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/itchio/butler/archive/v13.1.0.tar.gz",
+                    "sha256": "db3d12731076f2bbbcc0be6d992ebc5339c407ddb3222baf49b29132de356599",
+                    "dest" : "src/github.com/itchio/butler"
+                },
+                {
+                    "type": "git",
+                    "url": "https://github.com/itchio/spellbook",
+                    "commit": "98649825c402139ef1b75792f9b42d0e92d4c26e",
+                    "dest": "src/github.com/itchio/spellbook"
+                },
+                {
+                    "type": "git",
+                    "url": "https://github.com/itchio/wizardry",
+                    "commit": "8b25a114f7971ae6a0d56b6d43827693a192f7a0",
+                    "dest": "src/github.com/itchio/wizardry"
+                },
+                {
+                    "type": "git",
+                    "url": "https://github.com/jgallagher/gosaca",
+                    "commit": "754749770f0849e02d70651a75d4f9d5c5a62a6f",
+                    "dest": "src/github.com/jgallagher/gosaca"
+                },
+                {
+                    "type": "git",
+                    "url": "https://github.com/olekukonko/tablewriter",
+                    "commit": "d4647c9c7a84d847478d890b816b7d8b62b0b279",
+                    "dest": "src/github.com/olekukonko/tablewriter"
+                },
+                {
+                    "type": "git",
+                    "url": "https://github.com/Datadog/zstd",
+                    "commit": "aebefd9fcb99f22cd691ef778a12ed68f0e6a1ab",
+                    "dest": "src/github.com/Datadog/zstd"
+                },
+                {
+                    "type": "git",
+                    "url": "https://github.com/kardianos/osext",
+                    "dest": "src/github.com/kardianos/osext"
+                },
+                {
+                    "type": "git",
+                    "url": "https://github.com/mattn/go-runewidth",
+                    "dest": "src/github.com/mattn/go-runewidth"
+                },
+                {
+                    "type": "git",
+                    "url": "https://github.com/golang/crypto",
+                    "dest": "src/golang.org/x/crypto"
+                },
+                {
+                    "type": "git",
+                    "url": "https://github.com/golang/text",
+                    "dest": "src/golang.org/x/text"
+                },
+                {
+                    "type": "git",
+                    "url": "https://github.com/golang/sys",
+                    "dest": "src/golang.org/x/sys"
+                }
+            ]
+        },
         {
             "name": "itch",
             "buildsystem": "simple",
