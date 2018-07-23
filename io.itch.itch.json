@@ -32,6 +32,9 @@
                 "rmdir /app/usr",
                 "rm itch.deb data.tar.xz control.tar.gz debian-binary"
             ],
+            "post-install": [
+                "sed 's/itch.desktop/io.itch.itch.desktop/' -i /app/share/metainfo/itch.appdata.xml"
+            ],
             "sources": [
                 {
                     "type": "file",
