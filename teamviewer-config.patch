@@ -1,0 +1,25 @@
+--- a/tv_bin/script/tvw_config	2018-02-12 17:48:29.000000000 +0300
++++ b/tv_bin/script/tvw_config	2018-03-06 21:25:12.012013489 +0300
+@@ -1,14 +1,14 @@
+ 
+ TV_VERSION='13.0.9865'
+-TV_PKGTYPE='TAR_NI'
++TV_PKGTYPE='TAR_IN'
+ TV_EDITION='FULL'
+ 
+ TV_BIN_DIR="$(dirname "$TV_SCRIPT_DIR")"
+ TV_BASE_DIR="$(dirname "$TV_BIN_DIR")"
+ 
+ if isInstalledTV ; then
+-  TV_USER_CONFIG_SUBPATH='.config/teamviewer'
+-  TV_USER_LOCAL_SUBPATH='.local/share/teamviewer13'
++  TV_USER_CONFIG_SUBPATH='config/teamviewer'
++  TV_USER_LOCAL_SUBPATH='data/teamviewer'
+ 
+   TV_PROFILE="$HOME/$TV_USER_LOCAL_SUBPATH"
+   TV_LOG_DIR="$TV_PROFILE/logfiles"
+@@ -41,4 +41,3 @@
+ 
+ export PATH=$TV_SCRIPT_DIR:$PATH:$TV_XDGS_DIR
+ export TV_USERHOME=$HOME
+-

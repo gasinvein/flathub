@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+    <id>com.teamviewer.TeamViewer.desktop</id>
+    <name>TeamViewer</name>
+    <summary>Remote control and meeting solution</summary>
+    <description>
+        <p>TeamViewer is a proprietary computer software package for remote control, desktop sharing, online meetings, web conferencing and file transfer between computers.</p>
+    </description>
+    <launchable type="desktop-id">com.teamviewer.TeamViewer.desktop</launchable>
+    <categories>
+        <category>Network</category>
+    </categories>
+    <project_license>LicenseRef-proprietary</project_license>
+    <metadata_license>CC0-1.0</metadata_license>
+    <url type="homepage">https://www.teamviewer.com</url>
+    <url type="help">https://www.teamviewer.com/support/</url>
+    <screenshots>
+        <screenshot type="default">
+            <image>https://tv-static.net/c3613269c72c44b18f3c68b43fc13018/resources/images/screenshots/win-mainwindow.png</image>
+            <image>https://tv-static.net/c3613269c72c44b18f3c68b43fc13018/resources/images/screenshots/win-mainwindow-meeting.png</image>
+        </screenshot>
+    </screenshots>
+</component>

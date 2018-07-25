@@ -1,0 +1,137 @@
+{
+    "id": "com.teamviewer.TeamViewer",
+    "base": "io.qt.qtwebkit.BaseApp",
+    "branch": "stable",
+    "runtime": "org.kde.Platform",
+    "sdk": "org.kde.Sdk",
+    "runtime-version": "5.9",
+    "command": "teamviewer",
+    "finish-args": [
+        "--share=network",
+        "--device=all",
+        "--socket=pulseaudio",
+        "--socket=x11",
+        "--share=ipc",
+        "--filesystem=xdg-run/dconf",
+        "--filesystem=~/.config/dconf:ro",
+        "--talk-name=ca.desrt.dconf",
+        "--own-name=com.teamviewer.TeamViewer",
+        "--own-name=com.teamviewer.TeamViewer.Desktop",
+        "--talk-name=org.gtk.Notifications",
+        "--talk-name=org.freedesktop.Notifications",
+        "--talk-name=org.kde.StatusNotifierWatcher",
+        "--talk-name=org.a11y.Bus",
+        "--system-talk-name=org.freedesktop.NetworkManager",
+        "--persist=.config/teamviewer",
+        "--persist=.local/share/teamviewer13"
+    ],
+    "cleanup": [
+        "*.a",
+        "*.la",
+        "/include",
+        "/lib/cmake",
+        "/lib/pkgconfig",
+        "/lib/mkspecs"
+    ],
+    "modules": [
+        {
+            "name": "util-linux",
+            "config-opts": [
+                "--sbindir=/app/bin",
+                "--disable-bash-completion",
+                "--disable-agetty",
+                "--disable-wall",
+                "--disable-losetup",
+                "--disable-fsck",
+                "--disable-partx",
+                "--disable-unshare",
+                "--disable-nsenter",
+                "--disable-setpriv",
+                "--disable-zramctl",
+                "--disable-libblkid",
+                "--disable-libmount",
+                "--disable-cramfs",
+                "--disable-bfs",
+                "--disable-switch_root",
+                "--disable-pivot_root",
+                "--disable-login",
+                "--disable-su",
+                "--disable-nologin",
+                "--disable-sulogin"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.32/util-linux-2.32.tar.xz",
+                    "sha256": "6c7397abc764e32e8159c2e96042874a190303e77adceb4ac5bd502a272a4734"
+                }
+            ],
+            "cleanup": [
+                "/sbin",
+                "*.a",
+                "*.la",
+                "/include",
+                "/lib/cmake",
+                "/lib/pkgconfig",
+                "/lib/mkspecs"
+            ]
+        },
+        {
+            "name": "teamviewer",
+            "buildsystem": "simple",
+            "build-commands": [
+                "install -Dm755 apply_extra.sh /app/bin/apply_extra",
+                "install -Dm755 teamviewer.sh /app/bin/teamviewer"
+            ],
+            "sources": [
+                {
+                    "type": "file",
+                    "path": "apply_extra.sh"
+                },
+                {
+                    "type": "script",
+                    "dest-filename": "teamviewer.sh",
+                    "commands": [
+                        "test -d /var/config/teamviewer || mkdir -p /var/config/teamviewer",
+                        "test -d /var/data/teamviewer/log || mkdir -p /var/data/teamviewer/log",
+                        "exec /app/extra/teamviewer/tv_bin/script/teamviewer $@"
+                    ]
+                },
+                {
+                    "type": "extra-data",
+                    "only-arches": [ "x86_64" ],
+                    "url": "https://dl.tvcdn.de/download/linux/version_13x/teamviewer_13.1.8286_amd64.tar.xz",
+                    "filename": "teamviewer.tar.xz",
+                    "sha256": "15a50e7d0f6e5a21f9393351bc28ccce8a3c2ebf850b96e05a4f856640e0295c",
+                    "size": 11574812
+                },
+                {
+                    "type": "extra-data",
+                    "only-arches": [ "i386" ],
+                    "url": "https://dl.tvcdn.de/download/linux/version_13x/teamviewer_13.1.8286_i386.tar.xz",
+                    "filename": "teamviewer.tar.xz",
+                    "sha256": "7f0ecfa8aa6f1fb9d661340e50f542f2a6cd22fa1e2f47b3a7c3129dd07599cf",
+                    "size": 11422756
+                }
+            ]
+        },
+        {
+            "name": "appdata",
+            "buildsystem": "simple",
+            "build-commands": [
+                "install -Dm644 com.teamviewer.TeamViewer.appdata.xml -t /app/share/appdata/"
+            ],
+            "sources": [
+                {
+                    "type": "file",
+                    "path": "com.teamviewer.TeamViewer.appdata.xml"
+                }
+            ]
+        }
+    ],
+    "cleanup": [
+        "/include",
+        "/lib/cmake",
+        "/lib/pkgconfig"
+    ]
+}
