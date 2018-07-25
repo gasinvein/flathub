@@ -93,7 +93,7 @@
                     "dest-filename": "teamviewer.sh",
                     "commands": [
                         "test -d /var/config/teamviewer || mkdir -p /var/config/teamviewer",
-                        "test -d /var/data/teamviewer/log || mkdir -p /var/data/teamviewer/log",
+                        "test -d /var/data/teamviewer/logfiles || mkdir -p /var/data/teamviewer/logfiles",
                         "exec /app/extra/teamviewer/tv_bin/script/teamviewer $@"
                     ]
                 },

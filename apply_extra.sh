@@ -16,6 +16,7 @@ sed 's|Icon=.*|Icon=com.teamviewer.TeamViewer|g' -i export/share/applications/co
 sed 's|TAR_NI|TAR_IN|g' -i teamviewer/tv_bin/script/tvw_config
 rmdir teamviewer/{config,logfiles}
 ln -s /var/config/teamviewer teamviewer/config
-ln -s /var/data/teamviewer/log teamviewer/logfiles
+ln -s /var/data/teamviewer/logfiles teamviewer/logfiles
+ln -s /var/data/teamviewer teamviewer/profile
 
 rm teamviewer.tar.xz
