@@ -1,0 +1,267 @@
+{
+    "app-id": "mx.sft.openage",
+    "branch": "master",
+    "runtime": "org.kde.Platform",
+    "runtime-version": "5.9",
+    "sdk": "org.kde.Sdk",
+    "sdk-extensions": [
+        "org.freedesktop.Sdk.Extension.gcc8"
+    ],
+    "command": "openage",
+    "finish-args": [
+        "--share=ipc",
+        "--socket=x11",
+        "--socket=wayland",
+        "--device=dri",
+        "--share=network",
+        "--socket=pulseaudio"
+    ],
+    "rename-icon": "openage",
+    "rename-desktop-file": "openage.desktop",
+    "build-options": {
+        "env": {
+            "CC": "/usr/lib/sdk/gcc8/bin/gcc",
+            "CXX": "/usr/lib/sdk/gcc8/bin/g++"
+        },
+        "prepend-path": "/usr/lib/sdk/gcc8/bin/"
+    },
+    "cleanup-commands": [
+        "install -Dm644 /app/share/pixmaps/openage.svg /app/share/icons/hicolor/scaleable/apps/openage.svg"
+    ],
+    "cleanup": [
+        "*.a",
+        "*.la",
+        "/include",
+        "/lib/cmake",
+        "/lib/pkgconfig",
+        "/share/aclocal",
+        "/share/doc",
+        "/share/man"
+    ],
+    "modules": [
+        {
+            "name": "cmake",
+            "buildsystem": "cmake-ninja",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://cmake.org/files/v3.12/cmake-3.12.0.tar.gz",
+                    "sha256": "d0781a90f6cdb9049d104ac16a150f9350b693498b9dea8a0331e799db6b9d69"
+                }
+            ],
+            "cleanup": [ "*" ]
+        },
+        {
+            "name": "gcc-libs",
+            "buildsystem": "simple",
+            "build-commands": [
+                "/usr/lib/sdk/gcc8/install_runtime_libs.sh",
+                "/usr/lib/sdk/gcc8/install_gfortran.sh"
+            ]
+        },
+        {
+            "name": "cython",
+            "buildsystem": "simple",
+            "build-commands": [
+                "python3 setup.py build -j $FLATPAK_BUILDER_N_JOBS",
+                "python3 setup.py install --prefix=${FLATPAK_DEST} --root=/"
+            ],
+            "ensure-writable": [
+                "easy-install.pth",
+                "setuptools.pth"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/cython/cython/archive/0.28.4.tar.gz",
+                    "sha256": "bccc9aa050ea02595b2440188813b936eaf345e85fb9692790cecfe095cf91aa"
+                }
+            ]
+        },
+        {
+            "name": "numpy",
+            "buildsystem": "simple",
+            "build-commands": [
+                "python3 setup.py build --fcompiler=gnu95 -j 1",
+                "python3 setup.py install --prefix=${FLATPAK_DEST} --root=/ --optimize=1"
+            ],
+            "ensure-writable": [
+                "easy-install.pth",
+                "setuptools.pth"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/numpy/numpy/releases/download/v1.15.0/numpy-1.15.0.tar.gz",
+                    "sha256": "259934a941663e93fdd5d28ce3f6aa2a81ce7dda85c395dd07b1f1edff2e0236"
+                }
+            ]
+        },
+        {
+            "name": "Pillow",
+            "buildsystem": "simple",
+            "build-commands": [
+                "python3 setup.py build",
+                "python3 setup.py install --prefix=${FLATPAK_DEST} --root=/"
+            ],
+
+            "ensure-writable": [
+                "easy-install.pth",
+                "setuptools.pth"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/python-pillow/Pillow/archive/5.2.0.tar.gz",
+                    "sha256": "26dfdcc23186f82139e9e6c0bd46828e5d1ba15463b9e35e32bd017ad0003c44"
+                }
+            ]
+        },
+        {
+            "name": "pygments",
+            "buildsystem": "simple",
+            "build-commands": [
+                "python3 setup.py build",
+                "python3 setup.py install --prefix=${FLATPAK_DEST} --root=/"
+            ],
+            "ensure-writable": [
+                "easy-install.pth",
+                "setuptools.pth"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://bitbucket.org/birkenfeld/pygments-main/get/2.2.0.tar.gz",
+                    "sha256": "d6cc5f4fe3fd0f50142d8b271a68a9deb4cd628bc16eac189e6ddbffe33e7c89"
+                }
+            ]
+        },
+        {
+            "name": "markupsafe",
+            "buildsystem": "simple",
+            "build-commands": [
+                "python3 setup.py build",
+                "python3 setup.py install --prefix=${FLATPAK_DEST} --root=/"
+            ],
+            "ensure-writable": [
+                "easy-install.pth",
+                "setuptools.pth"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/pallets/markupsafe/archive/1.0.tar.gz",
+                    "sha256": "dc3938045d9407a73cf9fdd709e2b1defd0588d50ffc85eb0786c095ec846f15"
+                }
+            ]
+        },
+        {
+            "name": "Jinja2",
+            "buildsystem": "simple",
+            "build-commands": [
+                "python3 setup.py build",
+                "python3 setup.py install --prefix=${FLATPAK_DEST} --root=/"
+            ],
+            "ensure-writable": [
+                "easy-install.pth",
+                "setuptools.pth"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/pallets/jinja/releases/download/2.10/Jinja2-2.10.tar.gz",
+                    "sha256": "f84be1bb0040caca4cea721fcbbbbd61f9be9464ca236387158b0feea01914a4"
+                }
+            ]
+        },
+        {
+            "name": "opus",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://archive.mozilla.org/pub/opus/opus-1.2.1.tar.gz",
+                    "sha256": "cfafd339ccd9c5ef8d6ab15d7e1a412c054bf4cb4ecbbbcc78c12ef2def70732"
+                }
+            ]
+        },
+        {
+            "name": "opusfile",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://archive.mozilla.org/pub/opus/opusfile-0.10.tar.gz",
+                    "sha256": "48e03526ba87ef9cf5f1c47b5ebe3aa195bd89b912a57060c36184a6cd19412f"
+                }
+            ]
+        },
+        {
+            "name": "eigen",
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "http://bitbucket.org/eigen/eigen/get/3.3.5.tar.gz",
+                    "sha256": "0454b6bacafd2bf641e0fb0f59572b9995728b77e41d1b8517f807334d07e68e"
+                }
+            ],
+            "cleanup": [ "*" ]
+        },
+        {
+            "name": "gperftools",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/gperftools/gperftools/archive/gperftools-2.7.tar.gz",
+                    "sha256": "3a88b4544315d550c87db5c96775496243fb91aa2cea88d2b845f65823f3d38a"
+                }
+            ]
+        },
+        {
+            "name": "nyan",
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
+            "config-opts": [
+                "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
+                "-DCMAKE_INSTALL_LIBDIR=/app/lib"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/SFTtech/nyan.git"
+                }
+            ]
+        },
+        {
+            "name": "openage",
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
+            "config-opts": [
+                "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
+                "-DCMAKE_INSTALL_LIBDIR=/app/lib",
+                "-DCMAKE_PY_INSTALL_PREFIX=/app/lib/python3.5/site-packages",
+                "-DWANT_INOTIFY=True",
+                "-DWANT_GPERFTOOLS_TCMALLOC=True",
+                "-DWITH_GPERFTOOLS_TCMALLOC=True",
+                "-DWANT_GPERFTOOLS_PROFILER=True",
+                "-DCXX_OPTIMIZATION_LEVEL=auto",
+                "-DOpenGL_GL_PREFERENCE=GLVND"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/SFTtech/openage.git"
+                }
+            ]
+        },
+        {
+            "name": "ncurses",
+            "buildsystem": "simple",
+            "build-commands": [
+                "for soname in form formw menu menuw ncurses ncurses++ ncurses++w ncursesw panel panelw tic tinfo; do
+                    cp -v -d -t /app/lib /usr/lib/lib${soname}.so*
+                done"
+            ]
+        }
+    ]
+}
