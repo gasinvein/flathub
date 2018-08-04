@@ -7,14 +7,11 @@
     "branch": "stable",
     "sdk": "org.freedesktop.Sdk",
     "command": "vivaldi",
-    "rename-desktop-file": "vivaldi-stable.desktop",
-    "rename-appdata-file": "vivaldi.appdata.xml",
-    "rename-icon": "vivaldi",
     "finish-args": [
-        "--socket=x11", "--share=ipc",
+        "--share=ipc",
+        "--socket=x11",
         "--device=dri",
         "--share=network",
-        "--talk-name=org.gnome.GConf",
         "--talk-name=org.freedesktop.Notifications",
         "--talk-name=org.gtk.Notifications",
         "--talk-name=org.kde.StatusNotifierWatcher",
@@ -59,37 +56,66 @@
             "name": "vivaldi",
             "buildsystem": "simple",
             "build-commands": [
-                "ar x vivaldi-*.deb",
-                "tar xf data.tar.xz",
-                "mkdir -p /app/{bin,lib,share}",
-                "cp -ax opt/vivaldi /app/lib/",
-                "cp -ax usr/share/* /app/share/",
-                "for s in 16 22 24 32 48 64 128 256; do install -Dm644 opt/vivaldi/product_logo_$s.png /app/share/icons/hicolor/${s}x${s}/apps/vivaldi.png; done",
-                "sed 's/Exec=.*/Exec=vivaldi %U/g' -i /app/share/applications/vivaldi*.desktop",
-                "install -Dm755 vivaldi.sh /app/bin/vivaldi"
+                "mkdir -p /app/{bin,lib}",
+                "cp /usr/bin/ar /app/bin",
+                "cp /usr/lib/libbfd-*.so /app/lib",
+                "install -Dm755 apply_extra.sh /app/bin/apply_extra",
+                "install -Dm755 vivaldi.sh /app/bin/vivaldi",
+                "install -Dm644 -t /app/share/appdata/ $FLATPAK_ID.appdata.xml"
             ],
-            "build-options": {
-                "strip": false,
-                "no-debuginfo": true
-            },
             "sources": [
                 {
-                    "type": "file",
-                    "url": "https://downloads.vivaldi.com/stable/vivaldi-stable_1.15.1147.36-1_amd64.deb",
-                    "sha256": "6f8bc097a2bba17b8c3995d4474bdb7d0fd59fa438343134d68c299892c84932"
+                    "type": "script",
+                    "dest-filename": "apply_extra.sh",
+                    "commands": [
+                        "export FLATPAK_ID=com.vivaldi.Vivaldi",
+                        "ar x vivaldi.deb",
+                        "tar xf data.tar.xz",
+                        "mv opt/vivaldi .",
+                        "install -Dm644 usr/share/applications/vivaldi-stable.desktop export/share/applications/$FLATPAK_ID.desktop",
+                        "for s in 16 22 24 32 48 64 128 256; do
+                            install -Dm644 vivaldi/product_logo_$s.png export/share/icons/hicolor/${s}x${s}/apps/$FLATPAK_ID.png;
+                        done",
+                        "sed \"s|Exec=/usr/bin/vivaldi-stable|Exec=vivaldi|g\" -i export/share/applications/$FLATPAK_ID.desktop",
+                        "sed \"s|Icon=vivaldi|Icon=$FLATPAK_ID|g\" -i export/share/applications/$FLATPAK_ID.desktop",
+                        "rm -r etc usr opt data.tar.xz control.tar.gz debian-binary vivaldi.deb"
+                    ]
                 },
                 {
                     "type": "script",
                     "dest-filename": "vivaldi.sh",
                     "commands": [
-                        "exec /app/lib/vivaldi/vivaldi --no-sandbox $@"
+                        "exec /app/extra/vivaldi/vivaldi --no-sandbox $@"
                     ]
+                },
+                {
+                    "type": "file",
+                    "path": "com.vivaldi.Vivaldi.appdata.xml"
+                },
+                {
+                    "type": "extra-data",
+                    "only-arches": [ "x86_64" ],
+                    "url": "https://downloads.vivaldi.com/stable/vivaldi-stable_1.15.1147.55-1_amd64.deb",
+                    "filename": "vivaldi.deb",
+                    "size": 52880244,
+                    "sha256": "03c19e76d614b25fc8c36b636334a16d818f549abd2d20df303d15e9096f341e"
+                },
+                {
+                    "type": "extra-data",
+                    "only-arches": [ "i386" ],
+                    "url": "https://downloads.vivaldi.com/stable/vivaldi-stable_1.15.1147.55-1_i386.deb",
+                    "filename": "vivaldi.deb",
+                    "size": 52490106,
+                    "sha256": "1c38362d3b539df078171bb9b46abd6d0970a1af6091b6c10506fb5f81b142d8"
+                },
+                {
+                    "type": "extra-data",
+                    "only-arches": [ "armhf" ],
+                    "url": "https://downloads.vivaldi.com/stable/vivaldi-stable_1.15.1147.55-1_armhf.deb",
+                    "filename": "vivaldi.deb",
+                    "size": 46831370,
+                    "sha256": "24858244e3a9bce7cd8600ec655f2856dabbe4c7ad83fb7f7c313674ee31ed1f"
                 }
-            ],
-            "cleanup": [
-                "/share/doc",
-                "/share/xfce4",
-                "/share/gnome-control-center"
             ]
         }
     ]

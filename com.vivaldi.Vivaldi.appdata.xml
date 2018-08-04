@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+    <id>com.vivaldi.Vivaldi.desktop</id>
+    <metadata_license>CC0-1.0</metadata_license>
+    <project_license>LicenseRef-proprietary=https://vivaldi.com/privacy/vivaldi-end-user-license-agreement/</project_license>
+    <name>Vivaldi</name>
+    <summary>A new browser for our friends</summary>
+    <description>
+        <p>Vivaldi browser is made with power users in mind by people who love the Web.</p>
+    </description>
+    <developer_name>Vivaldi</developer_name>
+    <url type="homepage">https://www.vivaldi.com/</url>
+    <url type="bugtracker">https://vivaldi.com/bugreport/</url>
+    <url type="help">https://help.vivaldi.com/</url>
+    <screenshots>
+        <screenshot type="default">
+            <image width="1262" height="811">https://vivaldi.com/appdata/001.png</image>
+        </screenshot>
+        <screenshot>
+            <image width="1262" height="811">https://vivaldi.com/appdata/002.png</image>
+        </screenshot>
+        <screenshot>
+            <image width="1262" height="811">https://vivaldi.com/appdata/003.png</image>
+        </screenshot>
+        <screenshot>
+            <image width="1600" height="1067">https://vivaldi.com/appdata/004.jpg</image>
+        </screenshot>
+    </screenshots>
+</component>
