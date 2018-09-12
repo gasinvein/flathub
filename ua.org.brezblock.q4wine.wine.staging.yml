@@ -55,6 +55,13 @@ modules:
       - type: archive
         url: https://dl.winehq.org/wine/source/3.x/wine-3.15.tar.xz
         sha256: 2ca2cd95b69f2d89aaa481db34db20cbb249c6aba28ad77ecf383270326ab51e
+      - type: archive
+        url: https://github.com/wine-staging/wine-staging/archive/v3.15.tar.gz
+        sha256: bf209bf102455938ef0b8f678c2c68f134746aef633fbdf56a9c1994309349c4
+        dest: staging
+      - type: shell
+        commands:
+          - ./staging/patches/patchinstall.sh DESTDIR="$(pwd)" --all
 
   - name: wineserver
     buildsystem: simple
