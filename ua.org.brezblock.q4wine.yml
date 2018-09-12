@@ -1,0 +1,126 @@
+id: ua.org.brezblock.q4wine
+runtime: org.kde.Platform
+sdk: org.kde.Sdk
+runtime-version: 5.11
+command: q4wine
+rename-icon: q4wine
+rename-desktop-file: q4wine.desktop
+rename-appdata-file: q4wine.appdata.xml
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --socket=wayland
+  - --socket=pulseaudio
+  - --device=all
+cleanup:
+  - "*.a"
+  - "*.la"
+  - /share/man
+add-extensions:
+  org.freedesktop.Platform.Compat32:
+    directory: lib/32bit
+    version: 1.6
+    add-ld-path: lib
+  org.freedesktop.Platform.Compat32.Debug:
+    directory: lib/debug/lib/32bit
+    version: 1.6
+    no-autodownload: true
+  org.freedesktop.Platform.GL32:
+    directory: lib/32bit/lib/GL
+    version: 1.4
+    versions: 1.6;1.4
+    subdirectories: true
+    no-autodownload: true
+    autodelete: false
+    add-ld-path: lib
+    merge-dirs: vulkan/icd.d;glvnd/egl_vendor.d
+    download-if: active-gl-driver
+    enable-if: active-gl-driver
+  ua.org.brezblock.q4wine.wine.stable:
+    directory: wine/stable
+  ua.org.brezblock.q4wine.wine.devel:
+    directory: wine/devel
+  ua.org.brezblock.q4wine.wine.staging:
+    directory: wine/staging
+modules:
+  - name: q4wine
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+      - -DLIBS_ENTRY_PATH=/app/lib
+    post-install:
+      - install -Dm644 -t /app/share/appdata q4wine.appdata.xml
+    sources:
+      - type: archive
+        url: "https://github.com/brezerk/q4wine/archive/v1.3.9.tar.gz"
+        sha256: 70ffe5e4d35ca0d2557f61576e4abb714da82d79d01cf86c7d5b9a769dafacf4
+      - type: file
+        path: q4wine.appdata.xml
+
+    modules:
+      - name: fuseiso
+        sources:
+          - type: archive
+            url: "https://netix.dl.sourceforge.net/project/fuseiso/fuseiso/20070708/fuseiso-20070708.tar.bz2"
+            sha256: 8b242e077d66cd20900c59c905ff90b4c934b0613dd5a20facb0b1260ac5fd88
+
+        modules:
+          - name: libfuse
+            config-opts:
+              - --enable-lib
+            build-options:
+              env:
+                MOUNT_FUSE_PATH: /app/bin
+            sources:
+              - type: archive
+                url: "https://github.com/libfuse/libfuse/archive/fuse-2.9.8.tar.gz"
+                sha256: ceadc28f033b29d7aa1d7c3a5a267d51c2b572ed4e7346e0f9e24f4f5889debb
+              - type: shell
+                commands:
+                  - ./makeconf.sh
+            cleanup:
+              - /include
+              - /lib/pkgconfig
+
+      - name: icoutils
+        sources:
+          - type: archive
+            url: "http://savannah.nongnu.org/download/icoutils/icoutils-0.32.3.tar.bz2"
+            sha256: 17abe02d043a253b68b47e3af69c9fc755b895db68fdc8811786125df564c6e0
+
+  - name: q4wine-app-environment
+    buildsystem: simple
+    build-commands:
+      - mkdir -p /app/lib/32bit
+      - mkdir -p /app/wine/{stable,devel,staging}
+
+  # Here goest the wine dependencies
+  - name: openldap
+    config-opts:
+      - --disable-static
+      - --disable-bdb
+      - --disable-hdb
+    sources:
+      - type: archive
+        url: https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.46.tgz
+        sha256: 9a90dcb86b99ae790ccab93b7585a31fbcbeec8c94bf0f7ab0ca0a87ea0c4b2d
+    cleanup:
+      - /libexec
+      - /sbin
+      - /etc
+      - /var
+
+  - name: cabextract
+    sources:
+      - type: archive
+        url: https://www.cabextract.org.uk/cabextract-1.6.tar.gz
+        sha256: cee661b56555350d26943c5e127fc75dd290b7f75689d5ebc1f04957c4af55fb
+
+  - name: unrar
+    no-autogen: true
+    make-install-args:
+      - DESTDIR=/app
+    sources:
+      - type: archive
+        url: https://www.rarlab.com/rar/unrarsrc-5.6.4.tar.gz
+        sha256: 9335d2201870f2034007c04be80e00f1dc23932cb88b329d55c76134e6ba49fe

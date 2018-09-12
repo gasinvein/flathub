@@ -1,0 +1,50 @@
+id: ua.org.brezblock.q4wine.wine.devel
+runtime: ua.org.brezblock.q4wine
+runtime-version: stable
+sdk: org.freedesktop.Sdk//1.6
+build-extension: true
+separate-locales: false
+appstream-compose: false
+build-options:
+    prefix: /app/wine/devel
+    env:
+      PATH: /app/wine/devel/bin:/app/bin:/usr/bin
+cleanup:
+  - /include
+  - /share/man
+  - /share/applications
+modules:
+  - name: wine
+    build-options:
+      arch:
+        x86_64:
+          config-opts:
+            - --enable-win64
+        i386:
+          config-opts:
+            - --disable-win64
+    config-opts:
+      - --disable-win16
+      - --disable-tests
+      - --with-x
+      - --with-ldap
+      - --without-cups
+      - --without-curses
+      - --without-capi
+      - --without-glu
+      - --without-gphoto
+      - --without-gsm
+      - --without-hal
+      - --without-netapi
+      - --without-opencl
+      - --without-pcap
+      - --without-udev
+      - --without-v4l
+      - --help
+    cleanup:
+      - /share/man
+      - /share/applications
+    sources:
+      - type: archive
+        url: https://dl.winehq.org/wine/source/3.x/wine-3.15.tar.xz
+        sha256: 2ca2cd95b69f2d89aaa481db34db20cbb249c6aba28ad77ecf383270326ab51e

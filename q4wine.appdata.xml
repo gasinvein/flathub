@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2017 Dmitrij S. kryzhevich <kryzhev@ispms.ru> -->
+<component type="desktop">
+  <id>q4wine.desktop</id>
+  <translation type="gettext">q4wine</translation>
+  <name>q4wine</name>
+  <summary>Utility for Wine applications and prefixes management</summary>
+  <summary xml:lang="cz">užitečný program pro programy wine a správu předpon</summary>
+  <summary xml:lang="de">Werkzeug zur Verwaltung der Wine-Anwendungen und -Präfixe</summary>
+  <summary xml:lang="en">Utility for Wine applications and prefixes management</summary>
+  <summary xml:lang="es">Utilidad para el manejo de aplicaciones y prefijos de wine</summary>
+  <summary xml:lang="it">Programma per gestire le applicazioni con Wine e i prefissi</summary>
+  <summary xml:lang="ru">Программа для настройки приложений и управления префиксами Wine</summary>
+  <summary xml:lang="uk">Програма для налаштування програм та керування префіксами Wine</summary>
+  <description><p>Utility for Wine applications and prefixes management.</p></description>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://a.fsdn.com/con/app/proj/q4wine/screenshots/332493.jpg</image>
+    </screenshot>
+    <screenshot>
+      <image>https://a.fsdn.com/con/app/proj/q4wine/screenshots/332497.jpg</image>
+    </screenshot>
+  </screenshots>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0+</project_license>
+  <url type="homepage">http://q4wine.brezblock.org.ua/</url>
+  <update_contact>brezerk@gmail.com</update_contact>
+</component>
