@@ -9,6 +9,8 @@ build-options:
     prefix: /app/wine/devel
     env:
       PATH: /app/wine/devel/bin:/app/bin:/usr/bin
+    strip: true
+    no-debuginfo: false
 cleanup:
   - /include
   - /share/man
@@ -20,9 +22,6 @@ modules:
         x86_64:
           config-opts:
             - --enable-win64
-        i386:
-          config-opts:
-            - --disable-win64
     config-opts:
       - --disable-win16
       - --disable-tests
@@ -40,6 +39,15 @@ modules:
       - --without-pcap
       - --without-udev
       - --without-v4l
+    post-install:
+      - case $FLATPAK_ARCH in
+          x86_64)
+            mv $FLATPAK_DEST/bin/wineserver{,64}
+          ;;
+          i386)
+            mv $FLATPAK_DEST/bin/wineserver{,32}
+          ;;
+        esac
     cleanup:
       - /share/man
       - /share/applications
@@ -47,3 +55,32 @@ modules:
       - type: archive
         url: https://dl.winehq.org/wine/source/3.x/wine-3.15.tar.xz
         sha256: 2ca2cd95b69f2d89aaa481db34db20cbb249c6aba28ad77ecf383270326ab51e
+
+  - name: wineserver
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 wineserver.sh $FLATPAK_DEST/bin/wineserver
+    sources:
+      - type: script
+        dest-filename: wineserver.sh
+        commands:
+          - winedir=/app/wine/devel
+          # 64bit mode
+          - if test -x $winedir/bin/wineserver64; then
+          -   exec $winedir/bin/wineserver64 $@
+          # Pure 32bit mode
+          - elif test -x $winedir/bin/wineserver32; then
+          -   exec $winedir/bin/wineserver32 $@
+          - else
+          -   exit 1
+          - fi
+
+  - name: compat32
+    only-arches:
+      - x86_64
+    buildsystem: simple
+    build-commands:
+      - mkdir -p $FLATPAK_DEST/32bit
+      - ln -s 32bit/lib $FLATPAK_DEST/lib
+      - ln -s ../32bit/bin/wine $FLATPAK_DEST/bin/wine
+      - ln -s ../32bit/bin/wine-preloader $FLATPAK_DEST/bin/wine-preloader

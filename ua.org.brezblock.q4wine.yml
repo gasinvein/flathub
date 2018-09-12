@@ -12,11 +12,16 @@ finish-args:
   - --socket=wayland
   - --socket=pulseaudio
   - --device=all
+  - --share=network
   - --allow=multiarch
+  - --persist=.config/q4wine
+  - --persist=.wine
+  - --persist=.local/share/wineprefixes
 cleanup:
   - "*.a"
   - "*.la"
   - /share/man
+  - /share/doc
 add-extensions:
   org.freedesktop.Platform.Compat32:
     directory: lib/32bit
@@ -40,18 +45,18 @@ add-extensions:
 
   ua.org.brezblock.q4wine.wine.stable:
     directory: wine/stable
-  ua.org.brezblock.q4wine.wine.stable32:
-    directory: wine/stable32
+  ua.org.brezblock.q4wine.wine.stable.compat32:
+    directory: wine/stable/32bit
 
   ua.org.brezblock.q4wine.wine.devel:
     directory: wine/devel
-  ua.org.brezblock.q4wine.wine.devel32:
-    directory: wine/devel32
+  ua.org.brezblock.q4wine.wine.devel.compat32:
+    directory: wine/devel/32bit
 
   ua.org.brezblock.q4wine.wine.staging:
     directory: wine/staging
-  ua.org.brezblock.q4wine.wine.staging32:
-    directory: wine/staging32
+  ua.org.brezblock.q4wine.wine.staging.compat32:
+    directory: wine/staging/32bit
 
 modules:
   - name: q4wine
@@ -114,9 +119,40 @@ modules:
         url: https://www.rarlab.com/rar/unrarsrc-5.6.4.tar.gz
         sha256: 9335d2201870f2034007c04be80e00f1dc23932cb88b329d55c76134e6ba49fe
 
+  - name: winetricks
+    no-autogen: true
+    make-install-args:
+      - PREFIX=/app
+    sources:
+      - type: archive
+        url: "https://github.com/Winetricks/winetricks/archive/20180815.tar.gz"
+        sha256: 6dc22357ea1f857b7283250f7c6a68b9dee97e672bbea9a9c45c573d73634200
+    cleanup:
+      - /share/bash-completion
+      - /share/applications
+      - /share/metainfo
+
+  - name: konsole
+    buildsystem: cmake-ninja
+    sources:
+      - type: archive
+        url: "https://github.com/KDE/konsole/archive/v18.08.1.tar.gz"
+        sha256: 25eb2b7c1e48ee5e62160bde835be8e8e15bc22c398fda20d1103a4ef9cef8b6
+    cleanup:
+      - /share/applications
+      - /share/metainfo
+      - /share/khotkeys
+      - /share/knotifications5
+      - /share/kservices5
+      - /share/kservicetypes5
+
   - name: q4wine-app-environment
     buildsystem: simple
     build-commands:
       - mkdir -p /app/lib/32bit
-      - mkdir -p /app/wine/{stable,devel,staging}{,32}
+      - mkdir -p /app/wine/{stable,devel,staging}
       - ln -s 32bit/lib/ld-linux.so.2 /app/lib/ld-linux.so.2
+      - ln -s /bin/false /app/bin/mount
+      - ln -s /bin/false /app/bin/umount
+      - ln -s /bin/false /app/bin/sudo
+      - ln -s /bin/false /app/bin/renice
