@@ -27,7 +27,7 @@ modules:
       - --disable-win16
       - --disable-tests
       - --with-x
-      - --with-ldap
+      - --without-ldap
       - --without-cups
       - --without-curses
       - --without-capi
@@ -40,7 +40,6 @@ modules:
       - --without-pcap
       - --without-udev
       - --without-v4l
-      - --help
     cleanup:
       - /share/man
       - /share/applications

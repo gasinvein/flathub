@@ -12,6 +12,7 @@ finish-args:
   - --socket=wayland
   - --socket=pulseaudio
   - --device=all
+  - --allow=multiarch
 cleanup:
   - "*.a"
   - "*.la"
@@ -36,12 +37,22 @@ add-extensions:
     merge-dirs: vulkan/icd.d;glvnd/egl_vendor.d
     download-if: active-gl-driver
     enable-if: active-gl-driver
+
   ua.org.brezblock.q4wine.wine.stable:
     directory: wine/stable
+  ua.org.brezblock.q4wine.wine.stable32:
+    directory: wine/stable32
+
   ua.org.brezblock.q4wine.wine.devel:
     directory: wine/devel
+  ua.org.brezblock.q4wine.wine.devel32:
+    directory: wine/devel32
+
   ua.org.brezblock.q4wine.wine.staging:
     directory: wine/staging
+  ua.org.brezblock.q4wine.wine.staging32:
+    directory: wine/staging32
+
 modules:
   - name: q4wine
     buildsystem: cmake-ninja
@@ -88,28 +99,6 @@ modules:
             url: "http://savannah.nongnu.org/download/icoutils/icoutils-0.32.3.tar.bz2"
             sha256: 17abe02d043a253b68b47e3af69c9fc755b895db68fdc8811786125df564c6e0
 
-  - name: q4wine-app-environment
-    buildsystem: simple
-    build-commands:
-      - mkdir -p /app/lib/32bit
-      - mkdir -p /app/wine/{stable,devel,staging}
-
-  # Here goest the wine dependencies
-  - name: openldap
-    config-opts:
-      - --disable-static
-      - --disable-bdb
-      - --disable-hdb
-    sources:
-      - type: archive
-        url: https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.46.tgz
-        sha256: 9a90dcb86b99ae790ccab93b7585a31fbcbeec8c94bf0f7ab0ca0a87ea0c4b2d
-    cleanup:
-      - /libexec
-      - /sbin
-      - /etc
-      - /var
-
   - name: cabextract
     sources:
       - type: archive
@@ -124,3 +113,10 @@ modules:
       - type: archive
         url: https://www.rarlab.com/rar/unrarsrc-5.6.4.tar.gz
         sha256: 9335d2201870f2034007c04be80e00f1dc23932cb88b329d55c76134e6ba49fe
+
+  - name: q4wine-app-environment
+    buildsystem: simple
+    build-commands:
+      - mkdir -p /app/lib/32bit
+      - mkdir -p /app/wine/{stable,devel,staging}{,32}
+      - ln -s 32bit/lib/ld-linux.so.2 /app/lib/ld-linux.so.2
