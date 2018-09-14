@@ -1,7 +1,7 @@
 {
     "app-id": "net.rpcs3.RPCS3",
     "runtime": "org.kde.Platform",
-    "runtime-version": "5.10",
+    "runtime-version": "5.11",
     "sdk": "org.kde.Sdk",
     "command": "rpcs3",
     "rename-desktop-file": "rpcs3.desktop",
@@ -36,6 +36,39 @@
             ]
         },
         {
+            "name": "openal",
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
+            "config-opts": [
+                "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "http://kcat.strangesoft.net/openal-releases/openal-soft-1.17.2.tar.bz2",
+                    "sha256": "a341f8542f1f0b8c65241a17da13d073f18ec06658e1a1606a8ecc8bbc2b3314"
+                }
+            ],
+            "cleanup": [
+                "/bin",
+                "/include",
+                "/lib/pkgconfig",
+                "/share"
+            ]
+        },
+        {
+            "name": "cmake",
+            "buildsystem": "cmake-ninja",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://cmake.org/files/v3.12/cmake-3.12.0.tar.gz",
+                    "sha256": "d0781a90f6cdb9049d104ac16a150f9350b693498b9dea8a0331e799db6b9d69"
+                }
+            ],
+            "cleanup": [ "*" ]
+        },
+        {
             "name": "rpcs3",
             "buildsystem": "cmake-ninja",
             "builddir": true,
@@ -44,8 +77,7 @@
                 "-DUSE_ALSA=OFF",
                 "-DUSE_SYSTEM_LIBPNG=ON",
                 "-DCMAKE_C_COMPILER=clang",
-                "-DCMAKE_CXX_COMPILER=clang++",
-                "-DUSE_NATIVE_INSTRUCTIONS=ON"
+                "-DCMAKE_CXX_COMPILER=clang++"
             ],
             "sources": [
                 {
