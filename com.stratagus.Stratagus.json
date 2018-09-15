@@ -218,6 +218,27 @@
             ]
         },
         {
+            "name": "ffmpeg",
+            "config-opts": [
+                "--enable-shared",
+                "--disable-static",
+                "--enable-gnutls",
+                "--disable-doc",
+                "--enable-libtheora",
+                "--enable-libvorbis"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://ffmpeg.org/releases/ffmpeg-4.0.2.tar.xz",
+                    "sha256": "a95c0cc9eb990e94031d2183f2e6e444cc61c99f6f182d1575c433d62afb2f97"
+                }
+            ],
+            "cleanup": [
+                "/share/ffmpeg/examples"
+            ]
+        },
+        {
             "name": "timgm6mb-soundfont",
             "buildsystem": "simple",
             "build-commands": [
