@@ -1,16 +1,24 @@
 {
     "id": "com.stratagus.Stratagus",
-    "branch": "stable",
     "runtime": "org.freedesktop.Platform",
     "sdk": "org.freedesktop.Sdk",
     "runtime-version": "1.6",
     "finish-args": [
-        "--socket=x11", "--share=ipc",
+        "--share=ipc",
+        "--socket=x11",
         "--device=dri",
         "--socket=pulseaudio",
         "--persist=.stratagus"
     ],
     "command": "stratagus",
+    "cleanup": [
+        "/lib/*.a",
+        "/lib/*.la",
+        "/include",
+        "/lib/pkgconfig",
+        "/lib/cmake",
+        "/share/man"
+    ],
     "modules": [
         {
             "name": "lua",
@@ -23,7 +31,6 @@
                 }
             ],
             "cleanup": [
-                "/include",
                 "/share/lua"
             ]
         },
@@ -38,7 +45,6 @@
                 }
             ],
             "cleanup": [
-                "/include",
                 "/share/toluapp"
             ]
         },
@@ -68,13 +74,6 @@
                     "url": "https://github.com/FluidSynth/fluidsynth/archive/v1.1.11.tar.gz",
                     "sha256": "da8878ff374d12392eecf87e96bad8711b8e76a154c25a571dd8614d1af80de8"
                 }
-            ],
-            "cleanup": [
-                "/include",
-                "/lib/pkgconfig",
-                "/lib/*.a",
-                "/lib/*.la",
-                "/share/man"
             ]
         },
         {
@@ -87,11 +86,6 @@
                 }
             ],
             "cleanup": [
-                "/include",
-                "/lib/pkgconfig",
-                "/lib/*.a",
-                "/lib/*.la",
-                "/share/man",
                 "/share/info"
             ]
         },
@@ -103,13 +97,6 @@
                     "url": "http://downloads.sourceforge.net/sourceforge/libmng/libmng-2.0.3.tar.xz",
                     "sha1": "0f141482ffcef6f8cd4413f945a59310ac2e49af"
                 }
-            ],
-            "cleanup": [
-                "/include",
-                "/lib/pkgconfig",
-                "/lib/*.a",
-                "/lib/*.la",
-                "/share/man"
             ]
         },
         {
@@ -145,10 +132,6 @@
                 }
             ],
             "cleanup": [
-                "/include",
-                "/lib/pkgconfig",
-                "/lib/*.a",
-                "/lib/*.la",
                 "/man"
             ]
         },
@@ -174,10 +157,6 @@
                 }
             ],
             "cleanup": [
-                "/include",
-                "/lib/pkgconfig",
-                "/lib/*.a",
-                "/lib/*.la",
                 "/man"
             ]
         },
@@ -193,11 +172,6 @@
                     "url": "https://github.com/ladislav-zezula/StormLib/archive/v9.22.tar.gz",
                     "sha256": "7ed583aae5549ba1abc68a8fc9a642b28323cdf835941bd9b2b549a7b623e53d"
                 }
-            ],
-            "cleanup": [
-                "/include",
-                "/lib/*.a",
-                "/lib/*.la"
             ]
         },
         {
@@ -215,9 +189,6 @@
                     "url": "https://github.com/Wargus/stratagus.git",
                     "tag": "v2.4.1"
                 }
-            ],
-            "cleanup": [
-                "/include"
             ]
         },
         {
