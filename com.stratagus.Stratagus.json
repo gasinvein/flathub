@@ -62,21 +62,6 @@
             "cleanup": [ "*" ]
         },
         {
-            "name": "fluidsynth",
-            "buildsystem": "cmake-ninja",
-            "config-opts": [
-                "-DBUILD_SHARED_LIBS=BOOL:ON",
-                "-DLIB_SUFFIX="
-            ],
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "https://github.com/FluidSynth/fluidsynth/archive/v1.1.11.tar.gz",
-                    "sha256": "da8878ff374d12392eecf87e96bad8711b8e76a154c25a571dd8614d1af80de8"
-                }
-            ]
-        },
-        {
             "name": "libmikmod",
             "sources": [
                 {
@@ -97,67 +82,6 @@
                     "url": "http://downloads.sourceforge.net/sourceforge/libmng/libmng-2.0.3.tar.xz",
                     "sha1": "0f141482ffcef6f8cd4413f945a59310ac2e49af"
                 }
-            ]
-        },
-        {
-            "name": "scons",
-            "buildsystem": "simple",
-            "cleanup": [ "*" ],
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "http://download.sourceforge.net/scons/scons-3.0.1.tar.gz",
-                    "sha256": "24475e38d39c19683bc88054524df018fe6949d70fbd4c69e298d39a0269f173"
-                }
-            ],
-            "build-commands": [
-                "python3 setup.py install --prefix=/app"
-            ]
-        },
-        {
-            "name": "ffmpeg2theora",
-            "buildsystem": "simple",
-            "build-commands": [
-                "scons -j $FLATPAK_BUILDER_N_JOBS prefix=/app install"
-            ],
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "http://v2v.cc/~j/ffmpeg2theora/downloads/ffmpeg2theora-0.30.tar.bz2",
-                    "sha256": "4f6464b444acab5d778e0a3359d836e0867a3dcec4ad8f1cdcf87cb711ccc6df"
-                },
-                {
-                    "type": "patch",
-                    "path": "ffmpeg2theora-link-libm.patch"
-                }
-            ],
-            "cleanup": [
-                "/man"
-            ]
-        },
-        {
-            "name": "cdparanoia",
-            "config-opts": [
-                "--enable-shared",
-                "--disable-static"
-            ],
-            "build-options" : {
-                "cflags": "-fPIC -g",
-                "ldflags": "-fPIC"
-            },
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "http://downloads.xiph.org/releases/cdparanoia/cdparanoia-III-10.2.src.tgz",
-                    "sha256": "005db45ef4ee017f5c32ec124f913a0546e77014266c6a1c50df902a55fe64df"
-                },
-                {
-                    "type": "patch",
-                    "path": "cdparanoia-gcc4.3.patch"
-                }
-            ],
-            "cleanup": [
-                "/man"
             ]
         },
         {
@@ -265,6 +189,84 @@
                     "url": "http://http.debian.net/debian/pool/main/t/timgm6mb-soundfont/timgm6mb-soundfont_1.3.orig.tar.gz",
                     "sha1": "2ba5e0070863970055c74d5a8ed84538e14f6124"
                 }
+            ]
+        },
+        {
+            "name": "fluidsynth",
+            "buildsystem": "cmake-ninja",
+            "config-opts": [
+                "-DBUILD_SHARED_LIBS=BOOL:ON",
+                "-DLIB_SUFFIX="
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/FluidSynth/fluidsynth/archive/v1.1.11.tar.gz",
+                    "sha256": "da8878ff374d12392eecf87e96bad8711b8e76a154c25a571dd8614d1af80de8"
+                }
+            ]
+        },
+        {
+            "name": "ffmpeg2theora",
+            "buildsystem": "simple",
+            "build-commands": [
+                "scons -j $FLATPAK_BUILDER_N_JOBS prefix=/app install"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "http://v2v.cc/~j/ffmpeg2theora/downloads/ffmpeg2theora-0.30.tar.bz2",
+                    "sha256": "4f6464b444acab5d778e0a3359d836e0867a3dcec4ad8f1cdcf87cb711ccc6df"
+                },
+                {
+                    "type": "patch",
+                    "path": "ffmpeg2theora-link-libm.patch"
+                }
+            ],
+            "cleanup": [
+                "/man"
+            ],
+            "modules": [
+                {
+                    "name": "scons",
+                    "buildsystem": "simple",
+                    "cleanup": [ "*" ],
+                    "sources": [
+                        {
+                            "type": "archive",
+                            "url": "http://download.sourceforge.net/scons/scons-3.0.1.tar.gz",
+                            "sha256": "24475e38d39c19683bc88054524df018fe6949d70fbd4c69e298d39a0269f173"
+                        }
+                    ],
+                    "build-commands": [
+                        "python3 setup.py install --prefix=/app"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "cdparanoia",
+            "config-opts": [
+                "--enable-shared",
+                "--disable-static"
+            ],
+            "build-options" : {
+                "cflags": "-fPIC -g",
+                "ldflags": "-fPIC"
+            },
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "http://downloads.xiph.org/releases/cdparanoia/cdparanoia-III-10.2.src.tgz",
+                    "sha256": "005db45ef4ee017f5c32ec124f913a0546e77014266c6a1c50df902a55fe64df"
+                },
+                {
+                    "type": "patch",
+                    "path": "cdparanoia-gcc4.3.patch"
+                }
+            ],
+            "cleanup": [
+                "/man"
             ]
         }
     ]
