@@ -1,9 +1,9 @@
 {
     "app-id": "com.vivaldi.Vivaldi",
     "runtime": "org.freedesktop.Platform",
-    "runtime-version": "1.6",
+    "runtime-version": "18.08",
     "base": "io.atom.electron.BaseApp",
-    "base-version": "stable",
+    "base-version": "18.08",
     "branch": "stable",
     "sdk": "org.freedesktop.Sdk",
     "command": "vivaldi",
@@ -22,43 +22,12 @@
     ],
     "modules": [
         {
-            "name": "gyp",
-            "buildsystem": "simple",
-            "cleanup": [ "*" ],
-            "sources": [
-                {
-                    "type": "git",
-                    "url": "https://chromium.googlesource.com/external/gyp",
-                    "commit": "324dd166b7c0b39d513026fa52d6280ac6d56770"
-                }
-            ],
-            "build-commands": [
-                "python2 setup.py install --prefix=/app"
-            ]
-        },
-        {
-            "name": "nss",
-            "buildsystem": "simple",
-            "subdir": "nss",
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_32_RTM/src/nss-3.32.tar.gz",
-                    "sha256": "35c6f381cc96bb25e4f924469f6ba3e57b3a16e0c2fb7e295a284a00d57ed335"
-                }
-            ],
-            "build-commands": [
-                "./build.sh --system-sqlite --system-nspr --enable-libpkix -v -o",
-                "install -D ../dist/Release/lib/*.so /app/lib"
-            ]
-        },
-        {
             "name": "vivaldi",
             "buildsystem": "simple",
             "build-commands": [
                 "mkdir -p /app/{bin,lib}",
                 "cp /usr/bin/ar /app/bin",
-                "cp /usr/lib/libbfd-*.so /app/lib",
+                "cp /usr/lib/*/libbfd-*.so /app/lib",
                 "install -Dm755 apply_extra.sh /app/bin/apply_extra",
                 "install -Dm755 vivaldi.sh /app/bin/vivaldi",
                 "install -Dm644 -t /app/share/appdata/ $FLATPAK_ID.appdata.xml"
@@ -95,26 +64,26 @@
                 {
                     "type": "extra-data",
                     "only-arches": [ "x86_64" ],
-                    "url": "https://downloads.vivaldi.com/stable/vivaldi-stable_1.15.1147.55-1_amd64.deb",
+                    "url": "https://downloads.vivaldi.com/stable/vivaldi-stable_2.0.1309.29-2_amd64.deb",
                     "filename": "vivaldi.deb",
-                    "size": 52880244,
-                    "sha256": "03c19e76d614b25fc8c36b636334a16d818f549abd2d20df303d15e9096f341e"
+                    "size": 57575078,
+                    "sha256": "93fd79c0879470fd4c497f8bac18321c491705dc914eb8657479c91652706a27"
                 },
                 {
                     "type": "extra-data",
                     "only-arches": [ "i386" ],
-                    "url": "https://downloads.vivaldi.com/stable/vivaldi-stable_1.15.1147.55-1_i386.deb",
+                    "url": "https://downloads.vivaldi.com/stable/vivaldi-stable_2.0.1309.29-2_i386.deb",
                     "filename": "vivaldi.deb",
-                    "size": 52490106,
-                    "sha256": "1c38362d3b539df078171bb9b46abd6d0970a1af6091b6c10506fb5f81b142d8"
+                    "size": 56864360,
+                    "sha256": "c7c9a08d4f8f6490e0d26a7bef1cae78e410c5d28f86736e996ed867002a4472"
                 },
                 {
                     "type": "extra-data",
                     "only-arches": [ "armhf" ],
-                    "url": "https://downloads.vivaldi.com/stable/vivaldi-stable_1.15.1147.55-1_armhf.deb",
+                    "url": "https://downloads.vivaldi.com/stable/vivaldi-stable_2.0.1309.29-2_armhf.deb",
                     "filename": "vivaldi.deb",
-                    "size": 46831370,
-                    "sha256": "24858244e3a9bce7cd8600ec655f2856dabbe4c7ad83fb7f7c313674ee31ed1f"
+                    "size": 50850396,
+                    "sha256": "4b1bef53dcee877c15e072f9ed5a4cdfbea86b184b87184f4c6577a9830434c2"
                 }
             ]
         }
