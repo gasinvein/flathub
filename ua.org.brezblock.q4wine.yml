@@ -102,17 +102,26 @@ modules:
   - name: cabextract
     sources:
       - type: archive
-        url: https://www.cabextract.org.uk/cabextract-1.6.tar.gz
+        url: "https://www.cabextract.org.uk/cabextract-1.6.tar.gz"
         sha256: cee661b56555350d26943c5e127fc75dd290b7f75689d5ebc1f04957c4af55fb
 
   - name: unrar
     no-autogen: true
+    make-args:
+      - CXXFLAGS=-g
+      - STRIP=/bin/true
     make-install-args:
       - DESTDIR=/app
     sources:
       - type: archive
-        url: https://www.rarlab.com/rar/unrarsrc-5.6.4.tar.gz
+        url: "https://www.rarlab.com/rar/unrarsrc-5.6.4.tar.gz"
         sha256: 9335d2201870f2034007c04be80e00f1dc23932cb88b329d55c76134e6ba49fe
+
+  - name: wget
+    sources:
+      - type: archive
+        url: "https://ftp.gnu.org/gnu/wget/wget-1.19.tar.xz"
+        sha256: 0f1157bbf4daae19f3e1ddb70c6ccb2067feb834a6aa23c9d9daa7f048606384
 
   - name: winetricks
     no-autogen: true
