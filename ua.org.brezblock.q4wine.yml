@@ -43,15 +43,10 @@ add-extensions:
     download-if: active-gl-driver
     enable-if: active-gl-driver
 
-  ua.org.brezblock.q4wine.wine.stable:
-    directory: wine/stable
-  ua.org.brezblock.q4wine.wine.stable.compat32:
-    directory: wine/stable/32bit
-
-  ua.org.brezblock.q4wine.wine.devel:
-    directory: wine/devel
-  ua.org.brezblock.q4wine.wine.devel.compat32:
-    directory: wine/devel/32bit
+  ua.org.brezblock.q4wine.wine.vanilla:
+    directory: wine/vanilla
+  ua.org.brezblock.q4wine.wine.vanilla.compat32:
+    directory: wine/vanilla/32bit
 
   ua.org.brezblock.q4wine.wine.staging:
     directory: wine/staging
@@ -150,7 +145,7 @@ modules:
     buildsystem: simple
     build-commands:
       - mkdir -p /app/lib/32bit
-      - mkdir -p /app/wine/{stable,devel,staging}
+      - mkdir -p /app/wine/{vanilla,staging}
       - ln -s 32bit/lib/ld-linux.so.2 /app/lib/ld-linux.so.2
       - ln -s /bin/false /app/bin/mount
       - ln -s /bin/false /app/bin/umount
