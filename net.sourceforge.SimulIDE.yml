@@ -1,0 +1,39 @@
+id: net.sourceforge.SimulIDE
+runtime: org.kde.Platform
+sdk: org.kde.Sdk
+runtime-version: 5.11
+command: simulide
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --socket=wayland
+  - --device=all
+cleanup:
+  - "*.a"
+  - "*.la"
+  - /include
+  - /lib/pkgconfig
+  - /share/aclocal
+  - /share/gtk-doc
+  - /share/gtk-2.0/demo
+modules:
+  - name: simulide
+    buildsystem: qmake
+    subdir: build_XX
+    config-opts:
+      - LIBS+=-L/app/lib
+    post-install:
+      - cp -av release/SimulIDE_0.2.8/{bin,share} /app/
+      - ln -s SimulIDE_0.2.8 /app/bin/simulide
+    sources:
+      - type: archive
+        url: "https://sourceforge.net/projects/simulide/files/SimulIDE_0.2.8/SimulIDE_0.2.8-SR1-Sources.tar.gz"
+        sha256: 43e484cd2cdbd61f46b969de0705c409e26ede4ce6613730d23f04ace47d6187
+    modules:
+      - name: gpsim
+        sources:
+          - type: archive
+            url: "https://downloads.sourceforge.net/gpsim/gpsim-0.30.0.tar.gz"
+            sha256: e1927312c37119bc26d6abf2c250072a279a9c764c49ae9d71b4ccebb8154f86
+        modules:
+          - shared-modules/gtk2/gtk2.json
