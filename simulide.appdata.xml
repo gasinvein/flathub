@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+    <id>net.sourceforge.SimulIDE</id>
+    <name>SimulIDE</name>
+    <summary>Electronic circuit simulator</summary>
+    <description>
+        <p>
+            Real Time Electronic Circuit Simulator.
+            Include PIC, AVR and Arduino simulation.
+            Code Editor &amp; Debugger for Arduino, GcBasic, PIC asm, AVR asm.
+        </p>
+    </description>
+    <categories>
+        <category>Development</category>
+        <category>Electronics</category>
+    </categories>
+    <metadata_license>CC0-1.0</metadata_license>
+    <project_license>GPL-3.0</project_license>
+    <url type="homepage">https://simulide.blogspot.com/</url>
+    <url type="donation">https://www.patreon.com/user/overview?u=13972179</url>
+    <launchable type="desktop-id">net.sourceforge.SimulIDE.desktop</launchable>
+    <screenshots>
+        <screenshot type="default">
+            <image>https://a.fsdn.com/con/app/proj/simulide/screenshots/simulide028.png</image>
+        </screenshot>
+        <screenshot>
+            <image>https://a.fsdn.com/con/app/proj/simulide/screenshots/SIMULIDE028-1.png</image>
+        </screenshot>
+        <screenshot>
+            <image>https://a.fsdn.com/con/app/proj/simulide/screenshots/simulide028-3.png</image>
+        </screenshot>
+        <screenshot>
+            <image>https://a.fsdn.com/con/app/proj/simulide/screenshots/simulide028-2.png</image>
+        </screenshot>
+        <screenshot>
+            <image>https://a.fsdn.com/con/app/proj/simulide/screenshots/simulide028-4.png</image>
+        </screenshot>
+    </screenshots>
+    <releases>
+        <release version="0.2.8-SR1" date="2018-07-07" />
+    </releases>
+</component>

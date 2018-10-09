@@ -9,6 +9,7 @@ finish-args:
   - --socket=wayland
   - --device=all
 rename-desktop-file: simulide.desktop
+rename-appdata-file: simulide.appdata.xml
 rename-icon: simulide
 cleanup:
   - "*.a"
@@ -32,12 +33,15 @@ modules:
       - convert ../src/icons/simulide.png -resize 128x128 /app/share/icons/hicolor/128x128/apps/simulide.png
       - convert ../src/icons/simulide.png -resize 256x256 /app/share/icons/hicolor/256x256/apps/simulide.png
       - install -Dm644 ../simulide.desktop -t /app/share/applications
+      - install -Dm644 ../simulide.appdata.xml -t /app/share/appdata
     sources:
       - type: archive
         url: "https://sourceforge.net/projects/simulide/files/SimulIDE_0.2.8/SimulIDE_0.2.8-SR1-Sources.tar.gz"
         sha256: 43e484cd2cdbd61f46b969de0705c409e26ede4ce6613730d23f04ace47d6187
       - type: file
         path: simulide.desktop
+      - type: file
+        path: simulide.appdata.xml
     modules:
       - name: gpsim
         sources:
