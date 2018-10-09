@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=SimulIDE
+GenericName=Electronic circuit simulator
+Comment=Build and simulate electronic circuits
+Exec=simulide
+Icon=simulide
+Terminal=false
+Categories=Development;Engineering;Electronics;
+Keywords=embedded electronics;electronics;avr;pic;microcontroller;
+StartupNotify=true
