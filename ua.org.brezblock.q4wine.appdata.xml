@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2017 Dmitrij S. kryzhevich <kryzhev@ispms.ru> -->
 <component type="desktop">
-  <id>q4wine.desktop</id>
+  <id>ua.org.brezblock.q4wine.desktop</id>
   <translation type="gettext">q4wine</translation>
   <name>q4wine</name>
   <summary>Utility for Wine applications and prefixes management</summary>
@@ -22,7 +22,7 @@
     </screenshot>
   </screenshots>
   <metadata_license>CC0-1.0</metadata_license>
-  <project_license>GPL-3.0+</project_license>
+  <project_license>GPL-3.0</project_license>
   <url type="homepage">http://q4wine.brezblock.org.ua/</url>
   <update_contact>brezerk@gmail.com</update_contact>
 </component>

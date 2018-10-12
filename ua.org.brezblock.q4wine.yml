@@ -5,7 +5,6 @@ runtime-version: 5.11
 command: q4wine
 rename-icon: q4wine
 rename-desktop-file: q4wine.desktop
-rename-appdata-file: q4wine.appdata.xml
 finish-args:
   - --share=ipc
   - --socket=x11
@@ -60,13 +59,13 @@ modules:
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
       - -DLIBS_ENTRY_PATH=/app/lib
     post-install:
-      - install -Dm644 -t /app/share/appdata q4wine.appdata.xml
+      - install -Dm644 -t /app/share/appdata/ ${FLATPAK_ID}.appdata.xml
     sources:
       - type: archive
         url: "https://github.com/brezerk/q4wine/archive/v1.3.9.tar.gz"
         sha256: 70ffe5e4d35ca0d2557f61576e4abb714da82d79d01cf86c7d5b9a769dafacf4
       - type: file
-        path: q4wine.appdata.xml
+        path: ua.org.brezblock.q4wine.appdata.xml
 
     modules:
       - name: fuseiso
