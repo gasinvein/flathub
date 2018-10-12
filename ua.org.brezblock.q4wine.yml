@@ -62,8 +62,8 @@ modules:
       - install -Dm644 -t /app/share/appdata/ ${FLATPAK_ID}.appdata.xml
     sources:
       - type: archive
-        url: "https://github.com/brezerk/q4wine/archive/v1.3.9.tar.gz"
-        sha256: 70ffe5e4d35ca0d2557f61576e4abb714da82d79d01cf86c7d5b9a769dafacf4
+        url: "https://github.com/brezerk/q4wine/archive/v1.3.10.tar.gz"
+        sha256: a1dbc257dc7e56b07863ca469f924aded88ee5494b71a54249f097828dcae457
       - type: file
         path: ua.org.brezblock.q4wine.appdata.xml
 

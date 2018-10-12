@@ -2,8 +2,8 @@
 <!-- Copyright 2017 Dmitrij S. kryzhevich <kryzhev@ispms.ru> -->
 <component type="desktop">
   <id>ua.org.brezblock.q4wine.desktop</id>
-  <translation type="gettext">q4wine</translation>
   <name>q4wine</name>
+  <translation type="gettext">q4wine</translation>
   <summary>Utility for Wine applications and prefixes management</summary>
   <summary xml:lang="cz">užitečný program pro programy wine a správu předpon</summary>
   <summary xml:lang="de">Werkzeug zur Verwaltung der Wine-Anwendungen und -Präfixe</summary>
@@ -12,7 +12,12 @@
   <summary xml:lang="it">Programma per gestire le applicazioni con Wine e i prefissi</summary>
   <summary xml:lang="ru">Программа для настройки приложений и управления префиксами Wine</summary>
   <summary xml:lang="uk">Програма для налаштування програм та керування префіксами Wine</summary>
-  <description><p>Utility for Wine applications and prefixes management.</p></description>
+  <description>
+      <p>Utility for Wine applications and prefixes management.</p>
+  </description>
+  <categories>
+    <category>System</category>
+  </categories>
   <screenshots>
     <screenshot type="default">
       <image>https://a.fsdn.com/con/app/proj/q4wine/screenshots/332493.jpg</image>
@@ -25,4 +30,8 @@
   <project_license>GPL-3.0</project_license>
   <url type="homepage">http://q4wine.brezblock.org.ua/</url>
   <update_contact>brezerk@gmail.com</update_contact>
+  <launchable type="desktop-id">ua.org.brezblock.q4wine.desktop</launchable>
+  <releases>
+    <release version="1.3.10" date="2018-09-12" />
+  </releases>
 </component>
