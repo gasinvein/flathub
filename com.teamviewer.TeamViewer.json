@@ -1,10 +1,10 @@
 {
     "id": "com.teamviewer.TeamViewer",
-    "base": "io.qt.qtwebkit.BaseApp",
-    "branch": "stable",
     "runtime": "org.kde.Platform",
     "sdk": "org.kde.Sdk",
     "runtime-version": "5.9",
+    "base": "io.qt.qtwebkit.BaseApp",
+    "base-version": "5.9",
     "command": "teamviewer",
     "finish-args": [
         "--share=network",
@@ -67,19 +67,14 @@
                 }
             ],
             "cleanup": [
-                "/sbin",
-                "*.a",
-                "*.la",
-                "/include",
-                "/lib/cmake",
-                "/lib/pkgconfig",
-                "/lib/mkspecs"
+                "/sbin"
             ]
         },
         {
             "name": "teamviewer",
             "buildsystem": "simple",
             "build-commands": [
+                "install -Dm644 com.teamviewer.TeamViewer.appdata.xml -t /app/share/appdata/",
                 "install -Dm755 apply_extra.sh /app/bin/apply_extra",
                 "install -Dm755 teamviewer.sh /app/bin/teamviewer"
             ],
@@ -92,10 +87,14 @@
                     "type": "script",
                     "dest-filename": "teamviewer.sh",
                     "commands": [
-                        "test -d /var/config/teamviewer || mkdir -p /var/config/teamviewer",
-                        "test -d /var/data/teamviewer/logfiles || mkdir -p /var/data/teamviewer/logfiles",
+                        "mkdir -p /var/config/teamviewer",
+                        "mkdir -p /var/data/teamviewer/logfiles",
                         "exec /app/extra/teamviewer/tv_bin/script/teamviewer $@"
                     ]
+                },
+                {
+                    "type": "file",
+                    "path": "com.teamviewer.TeamViewer.appdata.xml"
                 },
                 {
                     "type": "extra-data",
@@ -114,24 +113,6 @@
                     "size": 11422756
                 }
             ]
-        },
-        {
-            "name": "appdata",
-            "buildsystem": "simple",
-            "build-commands": [
-                "install -Dm644 com.teamviewer.TeamViewer.appdata.xml -t /app/share/appdata/"
-            ],
-            "sources": [
-                {
-                    "type": "file",
-                    "path": "com.teamviewer.TeamViewer.appdata.xml"
-                }
-            ]
         }
-    ],
-    "cleanup": [
-        "/include",
-        "/lib/cmake",
-        "/lib/pkgconfig"
     ]
 }
