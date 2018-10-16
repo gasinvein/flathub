@@ -53,8 +53,8 @@ modules:
       - /share/applications
     sources:
       - type: archive
-        url: https://dl.winehq.org/wine/source/3.x/wine-3.17.tar.xz
-        sha256: 4cede2e1de426af2430abee84afd77379a1f4f05c3ec9cd4280110de54fccc21
+        url: "https://dl.winehq.org/wine/source/3.x/wine-3.18.tar.xz"
+        sha256: 9be8d44b1b22814c76e6214fe8ce657ae90a7a17879e5cd2b2a87ad6a1391a77
 
   - name: wineserver
     buildsystem: simple
@@ -84,3 +84,12 @@ modules:
       - ln -s 32bit/lib $FLATPAK_DEST/lib
       - ln -s ../32bit/bin/wine $FLATPAK_DEST/bin/wine
       - ln -s ../32bit/bin/wine-preloader $FLATPAK_DEST/bin/wine-preloader
+
+  - name: appdata
+    buildsystem: simple
+    build-commands:
+      - install -Dm644 -t ${FLATPAK_DEST}/share/metainfo ${FLATPAK_ID}.metainfo.xml
+      - appstream-compose --basename=${FLATPAK_ID} --prefix=${FLATPAK_DEST} --origin=flatpak ${FLATPAK_ID}
+    sources:
+      - type: file
+        path: ua.org.brezblock.q4wine.wine.vanilla.metainfo.xml
