@@ -1,7 +1,7 @@
 id: ua.org.brezblock.q4wine.wine.staging
 runtime: ua.org.brezblock.q4wine
 runtime-version: stable
-sdk: org.freedesktop.Sdk//1.6
+sdk: org.kde.Sdk//5.11
 build-extension: true
 separate-locales: false
 appstream-compose: false
@@ -53,11 +53,11 @@ modules:
       - /share/applications
     sources:
       - type: archive
-        url: "https://dl.winehq.org/wine/source/3.x/wine-3.18.tar.xz"
-        sha256: 9be8d44b1b22814c76e6214fe8ce657ae90a7a17879e5cd2b2a87ad6a1391a77
+        url: "https://dl.winehq.org/wine/source/3.x/wine-3.19.tar.xz"
+        sha256: ef21c626aef09715de9640a79d42e8b5e305761d5f21491fe84d74cafa7a9c6a
       - type: archive
-        url: "https://github.com/wine-staging/wine-staging/archive/v3.18.tar.gz"
-        sha256: 148b3312c3583e9b55b713fc201cb758aca022b27329b3b971c8923c8049576d
+        url: "https://github.com/wine-staging/wine-staging/archive/v3.19.tar.gz"
+        sha256: ed6961175aecba717782816f0146a5fa5aa2662b9685d6fd79f070d30b4437c9
         dest: staging
       - type: shell
         commands:
