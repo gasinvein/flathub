@@ -53,11 +53,11 @@ modules:
       - /share/applications
     sources:
       - type: archive
-        url: "https://dl.winehq.org/wine/source/3.x/wine-3.19.tar.xz"
-        sha256: ef21c626aef09715de9640a79d42e8b5e305761d5f21491fe84d74cafa7a9c6a
+        url: "https://dl.winehq.org/wine/source/3.x/wine-3.20.tar.xz"
+        sha256: 33d61122085056e091042df7d2cbe908ffb9c06e602278611dca2eea6a566f18
       - type: archive
-        url: "https://github.com/wine-staging/wine-staging/archive/v3.19.tar.gz"
-        sha256: ed6961175aecba717782816f0146a5fa5aa2662b9685d6fd79f070d30b4437c9
+        url: "https://github.com/wine-staging/wine-staging/archive/v3.20.tar.gz"
+        sha256: 796e6dec0091aa8c22fb1adf3f4bd2b6122b5aac9ae90daffd2e4a4326d0115b
         dest: staging
       - type: shell
         commands:
