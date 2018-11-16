@@ -1,0 +1,28 @@
+From aff30b75c3bedc2333989c08e8d4843a8b1acd8a Mon Sep 17 00:00:00 2001
+From: Filippe LeMarchand <gasinvein@gmail.com>
+Date: Fri, 16 Nov 2018 15:57:45 +0300
+Subject: [PATCH] Use /proc/self/mounts instead of /etc/mtab on Linux
+
+/etc/mtab is deprecated. While it's still present on most distributions as a compatibility symlink, you shouldn't rely on it.
+---
+ rip_music_unix.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/rip_music_unix.cpp b/rip_music_unix.cpp
+index eac977d7..9d294fbc 100644
+--- a/rip_music_unix.cpp
++++ b/rip_music_unix.cpp
+@@ -153,11 +153,11 @@ static char * find_dev(const char * mnt_dir) {
+ 	char * dev = NULL;
+ 	FILE * file;
+ 
+-	file = setmntent("/etc/mtab", "r");
++	file = setmntent("/proc/self/mounts", "r");
+ 
+ 	if ( ! file ) {
+ 
+-		fprintf(stderr, "Error: Cannot open file /etc/mtab: %s\n", strerror(errno));
++		fprintf(stderr, "Error: Cannot open file /proc/self/mounts: %s\n", strerror(errno));
+ 		return NULL;
+ 
+ 	}

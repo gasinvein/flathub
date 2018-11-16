@@ -139,6 +139,8 @@ modules:
       - type: git
         url: "https://github.com/Wargus/wargus.git"
         tag: v2.4.2
+      - type: patch
+        path: wargus-avoid-mtab.patch
     post-install:
       - install -Dm644 /app/share/pixmaps/wargus.png /app/share/icons/hicolor/64x64/apps/com.stratagus.Stratagus-wargus.png
       - sed 's/Icon=/Icon=com.stratagus.Stratagus-/g' -i /app/share/applications/wargus.desktop
