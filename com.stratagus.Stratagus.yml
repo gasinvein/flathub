@@ -70,9 +70,9 @@ modules:
     cleanup:
       - /share/toluapp
 
-  - shared-modules/SDL/SDL-1.2.15.json
-
   - shared-modules/glu/glu-9.0.0.json
+
+  - shared-modules/SDL/SDL-1.2.15.json
 
   - name: libmikmod
     sources:
@@ -120,6 +120,8 @@ modules:
     buildsystem: cmake-ninja
     builddir: true
     config-opts:
+      - -DWITH_RENDERER=OpenGL
+      - -DOpenGL_GL_PREFERENCE=GLVND
       - -DENABLE_USEGAMEDIR=OFF
       - -DENABLE_DEV=ON
       - -DGAMEDIR=/app/bin
