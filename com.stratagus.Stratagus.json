@@ -2,13 +2,15 @@
     "id": "com.stratagus.Stratagus",
     "runtime": "org.freedesktop.Platform",
     "sdk": "org.freedesktop.Sdk",
-    "runtime-version": "1.6",
+    "runtime-version": "18.08",
     "finish-args": [
         "--share=ipc",
         "--socket=x11",
-        "--device=dri",
+        "--device=all",
         "--socket=pulseaudio",
-        "--persist=.stratagus"
+        "--persist=.stratagus",
+        "--filesystem=/media",
+        "--filesystem=/run/media"
     ],
     "command": "stratagus",
     "cleanup": [
@@ -126,7 +128,7 @@
                 {
                     "type": "git",
                     "url": "https://github.com/Wargus/stratagus.git",
-                    "tag": "v2.4.1"
+                    "tag": "v2.4.2"
                 }
             ]
         },
@@ -141,7 +143,7 @@
                 {
                     "type": "git",
                     "url": "https://github.com/Wargus/wargus.git",
-                    "tag": "v2.4.1"
+                    "tag": "v2.4.2"
                 }
             ],
             "post-install": [
@@ -161,7 +163,7 @@
                 {
                     "type": "git",
                     "url": "https://github.com/Wargus/stargus.git",
-                    "tag": "v2.4.1"
+                    "commit": "17e1881"
                 }
             ],
             "post-install": [
@@ -183,7 +185,7 @@
                 {
                     "type": "git",
                     "url": "https://github.com/Wargus/war1gus.git",
-                    "tag": "v2.4.1"
+                    "tag": "v2.4.2"
                 }
             ],
             "post-install": [
@@ -194,23 +196,12 @@
         },
         {
             "name": "cdparanoia",
-            "config-opts": [
-                "--enable-shared",
-                "--disable-static"
-            ],
-            "build-options" : {
-                "cflags": "-fPIC -g",
-                "ldflags": "-fPIC"
-            },
+            "no-parallel-make": true,
             "sources": [
                 {
                     "type": "archive",
                     "url": "http://downloads.xiph.org/releases/cdparanoia/cdparanoia-III-10.2.src.tgz",
                     "sha256": "005db45ef4ee017f5c32ec124f913a0546e77014266c6a1c50df902a55fe64df"
-                },
-                {
-                    "type": "patch",
-                    "path": "cdparanoia-gcc4.3.patch"
                 }
             ],
             "cleanup": [
@@ -249,19 +240,6 @@
                     "type": "archive",
                     "url": "http://http.debian.net/debian/pool/main/t/timgm6mb-soundfont/timgm6mb-soundfont_1.3.orig.tar.gz",
                     "sha1": "2ba5e0070863970055c74d5a8ed84538e14f6124"
-                }
-            ]
-        },
-        {
-            "name": "ffmpeg2theora",
-            "buildsystem": "simple",
-            "build-commands": [
-                "install -Dm755 fake-ffmpeg2theora.sh /app/bin/ffmpeg2theora"
-            ],
-            "sources": [
-                {
-                    "type": "file",
-                    "path": "fake-ffmpeg2theora.sh"
                 }
             ]
         }
