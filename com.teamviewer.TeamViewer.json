@@ -23,7 +23,7 @@
         "--talk-name=org.a11y.Bus",
         "--system-talk-name=org.freedesktop.NetworkManager",
         "--persist=.config/teamviewer",
-        "--persist=.local/share/teamviewer13"
+        "--persist=.local/share/teamviewer14"
     ],
     "cleanup": [
         "*.a",
@@ -99,18 +99,18 @@
                 {
                     "type": "extra-data",
                     "only-arches": [ "x86_64" ],
-                    "url": "https://dl.tvcdn.de/download/linux/version_13x/teamviewer_13.1.8286_amd64.tar.xz",
+                    "url": "https://dl.tvcdn.de/download/linux/version_14x/teamviewer_14.0.12762_amd64.tar.xz",
                     "filename": "teamviewer.tar.xz",
-                    "sha256": "15a50e7d0f6e5a21f9393351bc28ccce8a3c2ebf850b96e05a4f856640e0295c",
-                    "size": 11574812
+                    "sha256": "5162430ef7b91234312654c8c7271a41e62d2f11c32e6137cfe3be42b36c3aa8",
+                    "size": 19449912
                 },
                 {
                     "type": "extra-data",
                     "only-arches": [ "i386" ],
-                    "url": "https://dl.tvcdn.de/download/linux/version_13x/teamviewer_13.1.8286_i386.tar.xz",
+                    "url": "https://dl.tvcdn.de/download/linux/version_14x/teamviewer_14.0.12762_i386.tar.xz",
                     "filename": "teamviewer.tar.xz",
-                    "sha256": "7f0ecfa8aa6f1fb9d661340e50f542f2a6cd22fa1e2f47b3a7c3129dd07599cf",
-                    "size": 11422756
+                    "sha256": "8e704f1527ac26b4a80893764c1b8a6f4180801769ed4c2f0bf3220b123537d2",
+                    "size": 19462964
                 }
             ]
         }
