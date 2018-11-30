@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="addon">
   <id>ua.org.brezblock.q4wine.wine.staging</id>
-  <extends>ua.org.brezblock.q4wine.desktop</extends>
+  <extends>ua.org.brezblock.q4wine</extends>
   <name>Wine Staging</name>
   <summary>Wine with staging patches</summary>
   <url type="homepage">https://wine-staging.com/</url>

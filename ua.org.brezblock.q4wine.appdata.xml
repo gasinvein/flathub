@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2017 Dmitrij S. kryzhevich <kryzhev@ispms.ru> -->
 <component type="desktop">
-  <id>ua.org.brezblock.q4wine.desktop</id>
+  <id>ua.org.brezblock.q4wine</id>
   <name>q4wine</name>
   <translation type="gettext">q4wine</translation>
   <summary>Utility for Wine applications and prefixes management</summary>

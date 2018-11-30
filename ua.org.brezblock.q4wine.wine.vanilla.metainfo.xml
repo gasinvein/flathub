@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="addon">
   <id>ua.org.brezblock.q4wine.wine.vanilla</id>
-  <extends>ua.org.brezblock.q4wine.desktop</extends>
+  <extends>ua.org.brezblock.q4wine</extends>
   <name>Wine Vanilla</name>
   <summary>Wine without any patches</summary>
   <url type="homepage">https://winehq.org/</url>
