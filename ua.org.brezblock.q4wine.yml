@@ -81,6 +81,7 @@ modules:
             build-options:
               env:
                 MOUNT_FUSE_PATH: /app/bin
+                INIT_D_PATH: /app/etc/init.d
             sources:
               - type: archive
                 url: "https://github.com/libfuse/libfuse/archive/fuse-2.9.8.tar.gz"
@@ -89,6 +90,7 @@ modules:
                 commands:
                   - ./makeconf.sh
             cleanup:
+              - /etc
               - /include
               - /lib/pkgconfig
 
