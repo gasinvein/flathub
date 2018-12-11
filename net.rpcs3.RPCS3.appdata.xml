@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-    <id>net.rpcs3.RPCS3.desktop</id>
+    <id>net.rpcs3.RPCS3</id>
     <name>RPCS3</name>
     <summary>Open-source Sony PlayStation 3 Emulator</summary>
     <description>
