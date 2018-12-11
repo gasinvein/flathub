@@ -1,7 +1,7 @@
 app-id: net.rpcs3.RPCS3
 runtime: org.freedesktop.Platform
 sdk: org.freedesktop.Sdk
-runtime-version: 18.08
+runtime-version: "18.08"
 command: rpcs3
 rename-desktop-file: rpcs3.desktop
 rename-icon: rpcs3
@@ -115,11 +115,10 @@ modules:
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
       - -DUSE_ALSA=OFF
       - -DUSE_SYSTEM_LIBPNG=ON
-      - -DCMAKE_C_COMPILER=clang
-      - -DCMAKE_CXX_COMPILER=clang++
     sources:
       - type: git
         url: "https://github.com/RPCS3/rpcs3.git"
+        disable-shallow-clone: true
     cleanup:
       - /include/llvm
       - /include/llvm-c
