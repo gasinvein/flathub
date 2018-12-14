@@ -1,7 +1,7 @@
 id: ua.org.brezblock.q4wine
 runtime: org.kde.Platform
 sdk: org.kde.Sdk
-runtime-version: 5.11
+runtime-version: "5.11"
 command: q4wine
 rename-icon: q4wine
 rename-desktop-file: q4wine.desktop
@@ -25,16 +25,16 @@ cleanup:
 add-extensions:
   org.freedesktop.Platform.Compat32:
     directory: lib/32bit
-    version: 1.6
+    version: "1.6"
     add-ld-path: lib
   org.freedesktop.Platform.Compat32.Debug:
     directory: lib/debug/lib/32bit
-    version: 1.6
+    version: "1.6"
     no-autodownload: true
   org.freedesktop.Platform.GL32:
     directory: lib/32bit/lib/GL
-    version: 1.4
-    versions: 1.6;1.4
+    version: "1.4"
+    versions: "1.6;1.4"
     subdirectories: true
     no-autodownload: true
     autodelete: false
