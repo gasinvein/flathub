@@ -1,0 +1,9 @@
+WAF = python3 waf
+
+all: build
+
+build:
+	$(WAF) build
+
+install:
+	$(WAF) install
