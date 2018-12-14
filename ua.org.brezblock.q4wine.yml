@@ -16,6 +16,7 @@ finish-args:
   - --persist=.config/q4wine
   - --persist=.wine
   - --persist=.local/share/wineprefixes
+  - --talk-name=org.freedesktop.Notifications
 cleanup:
   - "*.a"
   - "*.la"
