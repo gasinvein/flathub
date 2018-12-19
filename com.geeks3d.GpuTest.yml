@@ -89,6 +89,8 @@ modules:
       - install -Dm755 apply_extra.sh /app/bin/apply_extra
       - install -Dm755 gputest_gui.sh /app/bin/gputest_gui
       - install -Dm755 GpuTest.sh /app/bin/GpuTest
+      - install -Dm644 ${FLATPAK_ID}.desktop -t /app/share/applications/
+      - install -Dm644 ${FLATPAK_ID}.appdata.xml -t /app/share/appdata/
     sources:
       - type: script
         dest-filename: gputest_gui.sh
@@ -109,6 +111,12 @@ modules:
           - mv GpuTest*/* .
           - rmdir GpuTest*/
           - rm GpuTest.zip
+
+      - type: file
+        path: com.geeks3d.GpuTest.desktop
+
+      - type: file
+        path: com.geeks3d.GpuTest.appdata.xml
 
       - type: extra-data
         only-arches:

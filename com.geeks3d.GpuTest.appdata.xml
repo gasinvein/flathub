@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+    <id>com.geeks3d.GpuTest</id>
+    <name>GPUTest</name>
+    <developer_name>Geeks3D</developer_name>
+    <summary>GPUTest is a suite of cross-platform OpenGL benchmarks</summary>
+    <description>
+        <p>GpuTest is a cross-platform (Windows, Linux and Max OS X) GPU stress test and OpenGL benchmark. GpuTest comes with several GPU tests including some popular ones from Windows'world (FurMark or TessMark).</p>
+        <p>The number of GPU tests grows with the new versions of the tool. The foolowing tests are available in the latest version:
+            <ul>
+                <li><b>FurMark</b> based stress test (OpenGL 2.1 or 3.2).</li>
+                <li><b>TessMark</b> based tessellation test (OpenGL 4.0).</li>
+                <li><b>GiMark</b>: geometry instancing test (OpenGL 3.3).</li>
+                <li><b>PixMark Piano</b> pixel shader test (OpenGL 2.1 or 3.2).</li>
+                <li><b>PixMark Volplosion</b> pixel shader test (OpenGL 2.1 or 3.2).</li>
+                <li><b>Plot3D</b> vertex shader test (OpenGL 2.1 or 3.2).</li>
+                <li><b>Triangle</b> one of the most simple 3D scene ever made... (OpenGL 2.1 or 3.2).</li>
+            </ul>
+        </p>
+    </description>
+    <launchable type="desktop-id">com.geeks3d.GpuTest.desktop</launchable>
+    <categories>
+        <category>Game</category>
+    </categories>
+    <project_license>LicenseRef-proprietary</project_license>
+    <metadata_license>CC0-1.0</metadata_license>
+    <url type="homepage">https://www.geeks3d.com/gputest/</url>
+    <content_rating type="oars-1.1">
+        <content_attribute id="social-info">moderate</content_attribute>
+    </content_rating>
+    <screenshots>
+        <screenshot type="default">
+            <image>http://www.ozone3d.net/public/jegx/201304/gputest-030-mac-osx-piano-volplosion-opengl-test.jpg</image>
+        </screenshot>
+    </screenshots>
+    <releases>
+        <release version="0.7.0 " date="2014-03-04" />
+    </releases>
+</component>

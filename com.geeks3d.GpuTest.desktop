@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=GPUTest
+Comment=GPU test suite
+Exec=gputest_gui
+Terminal=false
+Categories=Game;X-Benchmark;
