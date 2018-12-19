@@ -1,0 +1,119 @@
+id: com.geeks3d.GpuTest
+sdk: org.freedesktop.Sdk
+runtime: org.freedesktop.Platform
+runtime-version: "18.08"
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --device=dri
+  - --share=network # to submit results
+command: GpuTest
+cleanup:
+- "*.a"
+- "*.la"
+- /include
+- /lib/pkgconfig
+- /share/man
+modules:
+  - name: python2
+    config-opts:
+      - --enable-shared
+      - --with-system-expat
+      - --with-system-ffi
+    post-install:
+      - chmod -v 755 /app/lib/libpython*.so
+    sources:
+      - type: archive
+        url: "https://www.python.org/ftp/python/2.7.15/Python-2.7.15.tgz"
+        sha256: 18617d1f15a380a919d517630a9cd85ce17ea602f9bbdc58ddc672df4b0239db
+    cleanup:
+      - /bin/2to3*
+      - /bin/easy_install*
+      - /bin/idle*
+      - /bin/pyvenv*
+      - /bin/pydoc*
+
+      - /lib/python*/test
+      - /lib/python*/*/test
+      - /lib/python*/*/tests
+      - /lib/python*/lib-tk/test
+      - /lib/python*/lib-dynload/_*_test.*.so
+      - /lib/python*/lib-dynload/_test*.*.so
+    modules:
+
+      - name: tk
+        subdir: unix
+        config-opts:
+          - --enable-threads
+          - --disable-rpath
+          - --mandir=/app/share/man
+          - --enable-64bit
+        post-install:
+          - chmod -v 755 /app/lib/libtk*.so
+        sources:
+          - type: archive
+            url: "http://downloads.sourceforge.net/sourceforge/tcl/tk8.6.9-src.tar.gz"
+            sha256: d3f9161e8ba0f107fe8d4df1f6d3a14c30cc3512dfc12a795daa367a27660dac
+        modules:
+
+          - name: tcl
+            subdir: unix
+            config-opts:
+              - --enable-threads
+              - --disable-rpath
+              - --mandir=/app/share/man
+              - --enable-64bit
+            post-install:
+              - chmod -v 755 /app/lib/libtcl*.so
+            sources:
+              - type: archive
+                url: "http://downloads.sourceforge.net/sourceforge/tcl/tcl8.6.9-src.tar.gz"
+                sha256: ad0cd2de2c87b9ba8086b43957a0de3eb2eb565c7159d5f53ccbba3feb915f4e
+
+  - name: lspci
+    no-autogen: true
+    make-args:
+      - OPT=-O2 -g
+    make-install-args:
+      - PREFIX=/app
+      - SBINDIR=/app/bin
+    sources:
+      - type: archive
+        url: "https://mirrors.edge.kernel.org/pub/software/utils/pciutils/pciutils-3.6.2.tar.gz"
+        sha256: d5f9254f27bbda8243b345633e980144e6bd2af9c786bb8a152b904530aef599
+      - type: shell
+
+  - name: GpuTest
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 apply_extra.sh /app/bin/apply_extra
+      - install -Dm755 gputest_gui.sh /app/bin/gputest_gui
+      - install -Dm755 GpuTest.sh /app/bin/GpuTest
+    sources:
+      - type: script
+        dest-filename: gputest_gui.sh
+        commands:
+          - cd /app/extra
+          - exec python2 ./gputest_gui.py $@
+
+      - type: script
+        dest-filename: GpuTest.sh
+        commands:
+          - cd /app/extra
+          - exec ./GpuTest $@
+
+      - type: script
+        dest-filename: apply_extra.sh
+        commands:
+          - unzip GpuTest.zip
+          - mv GpuTest*/* .
+          - rmdir GpuTest*/
+          - rm GpuTest.zip
+
+      - type: extra-data
+        only-arches:
+          - x86_64
+        filename: GpuTest.zip
+        url: "http://www.ozone3d.net/gputest/dl/GpuTest_Linux_x64_0.7.0.zip"
+        sha256: a6cbddfb40dc203735d63bc9609b24abde8613fbb649d0ef7d0d4515842ba263
+        size: 2083164
