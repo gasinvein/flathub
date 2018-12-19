@@ -1,10 +1,9 @@
-app-id: io.itch.itch
+id: io.itch.itch
+sdk: org.freedesktop.Sdk
 runtime: org.freedesktop.Platform
 runtime-version: '18.08'
-sdk: org.freedesktop.Sdk
 base: io.atom.electron.BaseApp
-base-version: stable
-branch: stable
+base-version: '18.08'
 command: itch
 rename-icon: itch
 rename-appdata-file: itch.appdata.xml
