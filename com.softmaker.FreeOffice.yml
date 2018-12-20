@@ -38,17 +38,17 @@ modules:
       - type: script
         dest-filename: textmaker.sh
         commands:
-          - exec /app/extra/freeoffice/textmaker
+          - exec /app/extra/freeoffice/textmaker "$@"
 
       - type: script
         dest-filename: planmaker.sh
         commands:
-          - exec /app/extra/freeoffice/planmaker
+          - exec /app/extra/freeoffice/planmaker "$@"
 
       - type: script
         dest-filename: presentations.sh
         commands:
-          - exec /app/extra/freeoffice/presentations
+          - exec /app/extra/freeoffice/presentations "$@"
 
       - type: file
         path: apply_extra.sh
