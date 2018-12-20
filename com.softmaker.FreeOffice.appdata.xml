@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+    <id>com.softmaker.FreeOffice</id>
+    <name>FreeOffice 2018</name>
+    <summary>Office suite with a word processor, a spreadsheet application and a presentation program</summary>
+    <developer_name>SoftMaker</developer_name>
+    <icon type="remote">https://www.freeoffice.com/images/icons/freeoffice_icon_48.png</icon>
+    <metadata_license>CC0-1.0</metadata_license>
+    <project_license>LicenseRef-proprietary=https://www.freeoffice.com/download#eula</project_license>
+    <description>
+        <p>SoftMaker FreeOffice 2018 is free to use at home and for business. After using it, you will agree that it is the best free alternative to Microsoft Office.</p>
+        <p>FreeOffice is a complete Office suite with a word processor, a spreadsheet application and a presentation program – all compatible with their counterparts in Microsoft Office.</p>
+        <p>What's the catch? There is none. Simply download it for free and use it for as long as you want. Millions of people are using it every day and enjoy this great free Office suite.</p>
+    </description>
+    <url type="homepage">https://www.freeoffice.com</url>
+    <url type="help">https://forum.softmaker.com/</url>
+    <screenshots>
+        <screenshot type="default">
+            <image>https://www.freeoffice.com/images/screenshots/en_freeoffice_tm.png</image>
+        </screenshot>
+        <screenshot type="default">
+            <image>https://www.freeoffice.com/images/screenshots/en_freeoffice_pm.png</image>
+        </screenshot>
+        <screenshot type="default">
+            <image>https://www.freeoffice.com/images/screenshots/en_freeoffice_pr.png</image>
+        </screenshot>
+    </screenshots>
+    <releases>
+        <release version="944" date="2018-12-12"/>
+    </releases>
+</component>
+<component type="desktop">
+    <id>com.softmaker.FreeOffice-textmaker</id>
+    <launchable type="desktop-id">com.softmaker.FreeOffice-textmaker.desktop</launchable>
+    <name>FreeOffice 2018 TextMaker</name>
+    <summary>Word processor part of the FreeOffice suite</summary>
+    <developer_name>SoftMaker</developer_name>
+    <icon type="remote" width="1024" height="1024">https://www.freeoffice.com/images/icons/2018/textmaker_1024.png</icon>
+    <metadata_license>CC0-1.0</metadata_license>
+    <project_license>LicenseRef-proprietary</project_license>
+    <description>
+        <p>Create all types of documents in no time with the FreeOffice TextMaker word processor: design flyers or brochures just as easily as you write business letters or complete scientific papers.</p>
+        <p>FreeOffice TextMaker offers numerous design options: Using its unique object mode, you can place pictures, drawings and text frames in your documents. Thanks to the advanced positioning and text wrapping options, you can create any layout you can think of. With master pages, you can not only watermark each page, but also place repeating objects in your document. Use character and paragraph styles to give your documents a consistent and professional look.</p>
+        <p>FreeOffice TextMaker supports spell-checking using Hunspell dictionaries, helping you find typos in dozens of languages.</p>
+        <p>FreeOffice TextMaker opens and saves all Microsoft Word DOCX files seamlessly. It also lets you create PDF files and EPUB e-books directly from within the application.</p>
+    </description>
+    <url type="homepage">https://www.freeoffice.com/freeoffice-textmaker</url>
+    <screenshots>
+        <screenshot type="default">
+            <image>https://www.freeoffice.com/images/screenshots/en_freeoffice_tm.png</image>
+        </screenshot>
+    </screenshots>
+</component>
+<component type="desktop">
+    <id>com.softmaker.FreeOffice-planmaker</id>
+    <launchable type="desktop-id">com.softmaker.FreeOffice-planmaker.desktop</launchable>
+    <name>FreeOffice 2018 PlanMaker</name>
+    <summary>Spreadsheet program part of the FreeOffice suite</summary>
+    <developer_name>SoftMaker</developer_name>
+    <icon type="remote" width="1024" height="1024">https://www.freeoffice.com/images/icons/2018/planmaker_1024.png</icon>
+    <metadata_license>CC0-1.0</metadata_license>
+    <project_license>LicenseRef-proprietary</project_license>
+    <description>
+        <p>Create complex calculations, worksheets and charts with ease: With the powerful spreadsheet application FreeOffice PlanMaker, you create simple timetables just as conveniently as you do the complete financial planning of your company.</p>
+        <p>Thanks to numerous design features, FreeOffice PlanMaker lets you create presentation-quality worksheets: You can not only insert pictures, drawings, text frames or impressive charts in 2D and 3D, but also choose from a large catalog of attractive cell styles that are compatible with Microsoft Excel 2016.</p>
+        <p>More than 350 calculation functions and a wide variety of analysis features help you get the most out of your data. As FreeOffice PlanMaker supports huge worksheets with up to 1 million rows and 16,384 columns, pivot tables are a handy tool to summarize and analyze your data quickly.</p>
+        <p>FreeOffice PlanMaker opens and saves all Microsoft Excel XLSX files seamlessly. You can also export your worksheets to PDF or print them exactly the way you want: tailored to fit on a specified number of pages, with a specific print range or with repeating headers.</p>
+    </description>
+    <url type="homepage">https://www.freeoffice.com/freeoffice-planmaker</url>
+    <screenshots>
+        <screenshot type="default">
+            <image>https://www.freeoffice.com/images/screenshots/en_freeoffice_pm.png</image>
+        </screenshot>
+    </screenshots>
+</component>
+<component type="desktop">
+    <id>com.softmaker.FreeOffice-presentations</id>
+    <launchable type="desktop-id">com.softmaker.FreeOffice-presentations.desktop</launchable>
+    <name>FreeOffice 2018 Presentations</name>
+    <summary>Presentation program processor part of the FreeOffice suite</summary>
+    <developer_name>SoftMaker</developer_name>
+    <icon type="remote" width="1024" height="1024">https://www.freeoffice.com/images/icons/2018/presentations_1024.png</icon>
+    <metadata_license>CC0-1.0</metadata_license>
+    <project_license>LicenseRef-proprietary</project_license>
+    <description>
+        <p>With FreeOffice Presentations, you create presentations that impress: Thanks to breathtaking animations and slide transitions as well as the sophisticated master-page concept, you are perfectly prepared for every presentation.</p>
+        <p>FreeOffice Presentations offers you a wide variety of design and drawing functions: Insert images, drawings and text frames into your presentations, apply attractive type effects by using the TextArt feature or just let one of the numerous attractive design templates do the design work for you.</p>
+        <p>Of course, FreeOffice Presentations lets you not only insert static objects; you can also insert movies and sound effects in your presentations. That's not all: beautiful animations and slide transitions using OpenGL graphics acceleration turn your presentations into true eye-catchers!</p>
+        <p>FreeOffice Presentations opens and saves all Microsoft PowerPoint PPTX files seamlessly. It also lets you create PDF files directly from within the application.</p>
+    </description>
+    <url type="homepage">https://www.freeoffice.com/freeoffice-presentations</url>
+    <screenshots>
+        <screenshot type="default">
+            <image>https://www.freeoffice.com/images/screenshots/en_freeoffice_pr.png</image>
+        </screenshot>
+    </screenshots>
+</component>
