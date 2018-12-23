@@ -13,7 +13,7 @@
         "--socket=x11",
         "--share=ipc",
         "--filesystem=xdg-run/dconf",
-        "--filesystem=~/.config/dconf:ro",
+        "--filesystem=xdg-config/dconf:ro",
         "--talk-name=ca.desrt.dconf",
         "--own-name=com.teamviewer.TeamViewer",
         "--own-name=com.teamviewer.TeamViewer.Desktop",
@@ -22,8 +22,9 @@
         "--talk-name=org.kde.StatusNotifierWatcher",
         "--talk-name=org.a11y.Bus",
         "--system-talk-name=org.freedesktop.NetworkManager",
-        "--persist=.config/teamviewer",
-        "--persist=.local/share/teamviewer14"
+        "--persist=.config",
+        "--persist=.local/share",
+        "--persist=.cache"
     ],
     "cleanup": [
         "*.a",
@@ -79,7 +80,7 @@
             "build-commands": [
                 "install -Dm644 com.teamviewer.TeamViewer.appdata.xml -t /app/share/appdata/",
                 "install -Dm755 apply_extra.sh /app/bin/apply_extra",
-                "install -Dm755 teamviewer.sh /app/bin/teamviewer"
+                "install -Dm755 teamviewer-wrapper.sh /app/bin/teamviewer"
             ],
             "sources": [
                 {
@@ -87,13 +88,8 @@
                     "path": "apply_extra.sh"
                 },
                 {
-                    "type": "script",
-                    "dest-filename": "teamviewer.sh",
-                    "commands": [
-                        "mkdir -p /var/config/teamviewer",
-                        "mkdir -p /var/data/teamviewer/logfiles",
-                        "exec /app/extra/teamviewer/tv_bin/script/teamviewer $@"
-                    ]
+                    "type": "file",
+                    "path": "teamviewer-wrapper.sh"
                 },
                 {
                     "type": "file",

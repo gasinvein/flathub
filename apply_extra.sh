@@ -1,4 +1,6 @@
 #!/bin/bash -x
+TV_VER_MAJOR=14
+
 mkdir -p teamviewer export/share/{dbus-1/services,polkit-1/actions,applications}
 tar -xf teamviewer.tar.xz -C teamviewer --strip-components=1
 
@@ -14,9 +16,11 @@ done
 sed 's|Icon=.*|Icon=com.teamviewer.TeamViewer|g' -i export/share/applications/com.teamviewer.TeamViewer.desktop
 
 sed 's|TAR_NI|TAR_IN|g' -i teamviewer/tv_bin/script/tvw_config
+
 rmdir teamviewer/{config,logfiles}
-ln -s /var/config/teamviewer teamviewer/config
-ln -s /var/data/teamviewer/logfiles teamviewer/logfiles
-ln -s /var/data/teamviewer teamviewer/profile
+#FIXME Using HOME path here is probably bad
+ln -s "$HOME/.config/teamviewer" teamviewer/config
+ln -s "$HOME.local/share/teamviewer${TV_VER_MAJOR}/logfiles" teamviewer/logfiles
+ln -s "$HOME.local/share/teamviewer${TV_VER_MAJOR}" teamviewer/profile
 
 rm teamviewer.tar.xz
