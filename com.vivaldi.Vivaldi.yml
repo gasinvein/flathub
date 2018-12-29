@@ -1,0 +1,76 @@
+app-id: com.vivaldi.Vivaldi
+runtime: org.freedesktop.Platform
+runtime-version: '18.08'
+base: io.atom.electron.BaseApp
+base-version: '18.08'
+branch: stable
+sdk: org.freedesktop.Sdk
+command: vivaldi
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --device=dri
+  - --share=network
+  - --talk-name=org.freedesktop.Notifications
+  - --talk-name=org.gtk.Notifications
+  - --talk-name=org.kde.StatusNotifierWatcher
+  - --talk-name=org.freedesktop.secrets
+  - --talk-name=org.gnome.SessionManager
+  - --system-talk-name=org.freedesktop.UPower
+  - --system-talk-name=org.freedesktop.NetworkManager
+modules:
+  - name: vivaldi
+    buildsystem: simple
+    build-commands:
+      - mkdir -p /app/{bin,lib}
+      - cp /usr/bin/ar /app/bin
+      - cp /usr/lib/*/libbfd-*.so /app/lib
+      - install -Dm755 apply_extra.sh /app/bin/apply_extra
+      - install -Dm755 vivaldi.sh /app/bin/vivaldi
+      - install -Dm644 -t /app/share/appdata/ $FLATPAK_ID.appdata.xml
+    sources:
+      - type: script
+        dest-filename: apply_extra.sh
+        commands:
+          - export FLATPAK_ID=com.vivaldi.Vivaldi
+          - ar x vivaldi.deb
+          - tar xf data.tar.xz
+          - mv opt/vivaldi .
+          - install -Dm644 usr/share/applications/vivaldi-stable.desktop export/share/applications/$FLATPAK_ID.desktop
+          - for s in 16 22 24 32 48 64 128 256; do install -Dm644 vivaldi/product_logo_$s.png
+            export/share/icons/hicolor/${s}x${s}/apps/$FLATPAK_ID.png; done
+          - sed "s|Exec=/usr/bin/vivaldi-stable|Exec=vivaldi|g" -i export/share/applications/$FLATPAK_ID.desktop
+          - sed "s|Icon=vivaldi|Icon=$FLATPAK_ID|g" -i export/share/applications/$FLATPAK_ID.desktop
+          - rm -r etc usr opt data.tar.xz control.tar.gz debian-binary vivaldi.deb
+
+      - type: script
+        dest-filename: vivaldi.sh
+        commands:
+          - exec /app/extra/vivaldi/vivaldi --no-sandbox $@
+
+      - type: file
+        path: com.vivaldi.Vivaldi.appdata.xml
+
+      - type: extra-data
+        only-arches:
+          - x86_64
+        url: "https://downloads.vivaldi.com/stable/vivaldi-stable_2.0.1309.29-2_amd64.deb"
+        filename: vivaldi.deb
+        size: 57575078
+        sha256: 93fd79c0879470fd4c497f8bac18321c491705dc914eb8657479c91652706a27
+
+      - type: extra-data
+        only-arches:
+          - i386
+        url: "https://downloads.vivaldi.com/stable/vivaldi-stable_2.0.1309.29-2_i386.deb"
+        filename: vivaldi.deb
+        size: 56864360
+        sha256: c7c9a08d4f8f6490e0d26a7bef1cae78e410c5d28f86736e996ed867002a4472
+
+      - type: extra-data
+        only-arches:
+          - armhf
+        url: "https://downloads.vivaldi.com/stable/vivaldi-stable_2.0.1309.29-2_armhf.deb"
+        filename: vivaldi.deb
+        size: 50850396
+        sha256: 4b1bef53dcee877c15e072f9ed5a4cdfbea86b184b87184f4c6577a9830434c2
