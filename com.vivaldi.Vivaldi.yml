@@ -1,7 +1,7 @@
 app-id: com.vivaldi.Vivaldi
 runtime: org.freedesktop.Platform
 runtime-version: '18.08'
-base: io.atom.electron.BaseApp
+base: org.electronjs.Electron2.BaseApp
 base-version: '18.08'
 branch: stable
 sdk: org.freedesktop.Sdk
@@ -14,6 +14,9 @@ finish-args:
   - --talk-name=org.freedesktop.Notifications
   - --talk-name=org.gtk.Notifications
   - --talk-name=org.kde.StatusNotifierWatcher
+  - --filesystem=xdg-run/dconf
+  - --filesystem=xdg-config/dconf:ro
+  - --talk-name=ca.desrt.dconf
   - --talk-name=org.freedesktop.secrets
   - --talk-name=org.gnome.SessionManager
   - --system-talk-name=org.freedesktop.UPower
