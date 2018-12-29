@@ -53,24 +53,24 @@ modules:
 
       - type: extra-data
         only-arches:
-          - x86_64
-        url: "https://downloads.vivaldi.com/stable/vivaldi-stable_2.0.1309.29-2_amd64.deb"
+          - "x86_64"
+        url: "https://downloads.vivaldi.com/stable/vivaldi-stable_2.2.1388.37-1_amd64.deb"
         filename: vivaldi.deb
-        size: 57575078
-        sha256: 93fd79c0879470fd4c497f8bac18321c491705dc914eb8657479c91652706a27
+        size: 58076356
+        sha256: a5ec363b0d3e53a4a6119041f6ec19a6082d60dacd7a4ef39dc54acb3725001f
 
       - type: extra-data
         only-arches:
-          - i386
-        url: "https://downloads.vivaldi.com/stable/vivaldi-stable_2.0.1309.29-2_i386.deb"
+          - "i386"
+        url: "https://downloads.vivaldi.com/stable/vivaldi-stable_2.2.1388.37-1_i386.deb"
         filename: vivaldi.deb
-        size: 56864360
-        sha256: c7c9a08d4f8f6490e0d26a7bef1cae78e410c5d28f86736e996ed867002a4472
+        size: 56996270
+        sha256: 347f53a08df6370be0ad80ab9bde97caa7bf8c61ab7f6b3da6e72707b9035a34
 
       - type: extra-data
         only-arches:
-          - armhf
-        url: "https://downloads.vivaldi.com/stable/vivaldi-stable_2.0.1309.29-2_armhf.deb"
+          - "arm"
+        url: "https://downloads.vivaldi.com/stable/vivaldi-stable_2.2.1388.37-1_armhf.deb"
         filename: vivaldi.deb
-        size: 50850396
-        sha256: 4b1bef53dcee877c15e072f9ed5a4cdfbea86b184b87184f4c6577a9830434c2
+        size: 50918454
+        sha256: 2fcef2b1868bc2ee701cfb76ac0c517292d66fad556fa453634cff3e6a96bde4
