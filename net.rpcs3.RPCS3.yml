@@ -1,7 +1,7 @@
 app-id: net.rpcs3.RPCS3
-runtime: org.freedesktop.Platform
-sdk: org.freedesktop.Sdk
-runtime-version: "18.08"
+runtime: org.kde.Platform
+sdk: org.kde.Sdk
+runtime-version: "5.12"
 command: rpcs3
 rename-desktop-file: rpcs3.desktop
 rename-icon: rpcs3
@@ -18,69 +18,7 @@ cleanup:
   - /lib/pkgconfig
   - /lib/cmake
   - /share/man
-  # Qt related
-  - /lib/*.prl
-  - /doc
-  - /mkspecs
 modules:
-  - name: qt5-qtbase
-    build-options:
-      cflags: -02 -g -fstack-protector-strong -D_FORTIFY_SOURCE=2
-      cxxflags: -O2 -g -fstack-protector-strong -D_FORTIFY_SOURCE=2
-      ldflags: -fstack-protector-strong -Wl,-z,relro,-z,now
-    config-opts:
-      - -confirm-license
-      - -opensource
-      - -shared
-      - -platform
-      - linux-g++
-      - -optimized-qmake
-      - -nomake
-      - examples
-      - -nomake
-      - tests
-      - -system-harfbuzz
-      - -system-sqlite
-      - -accessibility
-      - -dbus-linked
-      - -fontconfig
-      - -glib
-      - -icu
-      - -openssl-linked
-      - -no-pch
-      - -no-rpath
-      - -no-directfb
-      - -no-linuxfb
-      - -no-kms
-      - -no-cups
-      - -system-proxies
-      - -gtk
-    sources:
-      - type: archive
-        url: "https://download.qt.io/archive/qt/5.11/5.11.2/submodules/qtbase-everywhere-src-5.11.2.tar.xz"
-        sha256: 6381e7c3468d5a1dcfe3683b29eeced192faa0f8a32434fec071a59b8bcd0107
-        # NOTE: KDE has a handful of patches on top of this
-    cleanup:
-      - /bin
-
-  - name: qt5-wayland
-    buildsystem: qmake
-    sources:
-      - type: archive
-        url: "https://download.qt.io/archive/qt/5.11/5.11.2/submodules/qtwayland-everywhere-src-5.11.2.tar.xz"
-        sha256: 4e35e15da360480a5aef414246f70d29b0252b6a9c7e129e63afba3fb2ecb771
-    cleanup:
-      - /bin
-
-  - name: qt5-declarative
-    buildsystem: qmake
-    sources:
-      - type: archive
-        url: "https://download.qt.io/archive/qt/5.11/5.11.2/submodules/qtdeclarative-everywhere-src-5.11.2.tar.xz"
-        sha256: 220d86f8031e9d45f3c369c3fd517aaa4c5783ad62c843a21fa7cc3c0a36f2cd
-    cleanup:
-      - /bin
-
   - shared-modules/glu/glu-9.0.0.json
   - shared-modules/glew/glew.json
   - shared-modules/udev/udev-175.json
@@ -118,7 +56,6 @@ modules:
     sources:
       - type: git
         url: "https://github.com/RPCS3/rpcs3.git"
-        disable-shallow-clone: true
     cleanup:
       - /include/llvm
       - /include/llvm-c
