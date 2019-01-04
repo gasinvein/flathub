@@ -72,7 +72,7 @@ modules:
       - name: fuseiso
         sources:
           - type: archive
-            url: "https://netix.dl.sourceforge.net/project/fuseiso/fuseiso/20070708/fuseiso-20070708.tar.bz2"
+            url: "https://downloads.sourceforge.net/fuseiso/fuseiso-20070708.tar.bz2"
             sha256: 8b242e077d66cd20900c59c905ff90b4c934b0613dd5a20facb0b1260ac5fd88
 
         modules:
