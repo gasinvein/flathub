@@ -15,9 +15,6 @@
     ],
     "rename-icon": "openage",
     "rename-desktop-file": "openage.desktop",
-    "cleanup-commands": [
-        "install -Dm644 /app/share/pixmaps/openage.svg /app/share/icons/hicolor/scaleable/apps/openage.svg"
-    ],
     "cleanup": [
         "*.a",
         "*.la",
@@ -188,6 +185,15 @@
             ]
         },
         {
+            "name": "libbacktrace",
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/ianlancetaylor/libbacktrace.git"
+                }
+            ]
+        },
+        {
             "name": "nyan",
             "buildsystem": "cmake-ninja",
             "builddir": true,
@@ -209,13 +215,17 @@
             "config-opts": [
                 "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
                 "-DCMAKE_INSTALL_LIBDIR=/app/lib",
-                "-DCMAKE_PY_INSTALL_PREFIX=/app/lib/python3.5/site-packages",
-                "-DWANT_INOTIFY=True",
-                "-DWANT_GPERFTOOLS_TCMALLOC=True",
-                "-DWITH_GPERFTOOLS_TCMALLOC=True",
-                "-DWANT_GPERFTOOLS_PROFILER=True",
+                "-DCMAKE_PY_INSTALL_PREFIX=/app/lib/python3.7/site-packages",
+                "-DWANT_INOTIFY=TRUE",
+                "-DWANT_OPENGL=TRUE",
+                "-DWANT_VULKAN=TRUE",
+                "-DWANT_NCURSES=TRUE",
+                "-DWANT_BACKTRACE=TRUE",
                 "-DCXX_OPTIMIZATION_LEVEL=auto",
                 "-DOpenGL_GL_PREFERENCE=GLVND"
+            ],
+            "post-install": [
+                "install -Dm644 /app/share/{pixmaps,icons/hicolor/scaleable/apps}/openage.svg"
             ],
             "sources": [
                 {
