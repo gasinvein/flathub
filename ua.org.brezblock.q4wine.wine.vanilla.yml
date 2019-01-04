@@ -1,7 +1,7 @@
 id: ua.org.brezblock.q4wine.wine.vanilla
 runtime: ua.org.brezblock.q4wine
 runtime-version: stable
-sdk: org.kde.Sdk//5.11
+sdk: org.kde.Sdk//5.12
 build-extension: true
 separate-locales: false
 appstream-compose: false

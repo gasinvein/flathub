@@ -1,7 +1,7 @@
 id: ua.org.brezblock.q4wine
 runtime: org.kde.Platform
 sdk: org.kde.Sdk
-runtime-version: "5.11"
+runtime-version: "5.12"
 command: q4wine
 rename-icon: q4wine
 rename-desktop-file: q4wine.desktop
@@ -23,18 +23,19 @@ cleanup:
   - /share/man
   - /share/doc
 add-extensions:
-  org.freedesktop.Platform.Compat32:
-    directory: lib/32bit
-    version: "1.6"
-    add-ld-path: lib
-  org.freedesktop.Platform.Compat32.Debug:
-    directory: lib/debug/lib/32bit
-    version: "1.6"
+  org.freedesktop.Platform.Compat.i386:
+    directory: lib/i386-linux-gnu
+    version: "18.08"
+
+  org.freedesktop.Platform.Compat.i386.Debug:
+    directory: lib/debug/lib/i386-linux-gnu
+    version: "18.08"
     no-autodownload: true
+
   org.freedesktop.Platform.GL32:
-    directory: lib/32bit/lib/GL
+    directory: lib/i386-linux-gnu/GL
     version: "1.4"
-    versions: "1.6;1.4"
+    versions: "18.08;1.6;1.4"
     subdirectories: true
     no-autodownload: true
     autodelete: false
@@ -45,11 +46,13 @@ add-extensions:
 
   ua.org.brezblock.q4wine.wine.vanilla:
     directory: wine/vanilla
+
   ua.org.brezblock.q4wine.wine.vanilla.compat32:
     directory: wine/vanilla/32bit
 
   ua.org.brezblock.q4wine.wine.staging:
     directory: wine/staging
+
   ua.org.brezblock.q4wine.wine.staging.compat32:
     directory: wine/staging/32bit
 
@@ -67,15 +70,15 @@ modules:
         sha256: a1dbc257dc7e56b07863ca469f924aded88ee5494b71a54249f097828dcae457
       - type: file
         path: ua.org.brezblock.q4wine.appdata.xml
-
     modules:
+
       - name: fuseiso
         sources:
           - type: archive
             url: "https://downloads.sourceforge.net/fuseiso/fuseiso-20070708.tar.bz2"
             sha256: 8b242e077d66cd20900c59c905ff90b4c934b0613dd5a20facb0b1260ac5fd88
-
         modules:
+
           - name: libfuse
             config-opts:
               - --enable-lib
@@ -155,9 +158,8 @@ modules:
   - name: q4wine-app-environment
     buildsystem: simple
     build-commands:
-      - mkdir -p /app/lib/32bit
+      - mkdir -p /app/lib/i386-linux-gnu
       - mkdir -p /app/wine/{vanilla,staging}
-      - ln -s 32bit/lib/ld-linux.so.2 /app/lib/ld-linux.so.2
       - ln -s /bin/false /app/bin/mount
       - ln -s /bin/false /app/bin/umount
       - ln -s /bin/false /app/bin/sudo
