@@ -2,11 +2,8 @@
     "app-id": "mx.sft.openage",
     "branch": "master",
     "runtime": "org.kde.Platform",
-    "runtime-version": "5.9",
+    "runtime-version": "5.12",
     "sdk": "org.kde.Sdk",
-    "sdk-extensions": [
-        "org.freedesktop.Sdk.Extension.gcc8"
-    ],
     "command": "openage",
     "finish-args": [
         "--share=ipc",
@@ -18,13 +15,6 @@
     ],
     "rename-icon": "openage",
     "rename-desktop-file": "openage.desktop",
-    "build-options": {
-        "env": {
-            "CC": "/usr/lib/sdk/gcc8/bin/gcc",
-            "CXX": "/usr/lib/sdk/gcc8/bin/g++"
-        },
-        "prepend-path": "/usr/lib/sdk/gcc8/bin/"
-    },
     "cleanup-commands": [
         "install -Dm644 /app/share/pixmaps/openage.svg /app/share/icons/hicolor/scaleable/apps/openage.svg"
     ],
@@ -39,26 +29,6 @@
         "/share/man"
     ],
     "modules": [
-        {
-            "name": "cmake",
-            "buildsystem": "cmake-ninja",
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "https://cmake.org/files/v3.12/cmake-3.12.0.tar.gz",
-                    "sha256": "d0781a90f6cdb9049d104ac16a150f9350b693498b9dea8a0331e799db6b9d69"
-                }
-            ],
-            "cleanup": [ "*" ]
-        },
-        {
-            "name": "gcc-libs",
-            "buildsystem": "simple",
-            "build-commands": [
-                "/usr/lib/sdk/gcc8/install_runtime_libs.sh",
-                "/usr/lib/sdk/gcc8/install_gfortran.sh"
-            ]
-        },
         {
             "name": "cython",
             "buildsystem": "simple",
@@ -252,15 +222,6 @@
                     "type": "git",
                     "url": "https://github.com/SFTtech/openage.git"
                 }
-            ]
-        },
-        {
-            "name": "ncurses",
-            "buildsystem": "simple",
-            "build-commands": [
-                "for soname in form formw menu menuw ncurses ncurses++ ncurses++w ncursesw panel panelw tic tinfo; do
-                    cp -v -d -t /app/lib /usr/lib/lib${soname}.so*
-                done"
             ]
         }
     ]
