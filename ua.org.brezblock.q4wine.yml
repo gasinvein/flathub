@@ -51,17 +51,9 @@ add-extensions:
     download-if: active-gl-driver
     enable-if: active-gl-driver
 
-  ua.org.brezblock.q4wine.wine.vanilla:
-    directory: wine/vanilla
-
-  ua.org.brezblock.q4wine.wine.vanilla.compat32:
-    directory: wine/vanilla/32bit
-
-  ua.org.brezblock.q4wine.wine.staging:
-    directory: wine/staging
-
-  ua.org.brezblock.q4wine.wine.staging.compat32:
-    directory: wine/staging/32bit
+  ua.org.brezblock.q4wine.wine:
+    directory: wine
+    subdirectories: true
 
 modules:
   - name: q4wine
@@ -166,7 +158,7 @@ modules:
     buildsystem: simple
     build-commands:
       - mkdir -p /app/lib/i386-linux-gnu
-      - mkdir -p /app/wine/{vanilla,staging}
+      - mkdir -p /app/wine
       - ln -s /bin/false /app/bin/mount
       - ln -s /bin/false /app/bin/umount
       - ln -s /bin/false /app/bin/sudo
