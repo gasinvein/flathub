@@ -66,21 +66,15 @@ modules:
   - name: wineserver
     buildsystem: simple
     build-commands:
-      - install -Dm755 wineserver.sh $FLATPAK_DEST/bin/wineserver
-    sources:
-      - type: script
-        dest-filename: wineserver.sh
-        commands:
-          - winedir=/app/wine/staging
-          # 64bit mode
-          - if test -x $winedir/bin/wineserver64; then
-          -   exec $winedir/bin/wineserver64 $@
-          # Pure 32bit mode
-          - elif test -x $winedir/bin/wineserver32; then
-          -   exec $winedir/bin/wineserver32 $@
-          - else
-          -   exit 1
-          - fi
+      - ln -s $FLATPAK_DEST/wineserver $FLATPAK_DEST/bin/wineserver
+      - case $FLATPAK_ARCH in
+          x86_64)
+            ln -s bin/wineserver64 $FLATPAK_DEST/wineserver
+          ;;
+          i386)
+            ln -s bin/wineserver32 $FLATPAK_DEST/wineserver
+          ;;
+        esac
 
   - name: compat32
     only-arches:
@@ -91,6 +85,7 @@ modules:
       - ln -s 32bit/lib $FLATPAK_DEST/lib
       - ln -s ../32bit/bin/wine $FLATPAK_DEST/bin/wine
       - ln -s ../32bit/bin/wine-preloader $FLATPAK_DEST/bin/wine-preloader
+      - ln -s ../32bit/bin/wineserver32 $FLATPAK_DEST/bin/wineserver32
 
   - name: appdata
     buildsystem: simple
