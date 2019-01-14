@@ -47,15 +47,13 @@ modules:
       - type: script
         dest-filename: apply_extra
         commands:
-          - ar x reditr.deb
-          - tar -xf data.tar.gz
-          - mv opt/reditr /app/extra/reditr
-          - install -Dm644 usr/share/applications/Reditr.desktop /app/extra/export/share/applications/com.reditr.Reditr.desktop
-          - install -Dm644 /app/extra/reditr/128x128.png /app/extra/export/share/icons/hicolor/128x128/apps/com.reditr.Reditr.png
-          - sed 's|Exec=.*|Exec=reditr|g' -i /app/extra/export/share/applications/com.reditr.Reditr.desktop
-          - sed 's|Icon=.*|Icon=com.reditr.Reditr|g' -i /app/extra/export/share/applications/com.reditr.Reditr.desktop
-          - rm reditr.deb data.tar.gz control.tar.gz debian-binary
-          - rm -r usr opt
+          - ar p reditr.deb data.tar.gz | tar -xzf -
+          - mv opt/reditr reditr
+          - install -Dm644 usr/share/applications/Reditr.desktop export/share/applications/com.reditr.Reditr.desktop
+          - install -Dm644 /app/extra/reditr/128x128.png export/share/icons/hicolor/128x128/apps/com.reditr.Reditr.png
+          - sed 's|Exec=.*|Exec=reditr|g' -i export/share/applications/com.reditr.Reditr.desktop
+          - sed 's|Icon=.*|Icon=com.reditr.Reditr|g' -i export/share/applications/com.reditr.Reditr.desktop
+          - rm -r usr opt reditr.deb
 
       - type: script
         dest-filename: reditr.sh
