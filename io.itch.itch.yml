@@ -5,8 +5,6 @@ runtime-version: '18.08'
 base: io.atom.electron.BaseApp
 base-version: '18.08'
 command: itch
-rename-icon: itch
-rename-appdata-file: itch.appdata.xml
 finish-args:
   - --share=ipc
   - --socket=x11
@@ -45,22 +43,56 @@ modules:
   - name: itch
     buildsystem: simple
     build-commands:
-      - ar x itch.deb
-      - tar -xf data.tar.xz --transform='flags=r;s|usr/||' -C /app
-      - rmdir /app/usr
-      - rm itch.deb data.tar.xz control.tar.gz debian-binary
+      - mkdir -p /app/main
+      - unzip -d /app/main itch.zip
+      - install -Dm755 itch.sh /app/bin/itch
+      - |
+        for s in 16 32 48 64 128 256 512 1024; do
+          install -Dm644 icon${s}.png /app/share/icons/${s}x${s}/apps/${FLATPAK_ID}.png
+        done
     post-install:
       - mkdir -p /app/lib/i386-linux-gnu /app/lib/debug/lib/i386-linux-gnu
     sources:
+      - type: script
+        dest-filename: itch.sh
+        commands:
+          - exec /app/main/itch $@
+
       - type: file
         only-arches:
-          - i386
-        dest-filename: itch.deb
-        url: https://dl.bintray.com/itchio/deb/itch_23.6.3_i386.deb
-        sha256: ee31ad51d2aee275f1f9087bea601389821b5b89168952a6c068f937c3522aec
+          - "i386"
+        dest-filename: itch.zip
+        url: "https://broth.itch.ovh/itch/linux-386/25.4.0/archive/default"
+        sha256: 06482a6aea361ddf4da99d8477b4e41c64bdd814665a62d4c5d3ba0a6381c9fd
+
       - type: file
         only-arches:
-          - x86_64
-        dest-filename: itch.deb
-        url: https://dl.bintray.com/itchio/deb/itch_23.6.3_amd64.deb
-        sha256: 53c47f7c21261850c44f37c5fcc055eda3f67bbf79bc596292f48d3b5f31e8e9
+          - "x86_64"
+        dest-filename: itch.zip
+        url: "https://broth.itch.ovh/itch/linux-amd64/25.4.0/archive/default"
+        sha256: bb91c586bc4162a539c3394ba314fefebfaee380924fb0be37cab31586dad50e
+
+      - type: file
+        url: "https://github.com/itchio/itch/raw/v25.4.0/release/images/itch-icons/icon16.png"
+        sha256: c1e7154020c847cd5cd75d544a7e5dbe8bd495fe87a664afd24c4a952a7e8a78
+      - type: file
+        url: "https://github.com/itchio/itch/raw/v25.4.0/release/images/itch-icons/icon32.png"
+        sha256: e38c4a04b2ced31d2a13b72f310e069beff73a7cf887a4cbde57fa7b19c67fab
+      - type: file
+        url: "https://github.com/itchio/itch/raw/v25.4.0/release/images/itch-icons/icon48.png"
+        sha256: 5f38d0b884053b10d856151931b7699723c4a28cf14622c95bc6022bec391c3f
+      - type: file
+        url: "https://github.com/itchio/itch/raw/v25.4.0/release/images/itch-icons/icon64.png"
+        sha256: 2e08b733c867ae434ce1300d11d867385a635a8a1eb13a80c1d25c484c564d7f
+      - type: file
+        url: "https://github.com/itchio/itch/raw/v25.4.0/release/images/itch-icons/icon128.png"
+        sha256: d2753b056ad18ae41e271b8d9dd8421da1b7b5f0488185c70c76cdc8c3f311db
+      - type: file
+        url: "https://github.com/itchio/itch/raw/v25.4.0/release/images/itch-icons/icon256.png"
+        sha256: b2e96b15aed6ab995495ea69d6e2f7f97cd1971391eeda9dafeffc308968755e
+      - type: file
+        url: "https://github.com/itchio/itch/raw/v25.4.0/release/images/itch-icons/icon512.png"
+        sha256: ab6fbc4a51c5c171e725ff6ea0506b5083fc7cda984c3cbd04c870700321aece
+      - type: file
+        url: "https://github.com/itchio/itch/raw/v25.4.0/release/images/itch-icons/icon1024.png"
+        sha256: 054015fab28b1f3f163dc69eb12b20162d0915cb2a08b7679c5bbda33069b428
