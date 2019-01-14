@@ -5,8 +5,6 @@ runtime-version: '18.08'
 base: io.atom.electron.BaseApp
 base-version: '18.08'
 command: itch
-rename-icon: itch
-rename-appdata-file: itch.appdata.xml
 finish-args:
   - --share=ipc
   - --socket=x11
@@ -42,25 +40,44 @@ add-extensions:
     download-if: active-gl-driver
     enable-if: active-gl-driver
 modules:
+  - name: nodejs
+    sources:
+      - type: archive
+        url: "https://nodejs.org/dist/v8.11.1/node-v8.11.1.tar.xz"
+        sha256: 40a6eb51ea37fafcf0cfb58786b15b99152bec672cccf861c14d1cca0ad4758a
+    cleanup:
+      - /include
+      - /share
+      - /app/lib/node_modules/npm/changelogs
+      - /app/lib/node_modules/npm/doc
+      - /app/lib/node_modules/npm/html
+      - /app/lib/node_modules/npm/man
+      - /app/lib/node_modules/npm/scripts
+
   - name: itch
     buildsystem: simple
+    build-options:
+      env:
+        electron_config_cache: /run/build/itch/npm-cache
     build-commands:
-      - ar x itch.deb
-      - tar -xf data.tar.xz --transform='flags=r;s|usr/||' -C /app
-      - rmdir /app/usr
-      - rm itch.deb data.tar.xz control.tar.gz debian-binary
+      - npm install --prefix=main --offline --cache=/run/build/itch/npm-cache/
+      - cp -ax main /app/main
     post-install:
+      - |
+        for s in 16 22 32 48 64 128 256 512 1024; do
+          install -Dm644 main/release/images/itch-icons/icon${s}.png /app/share/icons/hicolor/${s}x${s}/apps/${FLATPAK_ID}.png ;
+        done
+      - install -Dm755 itch.sh /app/bin/itch
       - mkdir -p /app/lib/i386-linux-gnu /app/lib/debug/lib/i386-linux-gnu
     sources:
-      - type: file
-        only-arches:
-          - i386
-        dest-filename: itch.deb
-        url: https://dl.bintray.com/itchio/deb/itch_23.6.3_i386.deb
-        sha256: ee31ad51d2aee275f1f9087bea601389821b5b89168952a6c068f937c3522aec
-      - type: file
-        only-arches:
-          - x86_64
-        dest-filename: itch.deb
-        url: https://dl.bintray.com/itchio/deb/itch_23.6.3_amd64.deb
-        sha256: 53c47f7c21261850c44f37c5fcc055eda3f67bbf79bc596292f48d3b5f31e8e9
+      - type: archive
+        url: "https://github.com/itchio/itch/archive/v25.4.0.tar.gz"
+        sha256: e86c70044c7d02754c6e52fb428d1278678d729c77b8359b5d82198595da1351
+        dest: main
+
+      - generated-sources.json
+
+      - type: script
+        dest-filename: itch.sh
+        commands:
+          - exec npm start --prefix=/app/main
