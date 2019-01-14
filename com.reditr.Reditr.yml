@@ -34,6 +34,15 @@ modules:
         sha256: c7aa8cd34fd0caecd17b000165881e5879df40bdacdc3f8fe8e69ad762f61e79
         size: 34321100
         filename: reditr.deb
+
+      - type: extra-data
+        only-arches:
+          - "i386"
+        url: http://reditr.com/downloads/linux/reditr_i386.deb
+        sha256: 051a9c6bf6e32b4eae6b0119e9e1eefe08b96120612be7c72e513b46456c5443
+        size: 31669358
+        filename: reditr.deb
+
       - type: script
         dest-filename: apply_extra
         commands:
@@ -46,6 +55,7 @@ modules:
           - sed 's|Icon=.*|Icon=com.reditr.Reditr|g' -i /app/extra/export/share/applications/com.reditr.Reditr.desktop
           - rm reditr.deb data.tar.gz control.tar.gz debian-binary
           - rm -r usr opt
+
       - type: script
         dest-filename: reditr.sh
         commands:
@@ -53,5 +63,6 @@ modules:
           - export LD_LIBRARY_PATH=/usr/lib:/app/lib:$(pwd)
           - export TMPDIR=$XDG_RUNTIME_DIR
           - exec ./reditr_app $@
+
       - type: file
         path: com.reditr.Reditr.appdata.xml
