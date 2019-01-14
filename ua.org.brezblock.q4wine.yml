@@ -61,6 +61,7 @@ modules:
     config-opts:
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
       - -DLIBS_ENTRY_PATH=/app/lib
+      - -DWITH_DBUS=ON
     post-install:
       - install -Dm644 -t /app/share/appdata/ ${FLATPAK_ID}.appdata.xml
     sources:
