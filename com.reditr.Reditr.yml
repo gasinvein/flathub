@@ -1,9 +1,9 @@
 app-id: com.reditr.Reditr
 runtime: org.freedesktop.Platform
 sdk: org.freedesktop.Sdk
-runtime-version: '1.6'
+runtime-version: "18.08"
 base: io.atom.electron.BaseApp
-base-version: stable
+base-version: "18.08"
 command: reditr
 finish-args:
   - --socket=x11
@@ -21,8 +21,9 @@ modules:
   - name: reditr
     buildsystem: simple
     build-commands:
+      - mkdir -p /app/bin
       - cp /usr/bin/ar /app/bin
-      - cp /usr/lib/libbfd-*.so /app/lib
+      - cp /usr/lib/*/libbfd-*.so /app/lib
       - install -Dm755 apply_extra /app/bin/apply_extra
       - install -Dm755 reditr.sh /app/bin/reditr
       - install -Dm644 -t /app/share/appdata/ com.reditr.Reditr.appdata.xml
