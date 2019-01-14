@@ -46,9 +46,11 @@ modules:
       - mkdir -p /app/main
       - unzip -d /app/main itch.zip
       - install -Dm755 itch.sh /app/bin/itch
+      - install -Dm644 ${FLATPAK_ID}.desktop -t /app/share/applications/
+      - install -Dm644 ${FLATPAK_ID}.appdata.xml -t /app/share/appdata/
       - |
         for s in 16 32 48 64 128 256 512 1024; do
-          install -Dm644 icon${s}.png /app/share/icons/${s}x${s}/apps/${FLATPAK_ID}.png
+          install -Dm644 icon${s}.png /app/share/icons/hicolor/${s}x${s}/apps/${FLATPAK_ID}.png
         done
     post-install:
       - mkdir -p /app/lib/i386-linux-gnu /app/lib/debug/lib/i386-linux-gnu
@@ -71,6 +73,12 @@ modules:
         dest-filename: itch.zip
         url: "https://broth.itch.ovh/itch/linux-amd64/25.4.0/archive/default"
         sha256: bb91c586bc4162a539c3394ba314fefebfaee380924fb0be37cab31586dad50e
+
+      - type: file
+        path: io.itch.itch.desktop
+
+      - type: file
+        path: io.itch.itch.appdata.xml
 
       - type: file
         url: "https://github.com/itchio/itch/raw/v25.4.0/release/images/itch-icons/icon16.png"
