@@ -1,0 +1,57 @@
+app-id: com.reditr.Reditr
+runtime: org.freedesktop.Platform
+sdk: org.freedesktop.Sdk
+runtime-version: '1.6'
+base: io.atom.electron.BaseApp
+base-version: stable
+command: reditr
+finish-args:
+  - --socket=x11
+  - --share=ipc
+  - --socket=wayland
+  - --device=dri
+  - --socket=pulseaudio
+  - --share=network
+  - --talk-name=org.freedesktop.Notifications
+  - --talk-name=org.gtk.Notifications
+  - --talk-name=org.kde.StatusNotifierWatcher
+  - --system-talk-name=org.freedesktop.UPower
+  - --system-talk-name=org.freedesktop.NetworkManager
+modules:
+  - name: reditr
+    buildsystem: simple
+    build-commands:
+      - cp /usr/bin/ar /app/bin
+      - cp /usr/lib/libbfd-*.so /app/lib
+      - install -Dm755 apply_extra /app/bin/apply_extra
+      - install -Dm755 reditr.sh /app/bin/reditr
+      - install -Dm644 -t /app/share/appdata/ com.reditr.Reditr.appdata.xml
+    sources:
+      - type: extra-data
+        only-arches:
+          - x86_64
+        url: http://reditr.com/downloads/linux/reditr_amd64.deb
+        sha256: c7aa8cd34fd0caecd17b000165881e5879df40bdacdc3f8fe8e69ad762f61e79
+        size: 34321100
+        filename: reditr.deb
+      - type: script
+        dest-filename: apply_extra
+        commands:
+          - ar x reditr.deb
+          - tar -xf data.tar.gz
+          - mv opt/reditr /app/extra/reditr
+          - install -Dm644 usr/share/applications/Reditr.desktop /app/extra/export/share/applications/com.reditr.Reditr.desktop
+          - install -Dm644 /app/extra/reditr/128x128.png /app/extra/export/share/icons/hicolor/128x128/apps/com.reditr.Reditr.png
+          - sed 's|Exec=.*|Exec=reditr|g' -i /app/extra/export/share/applications/com.reditr.Reditr.desktop
+          - sed 's|Icon=.*|Icon=com.reditr.Reditr|g' -i /app/extra/export/share/applications/com.reditr.Reditr.desktop
+          - rm reditr.deb data.tar.gz control.tar.gz debian-binary
+          - rm -r usr opt
+      - type: script
+        dest-filename: reditr.sh
+        commands:
+          - cd /app/extra/reditr
+          - export LD_LIBRARY_PATH=/usr/lib:/app/lib:$(pwd)
+          - export TMPDIR=$XDG_RUNTIME_DIR
+          - exec ./reditr_app $@
+      - type: file
+        path: com.reditr.Reditr.appdata.xml
