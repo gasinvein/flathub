@@ -5,7 +5,7 @@ REPO=$2
 EXPORT_ARGS=$3
 FB_ARGS=$4
 
-set -x
+set -e -x
 for flavour in vanilla staging; do
     for ARCH in x86_64 i386; do
         flatpak-builder -v --force-clean --ccache --sandbox --delete-build-dirs \
