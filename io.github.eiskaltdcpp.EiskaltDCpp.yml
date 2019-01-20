@@ -1,0 +1,92 @@
+id: io.github.eiskaltdcpp.EiskaltDCpp
+sdk: org.kde.Sdk
+runtime: org.kde.Platform
+runtime-version: "5.12"
+command: eiskaltdcpp-qt
+rename-icon: eiskaltdcpp
+rename-desktop-file: eiskaltdcpp-qt.desktop
+rename-appdata-file: eiskaltdcpp.appdata.xml
+finish-args:
+  - --share=ipc
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --device=dri
+  - --socket=pulseaudio
+  - --share=network
+  - --talk-name=org.freedesktop.Notifications
+  - --talk-name=org.kde.StatusNotifierWatcher
+  - --filesystem=xdg-download
+cleanup:
+  - "*.a"
+  - "*.la"
+  - /include
+  - /lib/pkgconfig
+  - /lib/cmake
+  - /share/man
+  - /share/doc
+  - /share/gtk-doc
+modules:
+  - name: eiskaltdcpp
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DUSE_ASPELL=ON
+      - -DUSE_MINIUPNP=ON
+      - -DPERL_REGEX=ON
+      - -DLUA_SCRIPT=ON
+      - -DWITH_LUASCRIPTS=ON
+      - -DWITH_SOUNDS=ON
+      #Qt5 interface
+      - -DUSE_QT5=ON
+      - -DUSE_JS=ON
+      #GTK3 interface
+      - -DUSE_GTK3=ON
+      -
+    post-install:
+      - mv /app/share/applications/{eiskaltdcpp,${FLATPAK_ID}}-gtk.desktop
+      - desktop-file-edit --set-key=Icon --set-value=${FLATPAK_ID} /app/share/applications/${FLATPAK_ID}-gtk.desktop
+      - desktop-file-edit --set-key=X-Flatpak-RenamedFrom --set-value="eiskaltdcpp-gtk.desktop;" /app/share/applications/${FLATPAK_ID}-gtk.desktop
+    sources:
+      - type: git
+        url: "https://github.com/eiskaltdcpp/eiskaltdcpp.git"
+        commit: 6ca065bd1952b431abe34f1fd8c5c16f81bd7262
+    modules:
+
+      - name: boost
+        buildsystem: simple
+        build-commands:
+          - ./bootstrap.sh --prefix=/app --with-libraries=system
+          - ./b2 -j $FLATPAK_BUILDER_N_JOBS
+          - ./b2 install
+        sources:
+          - type: archive
+            url: "https://dl.bintray.com/boostorg/release/1.66.0/source/boost_1_66_0.tar.gz"
+            sha256: bd0df411efd9a585e5a2212275f8762079fed8842264954675a4fddc46cfcf60
+
+      - shared-modules/lua5.3/lua-5.3.2.json
+
+      - name: libidn
+        sources:
+          - type: archive
+            url: "https://ftp.gnu.org/gnu/libidn/libidn-1.35.tar.gz"
+            sha256: f11af1005b46b7b15d057d7f107315a1ad46935c7fcdf243c16e46ec14f0fe1e
+        cleanup:
+          - /share/info
+          - /share/emacs
+
+      - name: miniupnpc
+        buildsystem: cmake-ninja
+        subdir: miniupnpc
+        sources:
+          - type: archive
+            url: "https://github.com/miniupnp/miniupnp/archive/miniupnpc_2_1.tar.gz"
+            sha256: 19c5b6cf8f3fc31d5e641c797b36ecca585909c7f3685a5c1a64325340537c94
+
+      - name: libnotify
+        config-opts:
+          - --disable-static
+          - --disable-tests
+          - --disable-introspection
+        sources:
+          - type: archive
+            url: "https://download.gnome.org/sources/libnotify/0.7/libnotify-0.7.7.tar.xz"
+            sha256: 9cb4ce315b2655860c524d46b56010874214ec27e854086c1a1d0260137efc04
