@@ -49,6 +49,10 @@ modules:
   - name: rpcs3
     buildsystem: cmake-ninja
     builddir: true
+    build-options:
+      env:
+        CC: clang
+        CXX: clang++
     config-opts:
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
       - -DUSE_ALSA=OFF
