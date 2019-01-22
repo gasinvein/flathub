@@ -20,7 +20,7 @@ sed 's|TAR_NI|TAR_IN|g' -i teamviewer/tv_bin/script/tvw_config
 rmdir teamviewer/{config,logfiles}
 #FIXME Using HOME path here is probably bad
 ln -s "$HOME/.config/teamviewer" teamviewer/config
-ln -s "$HOME.local/share/teamviewer${TV_VER_MAJOR}/logfiles" teamviewer/logfiles
-ln -s "$HOME.local/share/teamviewer${TV_VER_MAJOR}" teamviewer/profile
+ln -s "$HOME/.local/share/teamviewer${TV_VER_MAJOR}/logfiles" teamviewer/logfiles
+ln -s "$HOME/.local/share/teamviewer${TV_VER_MAJOR}" teamviewer/profile
 
 rm teamviewer.tar.xz
