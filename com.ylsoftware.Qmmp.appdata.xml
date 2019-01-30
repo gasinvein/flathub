@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+    <id>com.ylsoftware.Qmmp</id>
+    <name>Qmmp</name>
+    <developer_name></developer_name>
+    <summary>Qt-based Multimedia Player</summary>
+    <description>
+        <p>This program is an audio-player, written with the help of the Qt library. The user interface is similar to winamp or xmms. Alternative user interface also is available.</p>
+    </description>
+    <launchable type="desktop-id">com.ylsoftware.Qmmp.desktop</launchable>
+    <categories>
+        <category>AudioVideo</category>
+    </categories>
+    <project_license>GPL-2.0</project_license>
+    <metadata_license>CC0-1.0</metadata_license>
+    <url type="homepage">http://qmmp.ylsoftware.com/</url>
+    <url type="bugtracker">https://sourceforge.net/p/qmmp-dev/tickets/</url>
+    <url type="translate">https://www.transifex.com/qmmp-development-team/</url>
+    <content_rating type="oars-1.1" />
+    <screenshots>
+        <screenshot type="default">
+            <image>http://qmmp.ylsoftware.com/images/qmmp-0.9_full_1.png</image>
+        </screenshot>
+        <screenshot>
+            <image>http://qmmp.ylsoftware.com/images/qmmp-0.9_full_2.png</image>
+        </screenshot>
+        <screenshot>
+            <image>http://qmmp.ylsoftware.com/images/qmmp-0.9_full_3.png</image>
+        </screenshot>
+    </screenshots>
+    <releases>
+        <release version="1.2.6" date="2019-01-08" />
+    </releases>
+</component>

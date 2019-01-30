@@ -5,7 +5,6 @@ runtime-version: "5.12"
 command: qmmp
 rename-icon: qmmp
 rename-desktop-file: qmmp.desktop
-rename-appdata-file: qmmp.appdata.xml
 finish-args:
   - --share=ipc
   - --socket=fallback-x11
@@ -157,3 +156,11 @@ modules:
       - type: archive
         url: "http://qmmp.ylsoftware.com/files/plugins/qmmp-plugin-pack-1.2.4.tar.bz2"
         md5: 61d461d0ab0d0697ffc9cd52f3bd0928
+
+  - name: qmmp-appdata
+    buildsystem: simple
+    build-commands:
+      - install -Dm644 ${FLATPAK_ID}.appdata.xml -t /app/share/appdata/
+    sources:
+      - type: file
+        path: com.ylsoftware.Qmmp.appdata.xml
