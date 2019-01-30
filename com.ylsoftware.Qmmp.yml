@@ -118,7 +118,7 @@ modules:
           - type: patch
             path: patches/libmad-0.15.1b-cflags-O2.patch
           - type: file
-            path: mad.pc
+            path: patches/mad.pc
 
       - name: soxr
         buildsystem: cmake-ninja
