@@ -38,23 +38,6 @@ modules:
         md5: fd4394057e51f5748a12554ee2483613
     modules:
 
-      - name: ffmpeg
-        config-opts:
-          - --enable-shared
-          - --disable-static
-          - --enable-gnutls
-          - --disable-doc
-          - --disable-programs
-          - --disable-encoders
-          - --disable-muxers
-          - --disable-libv4l2
-        sources:
-          - type: archive
-            url: "https://ffmpeg.org/releases/ffmpeg-4.1.tar.xz"
-            sha256: a38ec4d026efb58506a99ad5cd23d5a9793b4bf415f2c4c2e9c1bb444acd1994
-        cleanup:
-          - /share/ffmpeg/examples
-
       - name: taglib
         buildsystem: cmake-ninja
         config-opts:
