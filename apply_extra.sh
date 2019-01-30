@@ -1,11 +1,12 @@
 #!/bin/bash
-set -x
+set -e
 
 APP_ID="com.softmaker.FreeOffice"
+YEAR="2018"
+SUITE="FreeOffice"
 
-tar -xf freeoffice.tgz
 mkdir freeoffice
-tar -C freeoffice -xf freeoffice2018.tar.lzma
+tar -xOf freeoffice.tgz freeoffice${YEAR}.tar.lzma | tar -xJf - -C freeoffice
 
 declare -A abbreviations
 abbreviations=(
@@ -14,12 +15,11 @@ abbreviations=(
     [presentations]="pr"
 )
 
-fullname_base="FreeOffice 2018"
 declare -A fullnames
 fullnames=(
-    [textmaker]="$fullname_base TextMaker"
-    [planmaker]="$fullname_base PlanMaker"
-    [presentations]="$fullname_base Presentations"
+    [textmaker]="$SUITE $YEAR TextMaker"
+    [planmaker]="$SUITE $YEAR PlanMaker"
+    [presentations]="$SUITE $YEAR Presentations"
 )
 
 app_icon_sizes=(16 24 32 48 64 72 128 256 512 1024)
@@ -35,6 +35,7 @@ for app in textmaker planmaker presentations; do
     desktop-file-edit --set-key="Exec" --set-value="$app %F" "$desktop_file"
     desktop-file-edit --set-key="TryExec" --set-value="$app" "$desktop_file"
     desktop-file-edit --set-key="StartupWMClass" --set-value="${a}" "$desktop_file"
+    desktop-file-edit --set-key="X-Flatpak-RenamedFrom" --set-value="${app}-${YEAR}.desktop;" "$desktop_file"
     # install application icons
     for s in "${app_icon_sizes[@]}"; do
         install -Dm644 "freeoffice/icons/${a}l_${s}.png" "export/share/icons/hicolor/${s}x${s}/apps/$APP_ID-$app.png"
@@ -53,4 +54,4 @@ for t in tmd tmd_mso tmd_oth pmd pmd_mso pmd_oth prd prd_mso prd_oth; do
     sed "s/icon name=\"application-x-$suffix\"/icon name=\"$APP_ID-$suffix\"/g" -i "export/share/mime/packages/$APP_ID.xml"
 done
 
-rm freeoffice.tgz freeoffice2018.tar.lzma installfreeoffice
+rm freeoffice.tgz
