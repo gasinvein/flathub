@@ -25,6 +25,11 @@ cleanup:
   - "*.la"
   - /include
   - /lib/pkgconfig
+  - /share/aclocal
+  - /lib/cmake
+  - /share/doc
+  - /share/man
+  - /share/info
 modules:
   - name: qmmp
     buildsystem: cmake-ninja
@@ -32,6 +37,12 @@ modules:
       - -DUSE_ALSA:BOOL=FALSE
       - -DUSE_PULSE:BOOL=TRUE
       - -DQMMP_DEFAULT_OUTPUT=pulse
+      - -DPROJECTM_CONFIG=/app/share/projectM/config.inp
+    post-install:
+      - mv /app/share/applications/{qmmp_,${FLATPAK_ID}.}dir.desktop
+      - mv /app/share/applications/{qmmp_,${FLATPAK_ID}.}enqueue.desktop
+      - desktop-file-edit --set-key=Icon --set-value=${FLATPAK_ID} /app/share/applications/${FLATPAK_ID}.dir.desktop
+      - desktop-file-edit --set-key=Icon --set-value=${FLATPAK_ID} /app/share/applications/${FLATPAK_ID}.enqueue.desktop
     sources:
       - type: archive
         url: "http://qmmp.ylsoftware.com/files/qmmp-1.2.6.tar.bz2"
@@ -131,6 +142,8 @@ modules:
 
           - name: glm
             buildsystem: cmake-ninja
+            config-opts:
+              - -DCMAKE_INSTALL_LIBDIR=lib
             sources:
               - type: archive
                 url: "https://github.com/g-truc/glm/releases/download/0.9.9.3/glm-0.9.9.3.zip"
