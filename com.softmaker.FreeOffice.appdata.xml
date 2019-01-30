@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
     <id>com.softmaker.FreeOffice</id>
+    <launchable type="desktop-id">com.softmaker.FreeOffice-textmaker.desktop</launchable>
     <name>FreeOffice 2018</name>
     <summary>Office suite with a word processor, a spreadsheet application and a presentation program</summary>
     <developer_name>SoftMaker</developer_name>
