@@ -1,0 +1,119 @@
+id: org.hardinfo.HardInfo
+sdk: org.freedesktop.Sdk
+runtime: org.freedesktop.Platform
+runtime-version: "18.08"
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --socket=wayland
+  - --device=all
+command: hardinfo
+rename-icon: hardinfo
+rename-desktop-file: hardinfo.desktop
+cleanup:
+  - "*.a"
+  - "*.la"
+  - /include
+  - /lib/pkgconfig
+  - /share/man
+modules:
+
+  - name: usbutils
+    config-opts:
+      - --datadir=/app/share/hwdata
+    sources:
+      - type: archive
+        url: "https://mirrors.edge.kernel.org/pub/linux/utils/usb/usbutils/usbutils-007.tar.xz"
+        sha256: 7593a01724bbc0fd9fe48e62bc721ceb61c76654f1d7b231b3c65f6dfbbaefa4
+    modules:
+
+      - name: libusb
+        sources:
+          - type: archive
+            url: "https://github.com//libusb/libusb/releases/download/v1.0.22/libusb-1.0.22.tar.bz2"
+            sha256: 75aeb9d59a4fdb800d329a545c2e6799f732362193b465ea198f2aa275518157
+        modules:
+
+          - shared-modules/udev/udev-175.json
+
+  - name: pciutils
+    no-autogen: true
+    make-args:
+      - OPT=-O2 -g
+      - IDSDIR=/app/share/hwdata
+      - PCI_IDS=pci.ids
+    make-install-args:
+      - PREFIX=/app
+      - SBINDIR=/app/bin
+    sources:
+      - type: archive
+        url: "https://mirrors.edge.kernel.org/pub/software/utils/pciutils/pciutils-3.6.2.tar.gz"
+        sha256: d5f9254f27bbda8243b345633e980144e6bd2af9c786bb8a152b904530aef599
+    modules:
+
+      - name: hwdata
+        config-opts:
+          - --datarootdir=/app/share
+        sources:
+          - type: archive
+            url: "https://github.com/vcrhonek/hwdata/archive/v0.312.tar.gz"
+            sha256: 513d40c38ccc5ca6706d960dca61a9784d05c4a67a5e9c08f71b2d40acebab11
+
+  - name: xrandr
+    sources:
+      - type: archive
+        url: "https://xorg.freedesktop.org/archive/individual/app/xrandr-1.5.0.tar.bz2"
+        sha256: c1cfd4e1d4d708c031d60801e527abc9b6d34b85f2ffa2cadd21f75ff38151cd
+
+  - name: mesa-demos
+    config-opts:
+      - --without-glut
+    no-make-install: true
+    make-args:
+      - -C
+      - src/xdemos
+      - glxinfo
+    post-install:
+      - install -Dm755 src/xdemos/glxinfo -t /app/bin/
+    sources:
+      - type: archive
+        url: "https://mesa.freedesktop.org/archive/demos/8.3.0/mesa-demos-8.3.0.tar.bz2"
+        sha256: c173154bbd0d5fb53d732471984def42fb1b14ac85fcb834138fb9518b3e0bef
+    cleanup:
+      - /lib/mesa-demos
+    modules:
+
+      - shared-modules/glew/glew.json
+
+      - shared-modules/glu/glu-9.0.0.json
+
+  - name: kmod
+    sources:
+      - type: archive
+        url: "https://mirrors.edge.kernel.org/pub/linux/utils/kernel/kmod/kmod-25.tar.xz"
+        sha256: 7165e6496656159dcb909a91ed708a0fe273a4b128b4b1dc997ccb5189eef1cd
+
+  - name: net-tools
+    no-autogen: true
+    make-install-args:
+      - DESTDIR=/app
+      - SBINDIR=/bin
+    sources:
+      - type: archive
+        url: "http://deb.debian.org/debian/pool/main/n/net-tools/net-tools_1.60+git20180626.aebd88e.orig.tar.gz"
+        md5: 4144a36c75aad8ccbd713acdbf9276e1
+      - type: shell
+        commands:
+          - touch config.h
+    cleanup:
+      - /usr #Man installed here
+
+  - name: hardinfo
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DCMAKE_INSTALL_LIBDIR=lib
+      - -DHARDINFO_GTK3=1
+    sources:
+      - type: git
+        url: "https://github.com/lpereira/hardinfo.git"
