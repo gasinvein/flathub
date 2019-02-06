@@ -1,0 +1,88 @@
+id: today.sam.reddit-is-gtk
+sdk: org.gnome.Sdk
+runtime: org.gnome.Platform
+runtime-version: "3.30"
+finish-args:
+  - --share=ipc
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --device=dri
+  - --socket=pulseaudio
+  - --share=network
+  - --talk-name=ca.desrt.dconf
+  - --filesystem=xdg-run/dconf
+  - --filesystem=xdg-config/dconf:ro
+command: reddit-is-gtk
+rename-desktop-file: reddit-is-gtk.desktop
+rename-appdata-file: reddit-is-gtk.appdata.xml
+modules:
+
+  - name: something-for-reddit
+    sources:
+      - type: git
+        url: "https://github.com/samdroid-apps/something-for-reddit.git"
+        tag: v0.2.2
+    modules:
+
+      - name: sassc
+        sources:
+          - type: archive
+            url: "https://github.com/sass/sassc/archive/3.5.0.tar.gz"
+            sha256: 26f54e31924b83dd706bc77df5f8f5553a84d51365f0e3c566df8de027918042
+          - type: script
+            dest-filename: autogen.sh
+            commands:
+              - autoreconf -ifv
+        cleanup:
+          - "*"
+        modules:
+
+          - name: libsass
+            sources:
+              - type: archive
+                url: "https://github.com/sass/libsass/archive/3.5.5.tar.gz"
+                sha256: 487ca58f1dfdc4055079af04f0ad120747385d3b3926b1c8f46e4b00540fdb70
+              - type: script
+                dest-filename: autogen.sh
+                commands:
+                  - autoreconf -ifv
+            cleanup:
+              - "*"
+
+      - name: python-Markdown
+        buildsystem: simple
+        build-commands:
+          - python3 setup.py install --root=/ --prefix=/app
+        sources:
+          - type: archive
+            url: "https://github.com/Python-Markdown/markdown/archive/3.0.1.tar.gz"
+            sha256: e45cda91bfd07195f17ca565226010238b8c90ccfa82a79b15f4379510576335
+
+      - name: python-arrow
+        buildsystem: simple
+        build-commands:
+          - python3 setup.py install --root=/ --prefix=/app
+        sources:
+          - type: archive
+            url: "https://github.com/crsmithdev/arrow/archive/0.13.0.tar.gz"
+            sha256: a943133e44c57fd35f8f1f322b65e8c99e8728d62a624d0a16dc19a7bd462e4e
+        modules:
+
+          - name: python-dateutil
+            buildsystem: simple
+            build-commands:
+              - python3 setup.py install --root=/ --prefix=/app
+            sources:
+              - type: archive
+                url: "https://files.pythonhosted.org/packages/source/p/python-dateutil/python-dateutil-2.7.5.tar.gz"
+                sha256: 88f9287c0174266bb0d8cedd395cfba9c58e87e5ad86b2ce58859bc11be3cf02
+            modules:
+
+              - name: python-setuptools_scm
+                buildsystem: simple
+                build-commands:
+                  - python3 setup.py install --root=/ --prefix=/app
+                sources:
+                  - type: archive
+                    url: "https://pypi.io/packages/source/s/setuptools_scm/setuptools_scm-3.2.0.tar.gz"
+                    sha256: 52ab47715fa0fc7d8e6cd15168d1a69ba995feb1505131c3e814eb7087b57358
