@@ -54,3 +54,10 @@ modules:
       - /include/llvm
       - /include/llvm-c
       - /bin/llvm*
+
+cleanup-commands:
+  - |
+    icondir=/app/share/icons/hicolor/scalable/apps
+    mv $icondir/rpcs3.svg $icondir/rpcs3.orig.svg
+    rsvg-convert -f svg -a -w 512 $icondir/rpcs3.orig.svg -o $icondir/rpcs3.svg
+    rm $icondir/rpcs3.orig.svg
