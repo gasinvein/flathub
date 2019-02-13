@@ -4,6 +4,7 @@ sdk: org.kde.Sdk
 runtime-version: "5.12"
 command: rpcs3
 rename-desktop-file: rpcs3.desktop
+rename-appdata-file: rpcs3.appdata.xml
 rename-icon: rpcs3
 finish-args:
   - --device=all
@@ -47,15 +48,9 @@ modules:
     sources:
       - type: git
         url: "https://github.com/RPCS3/rpcs3.git"
+      - type: patch
+        path: fix-appdata.patch
     cleanup:
       - /include/llvm
       - /include/llvm-c
       - /bin/llvm*
-
-  - name: rpcs3-metadata
-    buildsystem: simple
-    build-commands:
-      - install -Dm644 net.rpcs3.RPCS3.appdata.xml -t /app/share/appdata/
-    sources:
-      - type: file
-        path: net.rpcs3.RPCS3.appdata.xml
