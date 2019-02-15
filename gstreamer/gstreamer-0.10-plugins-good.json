@@ -9,19 +9,19 @@
         },
         {
             "type": "patch",
-            "path": "gst-plugins-good-0.10.31-fix-v4l2_munmap.patch"
+            "path": "patches/gst-plugins-good-0.10.31-fix-v4l2_munmap.patch"
         },
         {
             "type": "patch",
-            "path": "gst-plugins-good-0.10.31-v4l2src-fix.patch"
+            "path": "patches/gst-plugins-good-0.10.31-v4l2src-fix.patch"
         },
         {
             "type": "patch",
-            "path": "gst-plugins-good-0.10.31-Some-blind-compilation-fixes.patch"
+            "path": "patches/gst-plugins-good-0.10.31-Some-blind-compilation-fixes.patch"
         },
         {
             "type": "patch",
-            "path": "gst-plugins-good-0.10.31-v4l2object-Don-t-probe-UVC-devices-for-being-interla.patch"
+            "path": "patches/gst-plugins-good-0.10.31-v4l2object-Don-t-probe-UVC-devices-for-being-interla.patch"
         }
     ]
 }
