@@ -23,11 +23,5 @@
             "type": "patch",
             "path": "gst-plugins-good-0.10.31-v4l2object-Don-t-probe-UVC-devices-for-being-interla.patch"
         }
-    ],
-    "cleanup": [
-        "/include",
-        "/lib/pkgconfig",
-        "*.a",
-        "*.la"
     ]
 }

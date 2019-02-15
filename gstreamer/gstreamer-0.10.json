@@ -15,14 +15,5 @@
             "type": "patch",
             "path": "gstreamer-0.10.36-bison3.patch"
         }
-    ],
-    "cleanup": [
-        "/include",
-        "/lib/pkgconfig",
-        "/share/aclocal",
-        "*.a",
-        "*.la",
-        "/share/gtk-doc",
-        "/share/man"
     ]
 }
