@@ -18,6 +18,10 @@ cleanup:
 modules:
   - name: wine
     build-options:
+      cflags: -O2 -g
+      cflags-override: true
+      cxxflags: -O2 -g
+      cxxflags-override: true
       arch:
         x86_64:
           config-opts:
@@ -26,19 +30,8 @@ modules:
       - --disable-win16
       - --disable-tests
       - --with-x
-      - --without-ldap
-      - --without-cups
-      - --without-curses
-      - --without-capi
-      - --without-glu
-      - --without-gphoto
-      - --without-gsm
+      - --with-pulse
       - --without-hal
-      - --without-netapi
-      - --without-opencl
-      - --without-pcap
-      - --without-udev
-      - --without-v4l
     post-install:
       - case $FLATPAK_ARCH in
           x86_64)

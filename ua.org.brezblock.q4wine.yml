@@ -51,6 +51,14 @@ add-extensions:
     download-if: active-gl-driver
     enable-if: active-gl-driver
 
+  ua.org.brezblock.q4wine.compat32:
+    directory: lib/compat32
+    add-ld-path: lib
+
+  ua.org.brezblock.q4wine.compat32.Debug:
+    directory: lib/debug/lib/compat32
+    no-autodownload: true
+
   ua.org.brezblock.q4wine.wine:
     directory: wine
     subdirectories: true
@@ -198,8 +206,29 @@ modules:
     buildsystem: simple
     build-commands:
       - mkdir -p /app/lib/i386-linux-gnu
+      - mkdir -p /app/lib/compat32
       - mkdir -p /app/wine
       - ln -s /bin/false /app/bin/mount
       - ln -s /bin/false /app/bin/umount
       - ln -s /bin/false /app/bin/sudo
       - ln -s /bin/false /app/bin/renice
+
+# ========== wine dependencies ==========
+
+  - name: vkd3d
+    sources:
+      - type: archive
+        url: "https://dl.winehq.org/vkd3d/source/vkd3d-1.1.tar.xz"
+        sha256: 495adc61cc80c65d54b2f5b52092ea05d3797cc2c17a610f0fc98457d2f56ab6
+    modules:
+
+      - name: SPIRV-Headers
+        buildsystem: cmake-ninja
+        sources:
+          - type: git
+            url: "https://github.com/KhronosGroup/SPIRV-Headers.git"
+            commit: 8bea0a266ac9b718aa0818d9e3a47c0b77c2cb23
+
+  - modules/glu-9.0.0.json
+ 
+  - modules/udev-175.json
