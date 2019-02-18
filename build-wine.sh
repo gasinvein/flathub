@@ -6,7 +6,7 @@ EXPORT_ARGS=$3
 FB_ARGS=$4
 
 set -e -x
-for flavour in vanilla staging proton esync; do
+for flavour in vanilla staging proton esync tkg; do
     for ARCH in x86_64 i386; do
         flatpak-builder -v --force-clean --ccache --sandbox --delete-build-dirs \
             --arch=${ARCH} --repo="${REPO}" --default-branch="${BRANCH}" \

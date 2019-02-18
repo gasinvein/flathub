@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="addon">
+  <id>ua.org.brezblock.q4wine.wine.tkg</id>
+  <extends>ua.org.brezblock.q4wine</extends>
+  <name>Tk-Glitch Wine</name>
+  <summary>Wine from Tk-Glitch (with staging, esync and pba patches)</summary>
+  <url type="homepage">https://winehq.org/</url>
+  <project_license>LGPL-2.1</project_license>
+  <metadata_license>CC0-1.0</metadata_license>
+</component>
