@@ -232,3 +232,12 @@ modules:
   - modules/glu-9.0.0.json
  
   - modules/udev-175.json
+
+  - name: FAudio
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DFFMPEG=ON
+    sources:
+      - type: archive
+        url: "https://github.com/FNA-XNA/FAudio/archive/19.02.tar.gz"
+        sha256: 514dd03672aa0241a7eee29e207a594e86cc9954940205489a8299cd1395ffaf
