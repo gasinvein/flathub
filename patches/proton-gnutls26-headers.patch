@@ -1,0 +1,4315 @@
+diff -urN empty/include/gnutls26/abstract.h contrib/include/gnutls26/abstract.h
+--- empty/include/gnutls26/abstract.h	1970-01-01 03:00:00.000000000 +0300
++++ contrib/include/gnutls26/abstract.h	2019-02-18 16:14:12.218343378 +0300
+@@ -0,0 +1,150 @@
++#ifndef __GNUTLS_ABSTRACT_H
++#define __GNUTLS_ABSTRACT_H
++
++#include <stdarg.h>
++#include <gnutls26/gnutls.h>
++#include <gnutls26/x509.h>
++#include <gnutls26/pkcs11.h>
++#include <gnutls26/openpgp.h>
++
++/* Public key operations */
++
++struct gnutls_pubkey_st;
++typedef struct gnutls_pubkey_st *gnutls_pubkey_t;
++
++struct gnutls_privkey_st;
++typedef struct gnutls_privkey_st *gnutls_privkey_t;
++
++int gnutls_pubkey_init (gnutls_pubkey_t * key);
++void gnutls_pubkey_deinit (gnutls_pubkey_t key);
++int gnutls_pubkey_get_pk_algorithm (gnutls_pubkey_t key, unsigned int *bits);
++
++int gnutls_pubkey_import_x509 (gnutls_pubkey_t key, gnutls_x509_crt_t crt,
++                               unsigned int flags);
++int gnutls_pubkey_import_pkcs11 (gnutls_pubkey_t pkey,
++                                 gnutls_pkcs11_obj_t crt, unsigned int flags);
++int gnutls_pubkey_import_openpgp (gnutls_pubkey_t pkey,
++                                  gnutls_openpgp_crt_t crt,
++                                  unsigned int flags);
++int
++gnutls_pubkey_import_privkey (gnutls_pubkey_t key, gnutls_privkey_t pkey,
++                              unsigned int usage, unsigned int flags);
++
++
++int gnutls_pubkey_get_preferred_hash_algorithm (gnutls_pubkey_t key,
++                                                gnutls_digest_algorithm_t *
++                                                hash, unsigned int *mand);
++
++int gnutls_pubkey_get_pk_rsa_raw (gnutls_pubkey_t key,
++                                  gnutls_datum_t * m, gnutls_datum_t * e);
++int gnutls_pubkey_get_pk_dsa_raw (gnutls_pubkey_t key,
++                                  gnutls_datum_t * p, gnutls_datum_t * q,
++                                  gnutls_datum_t * g, gnutls_datum_t * y);
++
++int gnutls_pubkey_export (gnutls_pubkey_t key,
++                          gnutls_x509_crt_fmt_t format,
++                          void *output_data, size_t * output_data_size);
++
++int gnutls_pubkey_get_key_id (gnutls_pubkey_t key, unsigned int flags,
++                              unsigned char *output_data,
++                              size_t * output_data_size);
++
++int gnutls_pubkey_get_key_usage (gnutls_pubkey_t key, unsigned int *usage);
++int gnutls_pubkey_set_key_usage (gnutls_pubkey_t key, unsigned int usage);
++
++int gnutls_pubkey_import (gnutls_pubkey_t key,
++                          const gnutls_datum_t * data,
++                          gnutls_x509_crt_fmt_t format);
++
++
++int gnutls_pubkey_import_pkcs11_url (gnutls_pubkey_t key, const char *url,
++                                     unsigned int flags
++                                     /* GNUTLS_PKCS11_OBJ_FLAG_* */ );
++int gnutls_pubkey_import_dsa_raw (gnutls_pubkey_t key,
++                                  const gnutls_datum_t * p,
++                                  const gnutls_datum_t * q,
++                                  const gnutls_datum_t * g,
++                                  const gnutls_datum_t * y);
++int gnutls_pubkey_import_rsa_raw (gnutls_pubkey_t key,
++                                  const gnutls_datum_t * m,
++                                  const gnutls_datum_t * e);
++
++int gnutls_x509_crt_set_pubkey (gnutls_x509_crt_t crt, gnutls_pubkey_t key);
++
++int gnutls_x509_crq_set_pubkey (gnutls_x509_crq_t crq, gnutls_pubkey_t key);
++
++int
++gnutls_pubkey_verify_hash (gnutls_pubkey_t key, unsigned int flags,
++                           const gnutls_datum_t * hash,
++                           const gnutls_datum_t * signature);
++int
++gnutls_pubkey_get_verify_algorithm (gnutls_pubkey_t key,
++                                    const gnutls_datum_t * signature,
++                                    gnutls_digest_algorithm_t * hash);
++
++int gnutls_pubkey_verify_data (gnutls_pubkey_t pubkey,
++                                   unsigned int flags,
++                                   const gnutls_datum_t * data,
++                                   const gnutls_datum_t * signature);
++
++/* Private key operations */
++
++int gnutls_privkey_init (gnutls_privkey_t * key);
++void gnutls_privkey_deinit (gnutls_privkey_t key);
++int gnutls_privkey_get_pk_algorithm (gnutls_privkey_t key,
++                                     unsigned int *bits);
++
++int
++gnutls_privkey_get_preferred_hash_algorithm (gnutls_privkey_t key,
++                                            gnutls_digest_algorithm_t *
++                                            hash, unsigned int *mand);
++gnutls_privkey_type_t gnutls_privkey_get_type (gnutls_privkey_t key);
++
++
++#define GNUTLS_PRIVKEY_IMPORT_AUTO_RELEASE (1<<0)
++#define GNUTLS_PRIVKEY_IMPORT_COPY (1<<1)
++int gnutls_privkey_import_pkcs11 (gnutls_privkey_t pkey,
++                                  gnutls_pkcs11_privkey_t key,
++                                  unsigned int flags);
++int gnutls_privkey_import_x509 (gnutls_privkey_t pkey,
++                                gnutls_x509_privkey_t key,
++                                unsigned int flags);
++int gnutls_privkey_import_openpgp (gnutls_privkey_t pkey,
++                                   gnutls_openpgp_privkey_t key,
++                                   unsigned int flags);
++
++int gnutls_privkey_sign_data (gnutls_privkey_t signer,
++                              gnutls_digest_algorithm_t hash,
++                              unsigned int flags,
++                              const gnutls_datum_t * data,
++                              gnutls_datum_t * signature);
++
++int gnutls_privkey_sign_hash (gnutls_privkey_t signer,
++			      gnutls_digest_algorithm_t hash_algo,
++			      unsigned int flags,
++			      const gnutls_datum_t * hash_data,
++			      gnutls_datum_t * signature);
++
++int gnutls_privkey_decrypt_data (gnutls_privkey_t key,
++                                 unsigned int flags,
++                                 const gnutls_datum_t * ciphertext,
++                                 gnutls_datum_t * plaintext);
++
++int gnutls_x509_crt_privkey_sign (gnutls_x509_crt_t crt,
++                                  gnutls_x509_crt_t issuer,
++                                  gnutls_privkey_t issuer_key,
++                                  gnutls_digest_algorithm_t dig,
++                                  unsigned int flags);
++
++int gnutls_x509_crl_privkey_sign (gnutls_x509_crl_t crl,
++                                  gnutls_x509_crt_t issuer,
++                                  gnutls_privkey_t issuer_key,
++                                  gnutls_digest_algorithm_t dig,
++                                  unsigned int flags);
++
++int gnutls_x509_crq_privkey_sign (gnutls_x509_crq_t crq,
++                                  gnutls_privkey_t key,
++                                  gnutls_digest_algorithm_t dig,
++                                  unsigned int flags);
++
++#endif
+diff -urN empty/include/gnutls26/compat.h contrib/include/gnutls26/compat.h
+--- empty/include/gnutls26/compat.h	1970-01-01 03:00:00.000000000 +0300
++++ contrib/include/gnutls26/compat.h	2019-02-18 16:14:12.218343378 +0300
+@@ -0,0 +1,359 @@
++/* Typedefs for more compatibility with older GnuTLS. */
++
++#ifndef _GNUTLS_COMPAT_H
++#define _GNUTLS_COMPAT_H
++
++#ifdef __cplusplus
++extern "C"
++{
++#endif
++
++#ifdef __GNUC__
++
++#define _GNUTLS_GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
++
++#if !defined GNUTLS_INTERNAL_BUILD
++#if _GNUTLS_GCC_VERSION >= 30100
++#define _GNUTLS_GCC_ATTR_DEPRECATED __attribute__ ((__deprecated__))
++#endif
++#endif
++
++#endif /* __GNUC__ */
++
++#ifndef _GNUTLS_GCC_ATTR_DEPRECATED
++#define _GNUTLS_GCC_ATTR_DEPRECATED
++#endif
++
++#define gnutls_cipher_algorithm gnutls_cipher_algorithm_t
++#define gnutls_kx_algorithm gnutls_kx_algorithm_t
++#define gnutls_paramsype gnutls_paramsype_t
++#define gnutls_mac_algorithm gnutls_mac_algorithm_t
++#define gnutls_digest_algorithm gnutls_digest_algorithm_t
++#define gnutls_compression_method gnutls_compression_method_t
++#define gnutls_connection_end gnutls_connection_end_t
++#define gnutls_credentialsype gnutls_credentialsype_t
++#define gnutls_certificateype gnutls_certificateype_t
++#define gnutls_x509_crt_fmt gnutls_x509_crt_fmt_t
++#define gnutls_openpgp_key_fmt gnutls_openpgp_key_fmt_t
++#define gnutls_pk_algorithm gnutls_pk_algorithm_t
++#define gnutls_sign_algorithm gnutls_sign_algorithm_t
++#define gnutls_server_name gnutls_server_nameype_t
++#define gnutls_protocol gnutls_protocol_version_t
++#define gnutls_close_request gnutls_close_request_t
++#define gnutls_openpgp_key_status gnutls_openpgp_key_status_t
++#define gnutls_certificate_request gnutls_certificate_request_t
++#define gnutls_certificate_status gnutls_certificate_status_t
++#define gnutls_session gnutls_session_t
++#define gnutls_alert_level gnutls_alert_level_t
++#define gnutls_alert_description gnutls_alert_description_t
++#define gnutls_x509_subject_alt_name gnutls_x509_subject_alt_name_t
++#define gnutls_openpgp_key gnutls_openpgp_key_t
++#define gnutls_openpgp_privkey gnutls_openpgp_privkey_t
++#define gnutls_openpgp_keyring gnutls_openpgp_keyring_t
++#define gnutls_x509_crt gnutls_x509_crt_t
++#define gnutls_x509_privkey gnutls_x509_privkey_t
++#define gnutls_x509_crl gnutls_x509_crl_t
++#define gnutls_pkcs7 gnutls_pkcs7_t
++#define gnutls_x509_crq gnutls_x509_crq_t
++#define gnutls_pkcs_encrypt_flags gnutls_pkcs_encrypt_flags_t
++#define gnutls_pkcs12_bag_type gnutls_pkcs12_bag_type_t
++#define gnutls_pkcs12_bag gnutls_pkcs12_bag_t
++#define gnutls_pkcs12 gnutls_pkcs12_t
++#define gnutls_certificate_credentials gnutls_certificate_credentials_t
++#define gnutls_anon_server_credentials gnutls_anon_server_credentials_t
++#define gnutls_anon_client_credentials gnutls_anon_client_credentials_t
++#define gnutls_srp_client_credentials gnutls_srp_client_credentials_t
++#define gnutls_srp_server_credentials gnutls_srp_server_credentials_t
++#define gnutls_dh_params gnutls_dh_params_t
++#define gnutls_rsa_params gnutls_rsa_params_t
++#define gnutls_params_type gnutls_params_type_t
++#define gnutls_credentials_type gnutls_credentials_type_t
++#define gnutls_certificate_type gnutls_certificate_type_t
++#define gnutls_datum gnutls_datum_t
++#define gnutls_transport_ptr gnutls_transport_ptr_t
++
++/* Old SRP alerts removed in 2.1.x because the TLS-SRP RFC was
++   modified to use the PSK alert. */
++#define GNUTLS_A_MISSING_SRP_USERNAME GNUTLS_A_UNKNOWN_PSK_IDENTITY
++#define GNUTLS_A_UNKNOWN_SRP_USERNAME GNUTLS_A_UNKNOWN_PSK_IDENTITY
++
++/* OpenPGP stuff renamed in 2.1.x. */
++#define gnutls_openpgp_key_fmt_t gnutls_openpgp_crt_fmt_t
++#define GNUTLS_OPENPGP_KEY GNUTLS_OPENPGP_CERT
++#define GNUTLS_OPENPGP_KEY_FINGERPRINT GNUTLS_OPENPGP_CERT_FINGERPRINT
++#define gnutls_openpgp_send_key gnutls_openpgp_send_cert
++#define gnutls_openpgp_key_status_t gnutls_openpgp_crt_status_t
++#define gnutls_openpgp_key_t gnutls_openpgp_crt_t
++#define gnutls_openpgp_key_init gnutls_openpgp_crt_init
++#define gnutls_openpgp_key_deinit gnutls_openpgp_crt_deinit
++#define gnutls_openpgp_key_import gnutls_openpgp_crt_import
++#define gnutls_openpgp_key_export gnutls_openpgp_crt_export
++#define gnutls_openpgp_key_get_key_usage gnutls_openpgp_crt_get_key_usage
++#define gnutls_openpgp_key_get_fingerprint gnutls_openpgp_crt_get_fingerprint
++#define gnutls_openpgp_key_get_pk_algorithm gnutls_openpgp_crt_get_pk_algorithm
++#define gnutls_openpgp_key_get_name gnutls_openpgp_crt_get_name
++#define gnutls_openpgp_key_get_version gnutls_openpgp_crt_get_version
++#define gnutls_openpgp_key_get_creation_time gnutls_openpgp_crt_get_creation_time
++#define gnutls_openpgp_key_get_expiration_time gnutls_openpgp_crt_get_expiration_time
++#define gnutls_openpgp_key_get_id gnutls_openpgp_crt_get_id
++#define gnutls_openpgp_key_check_hostname gnutls_openpgp_crt_check_hostname
++
++/* OpenPGP stuff renamed in 2.3.x. */
++#define gnutls_openpgp_crt_get_id gnutls_openpgp_crt_get_key_id
++
++/* New better names renamed in 2.3.x, add these for backwards
++   compatibility with old poor names.*/
++#define GNUTLS_X509_CRT_FULL GNUTLS_CRT_PRINT_FULL
++#define GNUTLS_X509_CRT_ONELINE GNUTLS_CRT_PRINT_ONELINE
++#define GNUTLS_X509_CRT_UNSIGNED_FULL GNUTLS_CRT_PRINT_UNSIGNED_FULL
++
++/* These old #define's violate the gnutls_* namespace. */
++#define TLS_MASTER_SIZE GNUTLS_MASTER_SIZE
++#define TLS_RANDOM_SIZE GNUTLS_RANDOM_SIZE
++
++/* Namespace problems. */
++#define LIBGNUTLS_VERSION GNUTLS_VERSION
++#define LIBGNUTLS_VERSION_MAJOR GNUTLS_VERSION_MAJOR
++#define LIBGNUTLS_VERSION_MINOR GNUTLS_VERSION_MINOR
++#define LIBGNUTLS_VERSION_PATCH GNUTLS_VERSION_PATCH
++#define LIBGNUTLS_VERSION_NUMBER GNUTLS_VERSION_NUMBER
++#define LIBGNUTLS_EXTRA_VERSION GNUTLS_VERSION
++
++/* The gnutls_retr_st was deprecated by gnutls_certificate_retrieve_function()
++ * and gnutls_retr2_st.
++ */
++typedef struct gnutls_retr_st
++{
++  gnutls_certificate_type_t type;
++  union
++  {
++    gnutls_x509_crt_t *x509;
++    gnutls_openpgp_crt_t pgp;
++  } cert;
++  unsigned int ncerts;          /* one for pgp keys */
++
++  union
++  {
++    gnutls_x509_privkey_t x509;
++    gnutls_openpgp_privkey_t pgp;
++  } key;
++
++  unsigned int deinit_all;      /* if non zero all keys will be deinited */
++} gnutls_retr_st;
++
++typedef int gnutls_certificate_client_retrieve_function (gnutls_session_t,
++                                                         const
++                                                         gnutls_datum_t *
++                                                         req_ca_rdn,
++                                                         int nreqs,
++                                                         const
++                                                         gnutls_pk_algorithm_t
++                                                         * pk_algos,
++                                                         int
++                                                         pk_algos_length,
++                                                         gnutls_retr_st *);
++typedef int gnutls_certificate_server_retrieve_function (gnutls_session_t,
++                                                         gnutls_retr_st *);
++
++void gnutls_certificate_client_set_retrieve_function
++  (gnutls_certificate_credentials_t cred,
++   gnutls_certificate_client_retrieve_function *
++   func) _GNUTLS_GCC_ATTR_DEPRECATED;
++void
++  gnutls_certificate_server_set_retrieve_function
++  (gnutls_certificate_credentials_t cred,
++   gnutls_certificate_server_retrieve_function *
++   func) _GNUTLS_GCC_ATTR_DEPRECATED;
++
++  /* External signing callback.  No longer supported because it
++   * was deprecated by the PKCS #11 API. */
++typedef int (*gnutls_sign_func) (gnutls_session_t session,
++                                 void *userdata,
++                                 gnutls_certificate_type_t cert_type,
++                                 const gnutls_datum_t * cert,
++                                 const gnutls_datum_t * hash,
++                                 gnutls_datum_t * signature);
++
++void
++gnutls_sign_callback_set (gnutls_session_t session,
++                          gnutls_sign_func sign_func, void *userdata)
++  _GNUTLS_GCC_ATTR_DEPRECATED;
++gnutls_sign_func
++gnutls_sign_callback_get (gnutls_session_t session, void **userdata)
++ _GNUTLS_GCC_ATTR_DEPRECATED;
++
++/* Extension API is no longer exported because a lot of internal
++ * structures are used. Currently it works due to a compatibility
++ * layer, but will be removed in later versions.
++ */
++     int gnutls_ext_register (int type,
++                              const char *name,
++                              gnutls_ext_parse_type_t parse_type,
++                              gnutls_ext_recv_func recv_func,
++                              gnutls_ext_send_func send_func)
++  _GNUTLS_GCC_ATTR_DEPRECATED;
++
++/* We no longer support the finished callback. Use
++ * gnutls_session_channel_binding for similar functionality.
++ */
++     typedef void (*gnutls_finished_callback_func) (gnutls_session_t session,
++                                                    const void *finished,
++                                                    size_t len);
++     void gnutls_session_set_finished_function (gnutls_session_t session,
++                                                gnutls_finished_callback_func
++                                                func)
++  _GNUTLS_GCC_ATTR_DEPRECATED;
++
++/* returns security values. 
++ * Do not use them unless you know what you're doing. Those are dangerous since
++ * they depend on a particular TLS version number
++ */
++#define GNUTLS_MASTER_SIZE 48
++#define GNUTLS_RANDOM_SIZE 32
++     const void *gnutls_session_get_server_random (gnutls_session_t session)
++  _GNUTLS_GCC_ATTR_DEPRECATED;
++     const void *gnutls_session_get_client_random (gnutls_session_t session)
++  _GNUTLS_GCC_ATTR_DEPRECATED;
++     const void *gnutls_session_get_master_secret (gnutls_session_t session)
++  _GNUTLS_GCC_ATTR_DEPRECATED;
++
++     int gnutls_psk_netconf_derive_key (const char *password,
++                                        const char *psk_identity,
++                                        const char *psk_identity_hint,
++                                        gnutls_datum_t *
++                                        output_key)
++  _GNUTLS_GCC_ATTR_DEPRECATED;
++
++/* This is a very dangerous and error-prone function.
++ * Use gnutls_privkey_sign_hash() instead.
++ */
++  int gnutls_x509_privkey_sign_hash (gnutls_x509_privkey_t key,
++                                        const gnutls_datum_t * hash,
++                                        gnutls_datum_t * signature)
++                                        _GNUTLS_GCC_ATTR_DEPRECATED;
++
++  int gnutls_openpgp_privkey_sign_hash (gnutls_openpgp_privkey_t key,
++                                       const gnutls_datum_t * hash,
++                                       gnutls_datum_t * signature)
++                                       _GNUTLS_GCC_ATTR_DEPRECATED;
++
++
++/* Deprecated because verify_* functions are moved to public
++ * keys. Check abstract.h for similar functionality.
++ */
++  int gnutls_x509_privkey_verify_data (gnutls_x509_privkey_t key,
++                                       unsigned int flags,
++                                       const gnutls_datum_t * data,
++                                       const gnutls_datum_t * signature)
++                                       _GNUTLS_GCC_ATTR_DEPRECATED;
++
++/* we support the gnutls_privkey_sign_data() instead.
++ */
++  int gnutls_x509_privkey_sign_data (gnutls_x509_privkey_t key,
++                                     gnutls_digest_algorithm_t digest,
++                                     unsigned int flags,
++                                     const gnutls_datum_t * data,
++                                     void *signature,
++                                     size_t * signature_size)
++                                     _GNUTLS_GCC_ATTR_DEPRECATED;
++
++  /* gnutls_pubkey_verify_data() */
++  int gnutls_x509_crt_verify_data (gnutls_x509_crt_t crt,
++                                   unsigned int flags,
++                                   const gnutls_datum_t * data,
++                                   const gnutls_datum_t * signature)
++                                   _GNUTLS_GCC_ATTR_DEPRECATED;
++
++
++  /* gnutls_pubkey_verify_hash() */
++  int gnutls_x509_crt_verify_hash (gnutls_x509_crt_t crt,
++                                   unsigned int flags,
++                                   const gnutls_datum_t * hash,
++                                   const gnutls_datum_t * signature)
++                                   _GNUTLS_GCC_ATTR_DEPRECATED;
++
++  /* gnutls_pubkey_get_verify_algorithm() */
++  int gnutls_x509_crt_get_verify_algorithm (gnutls_x509_crt_t crt,
++                                            const gnutls_datum_t * signature,
++                                            gnutls_digest_algorithm_t * hash)
++                                            _GNUTLS_GCC_ATTR_DEPRECATED;
++
++  /* gnutls_pubkey_get_preferred_hash_algorithm() */
++  int gnutls_x509_crt_get_preferred_hash_algorithm (gnutls_x509_crt_t crt,
++                                                    gnutls_digest_algorithm_t
++                                                    * hash,
++                                                    unsigned int *mand)
++                                                    _GNUTLS_GCC_ATTR_DEPRECATED;
++
++  /* gnutls_x509_crq_privkey_sign() */
++  int gnutls_x509_crq_sign2 (gnutls_x509_crq_t crq,
++                             gnutls_x509_privkey_t key,
++                             gnutls_digest_algorithm_t dig,
++                             unsigned int flags)
++                             _GNUTLS_GCC_ATTR_DEPRECATED;
++  int gnutls_x509_crq_sign (gnutls_x509_crq_t crq, gnutls_x509_privkey_t key)
++                              _GNUTLS_GCC_ATTR_DEPRECATED;
++
++
++
++  /* gnutls_x509_crl_privkey_sign */
++  int gnutls_x509_crl_sign (gnutls_x509_crl_t crl,
++                            gnutls_x509_crt_t issuer,
++                            gnutls_x509_privkey_t issuer_key)
++                            _GNUTLS_GCC_ATTR_DEPRECATED;
++  int gnutls_x509_crl_sign2 (gnutls_x509_crl_t crl,
++                             gnutls_x509_crt_t issuer,
++                             gnutls_x509_privkey_t issuer_key,
++                             gnutls_digest_algorithm_t dig,
++                             unsigned int flags)
++                             _GNUTLS_GCC_ATTR_DEPRECATED;
++
++
++  void gnutls_certificate_get_x509_cas (gnutls_certificate_credentials_t sc,
++                                        gnutls_x509_crt_t ** x509_ca_list,
++                                        unsigned int *ncas)
++                                        _GNUTLS_GCC_ATTR_DEPRECATED;
++
++  void gnutls_certificate_get_x509_crls (gnutls_certificate_credentials_t sc,
++                                         gnutls_x509_crl_t ** x509_crl_list,
++                                         unsigned int *ncrls)
++                                         _GNUTLS_GCC_ATTR_DEPRECATED;
++
++  void
++    gnutls_certificate_get_openpgp_keyring (gnutls_certificate_credentials_t
++                                            sc,
++                                            gnutls_openpgp_keyring_t *
++                                            keyring)
++                                            _GNUTLS_GCC_ATTR_DEPRECATED;
++
++  /* this is obsolete (?). */
++  int gnutls_certificate_verify_peers (gnutls_session_t session)
++  _GNUTLS_GCC_ATTR_DEPRECATED;
++
++  /* functions to set priority of cipher suites
++   */
++  int gnutls_cipher_set_priority (gnutls_session_t session, const int *list)
++  _GNUTLS_GCC_ATTR_DEPRECATED;
++  int gnutls_mac_set_priority (gnutls_session_t session, const int *list)
++  _GNUTLS_GCC_ATTR_DEPRECATED;
++  int gnutls_compression_set_priority (gnutls_session_t session,
++                                       const int *list)
++                                       _GNUTLS_GCC_ATTR_DEPRECATED;
++  int gnutls_kx_set_priority (gnutls_session_t session, const int *list)
++  _GNUTLS_GCC_ATTR_DEPRECATED;
++  int gnutls_protocol_set_priority (gnutls_session_t session,
++                                    const int *list)
++                                    _GNUTLS_GCC_ATTR_DEPRECATED;
++  int gnutls_certificate_type_set_priority (gnutls_session_t session,
++                                            const int *list)
++                                            _GNUTLS_GCC_ATTR_DEPRECATED;
++
++  void gnutls_transport_set_lowat (gnutls_session_t session, int num) _GNUTLS_GCC_ATTR_DEPRECATED;
++
++  void gnutls_transport_set_global_errno (int err) _GNUTLS_GCC_ATTR_DEPRECATED;
++
++#ifdef __cplusplus
++}
++#endif
++
++#endif /* _GNUTLS_COMPAT_H */
+diff -urN empty/include/gnutls26/crypto.h contrib/include/gnutls26/crypto.h
+--- empty/include/gnutls26/crypto.h	1970-01-01 03:00:00.000000000 +0300
++++ contrib/include/gnutls26/crypto.h	2019-02-18 16:14:12.218343378 +0300
+@@ -0,0 +1,378 @@
++/*
++ * Copyright (C) 2008, 2009, 2010 Free Software Foundation, Inc.
++ *
++ * Author: Nikos Mavrogiannopoulos
++ *
++ * This file is part of GnuTLS.
++ *
++ * The GnuTLS is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public License
++ * as published by the Free Software Foundation; either version 2.1 of
++ * the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful, but
++ * WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301,
++ * USA
++ *
++ */
++
++#ifndef GNUTLS_CRYPTO_H
++#define GNUTLS_CRYPTO_H
++
++#ifdef __cplusplus
++extern "C"
++{
++#endif
++
++  typedef struct cipher_hd_st *gnutls_cipher_hd_t;
++
++  int gnutls_cipher_init (gnutls_cipher_hd_t * handle,
++                          gnutls_cipher_algorithm_t cipher,
++                          const gnutls_datum_t * key,
++                          const gnutls_datum_t * iv);
++  int gnutls_cipher_encrypt (const gnutls_cipher_hd_t handle,
++                             void *text, size_t textlen);
++  int gnutls_cipher_decrypt (const gnutls_cipher_hd_t handle,
++                             void *ciphertext, size_t ciphertextlen);
++  int gnutls_cipher_decrypt2 (gnutls_cipher_hd_t handle,
++                              const void *ciphertext, size_t ciphertextlen,
++                              void *text, size_t textlen);
++  int gnutls_cipher_encrypt2 (gnutls_cipher_hd_t handle, void *text,
++                              size_t textlen, void *ciphertext,
++                              size_t ciphertextlen);
++
++  void gnutls_cipher_deinit (gnutls_cipher_hd_t handle);
++  int gnutls_cipher_get_block_size (gnutls_cipher_algorithm_t algorithm);
++
++
++  typedef struct hash_hd_st *gnutls_hash_hd_t;
++  typedef struct hmac_hd_st *gnutls_hmac_hd_t;
++
++  int gnutls_hmac_init (gnutls_hmac_hd_t * dig,
++                        gnutls_digest_algorithm_t algorithm, const void *key,
++                        size_t keylen);
++  int gnutls_hmac (gnutls_hmac_hd_t handle, const void *text, size_t textlen);
++  void gnutls_hmac_output (gnutls_hmac_hd_t handle, void *digest);
++  void gnutls_hmac_deinit (gnutls_hmac_hd_t handle, void *digest);
++  int gnutls_hmac_get_len (gnutls_mac_algorithm_t algorithm);
++  int gnutls_hmac_fast (gnutls_mac_algorithm_t algorithm, const void *key,
++                        size_t keylen, const void *text, size_t textlen,
++                        void *digest);
++
++  int gnutls_hash_init (gnutls_hash_hd_t * dig,
++                        gnutls_digest_algorithm_t algorithm);
++  int gnutls_hash (gnutls_hash_hd_t handle, const void *text, size_t textlen);
++  void gnutls_hash_output (gnutls_hash_hd_t handle, void *digest);
++  void gnutls_hash_deinit (gnutls_hash_hd_t handle, void *digest);
++  int gnutls_hash_get_len (gnutls_digest_algorithm_t algorithm);
++  int gnutls_hash_fast (gnutls_digest_algorithm_t algorithm,
++                        const void *text, size_t textlen, void *digest);
++
++/* register ciphers */
++
++#define GNUTLS_CRYPTO_API_VERSION 0x03
++
++#define gnutls_crypto_single_cipher_st gnutls_crypto_cipher_st
++#define gnutls_crypto_single_mac_st gnutls_crypto_mac_st
++#define gnutls_crypto_single_digest_st gnutls_crypto_digest_st
++
++  typedef struct
++  {
++    int (*init) (gnutls_cipher_algorithm_t, void **ctx);
++    int (*setkey) (void *ctx, const void *key, size_t keysize);
++    int (*setiv) (void *ctx, const void *iv, size_t ivsize);
++    int (*encrypt) (void *ctx, const void *plain, size_t plainsize,
++                    void *encr, size_t encrsize);
++    int (*decrypt) (void *ctx, const void *encr, size_t encrsize,
++                    void *plain, size_t plainsize);
++    void (*deinit) (void *ctx);
++  } gnutls_crypto_cipher_st;
++
++  typedef struct
++  {
++    int (*init) (gnutls_mac_algorithm_t, void **ctx);
++    int (*setkey) (void *ctx, const void *key, size_t keysize);
++    int (*hash) (void *ctx, const void *text, size_t textsize);
++    int (*output) (void *src_ctx, void *digest, size_t digestsize);
++    void (*deinit) (void *ctx);
++  } gnutls_crypto_mac_st;
++
++  typedef struct
++  {
++    int (*init) (gnutls_mac_algorithm_t, void **ctx);
++    int (*hash) (void *ctx, const void *text, size_t textsize);
++    int (*copy) (void **dst_ctx, void *src_ctx);
++    int (*output) (void *src_ctx, void *digest, size_t digestsize);
++    void (*deinit) (void *ctx);
++  } gnutls_crypto_digest_st;
++
++/**
++ * gnutls_rnd_level_t:
++ * @GNUTLS_RND_NONCE: Non-predictable random number.  Fatal in parts
++ *   of session if broken, i.e., vulnerable to statistical analysis.
++ * @GNUTLS_RND_RANDOM: Pseudo-random cryptographic random number.
++ *   Fatal in session if broken.
++ * @GNUTLS_RND_KEY: Fatal in many sessions if broken.
++ *
++ * Enumeration of random quality levels.
++ */
++  typedef enum gnutls_rnd_level
++  {
++    GNUTLS_RND_NONCE = 0,
++    GNUTLS_RND_RANDOM = 1,
++    GNUTLS_RND_KEY = 2
++  } gnutls_rnd_level_t;
++
++  int gnutls_rnd (gnutls_rnd_level_t level, void *data, size_t len);
++
++
++/**
++ * gnutls_pk_flag_t:
++ * @GNUTLS_PK_FLAG_NONE: No flag.
++ *
++ * Enumeration of public-key flag.
++ */
++  typedef enum
++  {
++    GNUTLS_PK_FLAG_NONE = 0
++  } gnutls_pk_flag_t;
++
++  typedef struct gnutls_crypto_rnd
++  {
++    int (*init) (void **ctx);
++    int (*rnd) (void *ctx, int level, void *data, size_t datasize);
++    void (*deinit) (void *ctx);
++  } gnutls_crypto_rnd_st;
++
++  typedef void *bigint_t;
++
++/**
++ * gnutls_bigint_format_t:
++ * @GNUTLS_MPI_FORMAT_USG: Raw unsigned integer format.
++ * @GNUTLS_MPI_FORMAT_STD: Raw signed integer format, always a leading
++ *   zero when positive.
++ * @GNUTLS_MPI_FORMAT_PGP: The pgp integer format.
++ *
++ * Enumeration of different bignum integer encoding formats.
++ */
++  typedef enum
++  {
++    /* raw unsigned integer format */
++    GNUTLS_MPI_FORMAT_USG = 0,
++    /* raw signed integer format - always a leading zero when positive */
++    GNUTLS_MPI_FORMAT_STD = 1,
++    /* the pgp integer format */
++    GNUTLS_MPI_FORMAT_PGP = 2
++  } gnutls_bigint_format_t;
++
++  typedef struct
++  {
++    bigint_t g;                 /* group generator */
++    bigint_t p;                 /* prime */
++  } gnutls_group_st;
++
++/* Multi precision integer arithmetic */
++  typedef struct gnutls_crypto_bigint
++  {
++    bigint_t (*bigint_new) (int nbits);
++    void (*bigint_release) (bigint_t n);
++    /* 0 for equality, > 0 for m1>m2, < 0 for m1<m2 */
++    int (*bigint_cmp) (const bigint_t m1, const bigint_t m2);
++    /* as bigint_cmp */
++    int (*bigint_cmp_ui) (const bigint_t m1, unsigned long m2);
++    /* ret = a % b */
++      bigint_t (*bigint_mod) (const bigint_t a, const bigint_t b);
++    /* a = b -> ret == a */
++      bigint_t (*bigint_set) (bigint_t a, const bigint_t b);
++    /* a = b -> ret == a */
++      bigint_t (*bigint_set_ui) (bigint_t a, unsigned long b);
++    unsigned int (*bigint_get_nbits) (const bigint_t a);
++    /* w = b ^ e mod m */
++      bigint_t (*bigint_powm) (bigint_t w, const bigint_t b,
++                               const bigint_t e, const bigint_t m);
++    /* w = a + b mod m */
++      bigint_t (*bigint_addm) (bigint_t w, const bigint_t a,
++                               const bigint_t b, const bigint_t m);
++    /* w = a - b mod m */
++      bigint_t (*bigint_subm) (bigint_t w, const bigint_t a, const bigint_t b,
++                               const bigint_t m);
++    /* w = a * b mod m */
++      bigint_t (*bigint_mulm) (bigint_t w, const bigint_t a, const bigint_t b,
++                               const bigint_t m);
++    /* w = a + b */ bigint_t (*bigint_add) (bigint_t w, const bigint_t a,
++                                            const bigint_t b);
++    /* w = a - b */ bigint_t (*bigint_sub) (bigint_t w, const bigint_t a,
++                                            const bigint_t b);
++    /* w = a * b */
++      bigint_t (*bigint_mul) (bigint_t w, const bigint_t a, const bigint_t b);
++    /* w = a + b */
++      bigint_t (*bigint_add_ui) (bigint_t w, const bigint_t a,
++                                 unsigned long b);
++    /* w = a - b */
++      bigint_t (*bigint_sub_ui) (bigint_t w, const bigint_t a,
++                                 unsigned long b);
++    /* w = a * b */
++      bigint_t (*bigint_mul_ui) (bigint_t w, const bigint_t a,
++                                 unsigned long b);
++    /* q = a / b */
++      bigint_t (*bigint_div) (bigint_t q, const bigint_t a, const bigint_t b);
++    /* 0 if prime */
++    int (*bigint_prime_check) (const bigint_t pp);
++    int (*bigint_generate_group) (gnutls_group_st * gg, unsigned int bits);
++
++    /* reads an bigint from a buffer */
++    /* stores an bigint into the buffer.  returns
++     * GNUTLS_E_SHORT_MEMORY_BUFFER if buf_size is not sufficient to
++     * store this integer, and updates the buf_size;
++     */
++      bigint_t (*bigint_scan) (const void *buf, size_t buf_size,
++                               gnutls_bigint_format_t format);
++    int (*bigint_print) (const bigint_t a, void *buf, size_t * buf_size,
++                         gnutls_bigint_format_t format);
++  } gnutls_crypto_bigint_st;
++
++#define GNUTLS_MAX_PK_PARAMS 16
++
++  typedef struct
++  {
++    bigint_t params[GNUTLS_MAX_PK_PARAMS];
++    unsigned int params_nr;     /* the number of parameters */
++    unsigned int flags;
++  } gnutls_pk_params_st;
++
++  void gnutls_pk_params_release (gnutls_pk_params_st * p);
++  void gnutls_pk_params_init (gnutls_pk_params_st * p);
++
++/* params are:
++ * RSA:
++ *  [0] is modulus
++ *  [1] is public exponent
++ *  [2] is private exponent (private key only)
++ *  [3] is prime1 (p) (private key only)
++ *  [4] is prime2 (q) (private key only)
++ *  [5] is coefficient (u == inverse of p mod q) (private key only)
++ *  [6] e1 == d mod (p-1)
++ *  [7] e2 == d mod (q-1)
++ *
++ *  note that for libgcrypt that does not use the inverse of q mod p,
++ *  we need to perform conversions using fixup_params().
++ *
++ * DSA:
++ *  [0] is p
++ *  [1] is q
++ *  [2] is g
++ *  [3] is y (public key)
++ *  [4] is x (private key only)
++ */
++
++/**
++ * gnutls_direction_t:
++ * @GNUTLS_IMPORT: Import direction.
++ * @GNUTLS_EXPORT: Export direction.
++ *
++ * Enumeration of different directions.
++ */
++  typedef enum
++  {
++    GNUTLS_IMPORT = 0,
++    GNUTLS_EXPORT = 1
++  } gnutls_direction_t;
++
++/* Public key algorithms */
++  typedef struct gnutls_crypto_pk
++  {
++    /* The params structure should contain the private or public key
++     * parameters, depending on the operation */
++    int (*encrypt) (gnutls_pk_algorithm_t, gnutls_datum_t * ciphertext,
++                    const gnutls_datum_t * plaintext,
++                    const gnutls_pk_params_st * pub);
++    int (*decrypt) (gnutls_pk_algorithm_t, gnutls_datum_t * plaintext,
++                    const gnutls_datum_t * ciphertext,
++                    const gnutls_pk_params_st * priv);
++
++    int (*sign) (gnutls_pk_algorithm_t, gnutls_datum_t * signature,
++                 const gnutls_datum_t * data,
++                 const gnutls_pk_params_st * priv);
++    int (*verify) (gnutls_pk_algorithm_t, const gnutls_datum_t * data,
++                   const gnutls_datum_t * signature,
++                   const gnutls_pk_params_st * pub);
++
++    int (*generate) (gnutls_pk_algorithm_t, unsigned int nbits,
++                     gnutls_pk_params_st *);
++    /* this function should convert params to ones suitable
++     * for the above functions
++     */
++    int (*pk_fixup_private_params) (gnutls_pk_algorithm_t, gnutls_direction_t,
++                                    gnutls_pk_params_st *);
++
++  } gnutls_crypto_pk_st;
++
++/* priority: infinity for backend algorithms, 90 for kernel
++   algorithms, lowest wins
++ */
++#define gnutls_crypto_single_cipher_register(algo, prio, st)		\
++  gnutls_crypto_single_cipher_register2 (algo, prio, \
++					 GNUTLS_CRYPTO_API_VERSION, st)
++#define gnutls_crypto_single_mac_register(algo, prio, st)		\
++  gnutls_crypto_single_mac_register2 (algo, prio, \
++				      GNUTLS_CRYPTO_API_VERSION, st)
++#define gnutls_crypto_single_digest_register(algo, prio, st)		\
++  gnutls_crypto_single_digest_register2(algo, prio,			\
++					GNUTLS_CRYPTO_API_VERSION, st)
++
++  int gnutls_crypto_single_cipher_register2 (gnutls_cipher_algorithm_t
++                                             algorithm, int priority,
++                                             int version,
++                                             const
++                                             gnutls_crypto_single_cipher_st *
++                                             s);
++  int gnutls_crypto_single_mac_register2 (gnutls_mac_algorithm_t algorithm,
++                                          int priority, int version,
++                                          const gnutls_crypto_single_mac_st *
++                                          s);
++  int gnutls_crypto_single_digest_register2 (gnutls_digest_algorithm_t
++                                             algorithm, int priority,
++                                             int version,
++                                             const
++                                             gnutls_crypto_single_digest_st *
++                                             s);
++
++#define gnutls_crypto_cipher_register(prio, st)			\
++  gnutls_crypto_cipher_register2 (prio, GNUTLS_CRYPTO_API_VERSION, st)
++#define gnutls_crypto_mac_register(prio, st)				\
++  gnutls_crypto_mac_register2 (prio, GNUTLS_CRYPTO_API_VERSION, st)
++#define gnutls_crypto_digest_register(prio, st)			\
++  gnutls_crypto_digest_register2 (prio, GNUTLS_CRYPTO_API_VERSION, st)
++
++  int gnutls_crypto_cipher_register2 (int priority, int version,
++                                      const gnutls_crypto_cipher_st * s);
++  int gnutls_crypto_mac_register2 (int priority, int version,
++                                   const gnutls_crypto_mac_st * s);
++  int gnutls_crypto_digest_register2 (int priority, int version,
++                                      const gnutls_crypto_digest_st * s);
++
++#define gnutls_crypto_rnd_register(prio, st)				\
++  gnutls_crypto_rnd_register2 (prio, GNUTLS_CRYPTO_API_VERSION, st)
++#define gnutls_crypto_pk_register(prio, st)				\
++  gnutls_crypto_pk_register2 (prio, GNUTLS_CRYPTO_API_VERSION, st)
++#define gnutls_crypto_bigint_register(prio, st)			\
++  gnutls_crypto_bigint_register2 (prio, GNUTLS_CRYPTO_API_VERSION, st)
++
++  int gnutls_crypto_rnd_register2 (int priority, int version,
++                                   const gnutls_crypto_rnd_st * s);
++  int gnutls_crypto_pk_register2 (int priority, int version,
++                                  const gnutls_crypto_pk_st * s);
++  int gnutls_crypto_bigint_register2 (int priority, int version,
++                                      const gnutls_crypto_bigint_st * s);
++
++#ifdef __cplusplus
++}
++#endif
++
++#endif
+diff -urN empty/include/gnutls26/gnutls.h contrib/include/gnutls26/gnutls.h
+--- empty/include/gnutls26/gnutls.h	1970-01-01 03:00:00.000000000 +0300
++++ contrib/include/gnutls26/gnutls.h	2019-02-18 16:14:12.219343390 +0300
+@@ -0,0 +1,1777 @@
++/* -*- c -*-
++ * Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
++ * 2009, 2010 Free Software Foundation, Inc.
++ *
++ * Author: Nikos Mavroyanopoulos
++ *
++ * This file is part of GnuTLS.
++ *
++ * The GnuTLS is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public License
++ * as published by the Free Software Foundation; either version 2.1 of
++ * the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful, but
++ * WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301
++ * USA
++ *
++ */
++
++/* This file contains the types and prototypes for all the
++ * high level functionality of gnutls main library. For the
++ * extra functionality (which is under the GNU GPL license) check
++ * the gnutls/extra.h header. The openssl compatibility layer is
++ * in gnutls/openssl.h.
++ *
++ * The low level cipher functionality is in libgcrypt. Check
++ * gcrypt.h
++ */
++
++
++#ifndef GNUTLS_H
++#define GNUTLS_H
++
++/* Get size_t. */
++#include <stddef.h>
++/* Get ssize_t. */
++#ifndef HAVE_SSIZE_T
++#define HAVE_SSIZE_T
++/* *INDENT-OFF* */
++#include <sys/types.h>
++/* *INDENT-ON* */
++#endif
++/* Get time_t. */
++#include <time.h>
++#ifdef __cplusplus
++extern "C"
++{
++#endif
++
++#define GNUTLS_VERSION "2.12.14"
++
++#define GNUTLS_VERSION_MAJOR 2
++#define GNUTLS_VERSION_MINOR 12
++#define GNUTLS_VERSION_PATCH 14
++
++#define GNUTLS_VERSION_NUMBER 0x020c0e
++
++#define GNUTLS_CIPHER_RIJNDAEL_128_CBC GNUTLS_CIPHER_AES_128_CBC
++#define GNUTLS_CIPHER_RIJNDAEL_256_CBC GNUTLS_CIPHER_AES_256_CBC
++#define GNUTLS_CIPHER_RIJNDAEL_CBC GNUTLS_CIPHER_AES_128_CBC
++#define GNUTLS_CIPHER_ARCFOUR GNUTLS_CIPHER_ARCFOUR_128
++
++  /**
++   * gnutls_cipher_algorithm_t:
++   * @GNUTLS_CIPHER_UNKNOWN: Unknown algorithm.
++   * @GNUTLS_CIPHER_NULL: NULL algorithm.
++   * @GNUTLS_CIPHER_ARCFOUR_128: ARCFOUR stream cipher with 128-bit keys.
++   * @GNUTLS_CIPHER_3DES_CBC: 3DES in CBC mode.
++   * @GNUTLS_CIPHER_AES_128_CBC: AES in CBC mode with 128-bit keys.
++   * @GNUTLS_CIPHER_AES_256_CBC: AES in CBC mode with 256-bit keys.
++   * @GNUTLS_CIPHER_ARCFOUR_40: ARCFOUR stream cipher with 40-bit keys.
++   * @GNUTLS_CIPHER_CAMELLIA_128_CBC: Camellia in CBC mode with 128-bit keys.
++   * @GNUTLS_CIPHER_CAMELLIA_256_CBC: Camellia in CBC mode with 256-bit keys.
++   * @GNUTLS_CIPHER_RC2_40_CBC: RC2 in CBC mode with 40-bit keys.
++   * @GNUTLS_CIPHER_DES_CBC: DES in CBC mode (56-bit keys).
++   * @GNUTLS_CIPHER_AES_192_CBC: AES in CBC mode with 192-bit keys.
++   * @GNUTLS_CIPHER_IDEA_PGP_CFB: IDEA in CFB mode.
++   * @GNUTLS_CIPHER_3DES_PGP_CFB: 3DES in CFB mode.
++   * @GNUTLS_CIPHER_CAST5_PGP_CFB: CAST5 in CFB mode.
++   * @GNUTLS_CIPHER_BLOWFISH_PGP_CFB: Blowfish in CFB mode.
++   * @GNUTLS_CIPHER_SAFER_SK128_PGP_CFB: Safer-SK in CFB mode with 128-bit keys.
++   * @GNUTLS_CIPHER_AES128_PGP_CFB: AES in CFB mode with 128-bit keys.
++   * @GNUTLS_CIPHER_AES192_PGP_CFB: AES in CFB mode with 192-bit keys.
++   * @GNUTLS_CIPHER_AES256_PGP_CFB: AES in CFB mode with 256-bit keys.
++   * @GNUTLS_CIPHER_TWOFISH_PGP_CFB: Twofish in CFB mode.
++   *
++   * Enumeration of different symmetric encryption algorithms.
++   */
++  typedef enum gnutls_cipher_algorithm
++  {
++    GNUTLS_CIPHER_UNKNOWN = 0,
++    GNUTLS_CIPHER_NULL = 1,
++    GNUTLS_CIPHER_ARCFOUR_128 = 2,
++    GNUTLS_CIPHER_3DES_CBC = 3,
++    GNUTLS_CIPHER_AES_128_CBC = 4,
++    GNUTLS_CIPHER_AES_256_CBC = 5,
++    GNUTLS_CIPHER_ARCFOUR_40 = 6,
++    GNUTLS_CIPHER_CAMELLIA_128_CBC = 7,
++    GNUTLS_CIPHER_CAMELLIA_256_CBC = 8,
++    GNUTLS_CIPHER_RC2_40_CBC = 90,
++    GNUTLS_CIPHER_DES_CBC = 91,
++    GNUTLS_CIPHER_AES_192_CBC = 92,
++
++    /* used only for PGP internals. Ignored in TLS/SSL
++     */
++    GNUTLS_CIPHER_IDEA_PGP_CFB = 200,
++    GNUTLS_CIPHER_3DES_PGP_CFB = 201,
++    GNUTLS_CIPHER_CAST5_PGP_CFB = 202,
++    GNUTLS_CIPHER_BLOWFISH_PGP_CFB = 203,
++    GNUTLS_CIPHER_SAFER_SK128_PGP_CFB = 204,
++    GNUTLS_CIPHER_AES128_PGP_CFB = 205,
++    GNUTLS_CIPHER_AES192_PGP_CFB = 206,
++    GNUTLS_CIPHER_AES256_PGP_CFB = 207,
++    GNUTLS_CIPHER_TWOFISH_PGP_CFB = 208
++  } gnutls_cipher_algorithm_t;
++
++  /**
++   * gnutls_kx_algorithm_t:
++   * @GNUTLS_KX_UNKNOWN: Unknown key-exchange algorithm.
++   * @GNUTLS_KX_RSA: RSA key-exchange algorithm.
++   * @GNUTLS_KX_DHE_DSS: DHE-DSS key-exchange algorithm.
++   * @GNUTLS_KX_DHE_RSA: DHE-RSA key-exchange algorithm.
++   * @GNUTLS_KX_ANON_DH: Anon-DH key-exchange algorithm.
++   * @GNUTLS_KX_SRP: SRP key-exchange algorithm.
++   * @GNUTLS_KX_RSA_EXPORT: RSA-EXPORT key-exchange algorithm.
++   * @GNUTLS_KX_SRP_RSA: SRP-RSA key-exchange algorithm.
++   * @GNUTLS_KX_SRP_DSS: SRP-DSS key-exchange algorithm.
++   * @GNUTLS_KX_PSK: PSK key-exchange algorithm.
++   * @GNUTLS_KX_DHE_PSK: DHE-PSK key-exchange algorithm.
++   *
++   * Enumeration of different key exchange algorithms.
++   */
++  typedef enum
++  {
++    GNUTLS_KX_UNKNOWN = 0,
++    GNUTLS_KX_RSA = 1,
++    GNUTLS_KX_DHE_DSS = 2,
++    GNUTLS_KX_DHE_RSA = 3,
++    GNUTLS_KX_ANON_DH = 4,
++    GNUTLS_KX_SRP = 5,
++    GNUTLS_KX_RSA_EXPORT = 6,
++    GNUTLS_KX_SRP_RSA = 7,
++    GNUTLS_KX_SRP_DSS = 8,
++    GNUTLS_KX_PSK = 9,
++    GNUTLS_KX_DHE_PSK = 10
++  } gnutls_kx_algorithm_t;
++
++  /**
++   * gnutls_params_type_t:
++   * @GNUTLS_PARAMS_RSA_EXPORT: Session RSA-EXPORT parameters.
++   * @GNUTLS_PARAMS_DH: Session Diffie-Hellman parameters.
++   *
++   * Enumeration of different TLS session parameter types.
++   */
++  typedef enum
++  {
++    GNUTLS_PARAMS_RSA_EXPORT = 1,
++    GNUTLS_PARAMS_DH = 2
++  } gnutls_params_type_t;
++
++  /**
++   * gnutls_credentials_type_t:
++   * @GNUTLS_CRD_CERTIFICATE: Certificate credential.
++   * @GNUTLS_CRD_ANON: Anonymous credential.
++   * @GNUTLS_CRD_SRP: SRP credential.
++   * @GNUTLS_CRD_PSK: PSK credential.
++   * @GNUTLS_CRD_IA: IA credential.
++   *
++   * Enumeration of different credential types.
++   */
++  typedef enum
++  {
++    GNUTLS_CRD_CERTIFICATE = 1,
++    GNUTLS_CRD_ANON,
++    GNUTLS_CRD_SRP,
++    GNUTLS_CRD_PSK,
++    GNUTLS_CRD_IA
++  } gnutls_credentials_type_t;
++
++#define GNUTLS_MAC_SHA GNUTLS_MAC_SHA1
++#define GNUTLS_DIG_SHA GNUTLS_DIG_SHA1
++
++  /**
++   * gnutls_mac_algorithm_t:
++   * @GNUTLS_MAC_UNKNOWN: Unknown MAC algorithm.
++   * @GNUTLS_MAC_NULL: NULL MAC algorithm (empty output).
++   * @GNUTLS_MAC_MD5: HMAC-MD5 algorithm.
++   * @GNUTLS_MAC_SHA1: HMAC-SHA-1 algorithm.
++   * @GNUTLS_MAC_RMD160: HMAC-RMD160 algorithm.
++   * @GNUTLS_MAC_MD2: HMAC-MD2 algorithm.
++   * @GNUTLS_MAC_SHA256: HMAC-SHA-256 algorithm.
++   * @GNUTLS_MAC_SHA384: HMAC-SHA-384 algorithm.
++   * @GNUTLS_MAC_SHA512: HMAC-SHA-512 algorithm.
++   * @GNUTLS_MAC_SHA224: HMAC-SHA-224 algorithm.
++   *
++   * Enumeration of different Message Authentication Code (MAC)
++   * algorithms.
++   */
++  typedef enum
++  {
++    GNUTLS_MAC_UNKNOWN = 0,
++    GNUTLS_MAC_NULL = 1,
++    GNUTLS_MAC_MD5 = 2,
++    GNUTLS_MAC_SHA1 = 3,
++    GNUTLS_MAC_RMD160 = 4,
++    GNUTLS_MAC_MD2 = 5,
++    GNUTLS_MAC_SHA256 = 6,
++    GNUTLS_MAC_SHA384 = 7,
++    GNUTLS_MAC_SHA512 = 8,
++    GNUTLS_MAC_SHA224 = 9
++      /* If you add anything here, make sure you align with
++         gnutls_digest_algorithm_t. */
++  } gnutls_mac_algorithm_t;
++
++  /**
++   * gnutls_digest_algorithm_t:
++   * @GNUTLS_DIG_UNKNOWN: Unknown hash algorithm.
++   * @GNUTLS_DIG_NULL: NULL hash algorithm (empty output).
++   * @GNUTLS_DIG_MD5: MD5 algorithm.
++   * @GNUTLS_DIG_SHA1: SHA-1 algorithm.
++   * @GNUTLS_DIG_RMD160: RMD160 algorithm.
++   * @GNUTLS_DIG_MD2: MD2 algorithm.
++   * @GNUTLS_DIG_SHA256: SHA-256 algorithm.
++   * @GNUTLS_DIG_SHA384: SHA-384 algorithm.
++   * @GNUTLS_DIG_SHA512: SHA-512 algorithm.
++   * @GNUTLS_DIG_SHA224: SHA-224 algorithm.
++   *
++   * Enumeration of different digest (hash) algorithms.
++   */
++  typedef enum
++  {
++    GNUTLS_DIG_UNKNOWN = GNUTLS_MAC_UNKNOWN,
++    GNUTLS_DIG_NULL = GNUTLS_MAC_NULL,
++    GNUTLS_DIG_MD5 = GNUTLS_MAC_MD5,
++    GNUTLS_DIG_SHA1 = GNUTLS_MAC_SHA1,
++    GNUTLS_DIG_RMD160 = GNUTLS_MAC_RMD160,
++    GNUTLS_DIG_MD2 = GNUTLS_MAC_MD2,
++    GNUTLS_DIG_SHA256 = GNUTLS_MAC_SHA256,
++    GNUTLS_DIG_SHA384 = GNUTLS_MAC_SHA384,
++    GNUTLS_DIG_SHA512 = GNUTLS_MAC_SHA512,
++    GNUTLS_DIG_SHA224 = GNUTLS_MAC_SHA224
++      /* If you add anything here, make sure you align with
++         gnutls_mac_algorithm_t. */
++  } gnutls_digest_algorithm_t;
++
++  /* exported for other gnutls headers. This is the maximum number of
++   * algorithms (ciphers, kx or macs).
++   */
++#define GNUTLS_MAX_ALGORITHM_NUM 16
++
++  /**
++   * gnutls_compression_method_t:
++   * @GNUTLS_COMP_UNKNOWN: Unknown compression method.
++   * @GNUTLS_COMP_NULL: The NULL compression method (uncompressed).
++   * @GNUTLS_COMP_DEFLATE: The deflate/zlib compression method.
++   * @GNUTLS_COMP_ZLIB: Same as %GNUTLS_COMP_DEFLATE.
++   * @GNUTLS_COMP_LZO: The non-standard LZO compression method.
++   *
++   * Enumeration of different TLS compression methods.
++   */
++  typedef enum
++  {
++    GNUTLS_COMP_UNKNOWN = 0,
++    GNUTLS_COMP_NULL = 1,
++    GNUTLS_COMP_DEFLATE = 2,
++    GNUTLS_COMP_ZLIB = GNUTLS_COMP_DEFLATE,
++    GNUTLS_COMP_LZO = 3         /* only available if gnutls-extra has
++                                   been initialized
++                                 */
++  } gnutls_compression_method_t;
++
++  /**
++   * gnutls_connection_end_t:
++   * @GNUTLS_SERVER: Connection end is a server.
++   * @GNUTLS_CLIENT: Connection end is a client.
++   *
++   * Enumeration of different TLS connection end types.
++   */
++  typedef enum
++  {
++    GNUTLS_SERVER = 1,
++    GNUTLS_CLIENT
++  } gnutls_connection_end_t;
++
++  /**
++   * gnutls_alert_level_t:
++   * @GNUTLS_AL_WARNING: Alert of warning severity.
++   * @GNUTLS_AL_FATAL: Alert of fatal severity.
++   *
++   * Enumeration of different TLS alert severities.
++   */
++  typedef enum
++  {
++    GNUTLS_AL_WARNING = 1,
++    GNUTLS_AL_FATAL
++  } gnutls_alert_level_t;
++
++  /**
++   * gnutls_alert_description_t:
++   * @GNUTLS_A_CLOSE_NOTIFY: Close notify.
++   * @GNUTLS_A_UNEXPECTED_MESSAGE: Unexpected message.
++   * @GNUTLS_A_BAD_RECORD_MAC: Bad record MAC.
++   * @GNUTLS_A_DECRYPTION_FAILED: Decryption failed.
++   * @GNUTLS_A_RECORD_OVERFLOW: Record overflow.
++   * @GNUTLS_A_DECOMPRESSION_FAILURE: Decompression failed.
++   * @GNUTLS_A_HANDSHAKE_FAILURE: Handshake failed.
++   * @GNUTLS_A_SSL3_NO_CERTIFICATE: No certificate.
++   * @GNUTLS_A_BAD_CERTIFICATE: Certificate is bad.
++   * @GNUTLS_A_UNSUPPORTED_CERTIFICATE: Certificate is not supported.
++   * @GNUTLS_A_CERTIFICATE_REVOKED: Certificate was revoked.
++   * @GNUTLS_A_CERTIFICATE_EXPIRED: Certificate is expired.
++   * @GNUTLS_A_CERTIFICATE_UNKNOWN: Unknown certificate.
++   * @GNUTLS_A_ILLEGAL_PARAMETER: Illegal parameter.
++   * @GNUTLS_A_UNKNOWN_CA: CA is unknown.
++   * @GNUTLS_A_ACCESS_DENIED: Access was denied.
++   * @GNUTLS_A_DECODE_ERROR: Decode error.
++   * @GNUTLS_A_DECRYPT_ERROR: Decrypt error.
++   * @GNUTLS_A_EXPORT_RESTRICTION: Export restriction.
++   * @GNUTLS_A_PROTOCOL_VERSION: Error in protocol version.
++   * @GNUTLS_A_INSUFFICIENT_SECURITY: Insufficient security.
++   * @GNUTLS_A_USER_CANCELED: User canceled.
++   * @GNUTLS_A_INTERNAL_ERROR: Internal error.
++   * @GNUTLS_A_NO_RENEGOTIATION: No renegotiation is allowed.
++   * @GNUTLS_A_CERTIFICATE_UNOBTAINABLE: Could not retrieve the
++   *   specified certificate.
++   * @GNUTLS_A_UNSUPPORTED_EXTENSION: An unsupported extension was
++   *   sent.
++   * @GNUTLS_A_UNRECOGNIZED_NAME: The server name sent was not
++   *   recognized.
++   * @GNUTLS_A_UNKNOWN_PSK_IDENTITY: The SRP/PSK username is missing
++   *   or not known.
++   * @GNUTLS_A_INNER_APPLICATION_FAILURE: Inner application
++   *   negotiation failed.
++   * @GNUTLS_A_INNER_APPLICATION_VERIFICATION: Inner application
++   *   verification failed.
++   *
++   * Enumeration of different TLS alerts.
++   */
++  typedef enum
++  {
++    GNUTLS_A_CLOSE_NOTIFY,
++    GNUTLS_A_UNEXPECTED_MESSAGE = 10,
++    GNUTLS_A_BAD_RECORD_MAC = 20,
++    GNUTLS_A_DECRYPTION_FAILED,
++    GNUTLS_A_RECORD_OVERFLOW,
++    GNUTLS_A_DECOMPRESSION_FAILURE = 30,
++    GNUTLS_A_HANDSHAKE_FAILURE = 40,
++    GNUTLS_A_SSL3_NO_CERTIFICATE = 41,
++    GNUTLS_A_BAD_CERTIFICATE = 42,
++    GNUTLS_A_UNSUPPORTED_CERTIFICATE,
++    GNUTLS_A_CERTIFICATE_REVOKED,
++    GNUTLS_A_CERTIFICATE_EXPIRED,
++    GNUTLS_A_CERTIFICATE_UNKNOWN,
++    GNUTLS_A_ILLEGAL_PARAMETER,
++    GNUTLS_A_UNKNOWN_CA,
++    GNUTLS_A_ACCESS_DENIED,
++    GNUTLS_A_DECODE_ERROR = 50,
++    GNUTLS_A_DECRYPT_ERROR,
++    GNUTLS_A_EXPORT_RESTRICTION = 60,
++    GNUTLS_A_PROTOCOL_VERSION = 70,
++    GNUTLS_A_INSUFFICIENT_SECURITY,
++    GNUTLS_A_INTERNAL_ERROR = 80,
++    GNUTLS_A_USER_CANCELED = 90,
++    GNUTLS_A_NO_RENEGOTIATION = 100,
++    GNUTLS_A_UNSUPPORTED_EXTENSION = 110,
++    GNUTLS_A_CERTIFICATE_UNOBTAINABLE = 111,
++    GNUTLS_A_UNRECOGNIZED_NAME = 112,
++    GNUTLS_A_UNKNOWN_PSK_IDENTITY = 115,
++    GNUTLS_A_INNER_APPLICATION_FAILURE = 208,
++    GNUTLS_A_INNER_APPLICATION_VERIFICATION = 209
++  } gnutls_alert_description_t;
++
++  /**
++   * gnutls_handshake_description_t:
++   * @GNUTLS_HANDSHAKE_HELLO_REQUEST: Hello request.
++   * @GNUTLS_HANDSHAKE_CLIENT_HELLO: Client hello.
++   * @GNUTLS_HANDSHAKE_SERVER_HELLO: Server hello.
++   * @GNUTLS_HANDSHAKE_NEW_SESSION_TICKET: New session ticket.
++   * @GNUTLS_HANDSHAKE_CERTIFICATE_PKT: Certificate packet.
++   * @GNUTLS_HANDSHAKE_SERVER_KEY_EXCHANGE: Server key exchange.
++   * @GNUTLS_HANDSHAKE_CERTIFICATE_REQUEST: Certificate request.
++   * @GNUTLS_HANDSHAKE_SERVER_HELLO_DONE: Server hello done.
++   * @GNUTLS_HANDSHAKE_CERTIFICATE_VERIFY: Certificate verify.
++   * @GNUTLS_HANDSHAKE_CLIENT_KEY_EXCHANGE: Client key exchange.
++   * @GNUTLS_HANDSHAKE_FINISHED: Finished.
++   * @GNUTLS_HANDSHAKE_SUPPLEMENTAL: Supplemental.
++   *
++   * Enumeration of different TLS handshake packets.
++   */
++  typedef enum
++  {
++    GNUTLS_HANDSHAKE_HELLO_REQUEST = 0,
++    GNUTLS_HANDSHAKE_CLIENT_HELLO = 1,
++    GNUTLS_HANDSHAKE_SERVER_HELLO = 2,
++    GNUTLS_HANDSHAKE_NEW_SESSION_TICKET = 4,
++    GNUTLS_HANDSHAKE_CERTIFICATE_PKT = 11,
++    GNUTLS_HANDSHAKE_SERVER_KEY_EXCHANGE = 12,
++    GNUTLS_HANDSHAKE_CERTIFICATE_REQUEST = 13,
++    GNUTLS_HANDSHAKE_SERVER_HELLO_DONE = 14,
++    GNUTLS_HANDSHAKE_CERTIFICATE_VERIFY = 15,
++    GNUTLS_HANDSHAKE_CLIENT_KEY_EXCHANGE = 16,
++    GNUTLS_HANDSHAKE_FINISHED = 20,
++    GNUTLS_HANDSHAKE_SUPPLEMENTAL = 23
++  } gnutls_handshake_description_t;
++
++  /**
++   * gnutls_certificate_status_t:
++   * @GNUTLS_CERT_INVALID: Will be set if the certificate was not
++   *   verified.
++   * @GNUTLS_CERT_REVOKED: Certificate revoked.  In X.509 this will be
++   *   set only if CRLs are checked.
++   * @GNUTLS_CERT_SIGNER_NOT_FOUND: Certificate not verified.  Signer
++   *   not found.
++   * @GNUTLS_CERT_SIGNER_NOT_CA: Certificate not verified.  Signer
++   *   not a CA certificate.
++   * @GNUTLS_CERT_INSECURE_ALGORITHM: Certificate not verified,
++   *   insecure algorithm.
++   * @GNUTLS_CERT_NOT_ACTIVATED: Certificate not yet activated.
++   * @GNUTLS_CERT_EXPIRED: Certificate expired.
++   *
++   * Enumeration of certificate status codes.  Note that the status
++   * bits have different meanings in OpenPGP keys and X.509
++   * certificate verification.
++   */
++  typedef enum
++  {
++    GNUTLS_CERT_INVALID = 2,
++    GNUTLS_CERT_REVOKED = 32,
++    GNUTLS_CERT_SIGNER_NOT_FOUND = 64,
++    GNUTLS_CERT_SIGNER_NOT_CA = 128,
++    GNUTLS_CERT_INSECURE_ALGORITHM = 256,
++    GNUTLS_CERT_NOT_ACTIVATED = 512,
++    GNUTLS_CERT_EXPIRED = 1024
++  } gnutls_certificate_status_t;
++
++  /**
++   * gnutls_certificate_request_t:
++   * @GNUTLS_CERT_IGNORE: Ignore certificate.
++   * @GNUTLS_CERT_REQUEST: Request certificate.
++   * @GNUTLS_CERT_REQUIRE: Require certificate.
++   *
++   * Enumeration of certificate request types.
++   */
++  typedef enum
++  {
++    GNUTLS_CERT_IGNORE = 0,
++    GNUTLS_CERT_REQUEST = 1,
++    GNUTLS_CERT_REQUIRE = 2
++  } gnutls_certificate_request_t;
++
++  /**
++   * gnutls_openpgp_crt_status_t:
++   * @GNUTLS_OPENPGP_CERT: Send entire certificate.
++   * @GNUTLS_OPENPGP_CERT_FINGERPRINT: Send only certificate fingerprint.
++   *
++   * Enumeration of ways to send OpenPGP certificate.
++   */
++  typedef enum
++  {
++    GNUTLS_OPENPGP_CERT = 0,
++    GNUTLS_OPENPGP_CERT_FINGERPRINT = 1
++  } gnutls_openpgp_crt_status_t;
++
++  /**
++   * gnutls_close_request_t:
++   * @GNUTLS_SHUT_RDWR: Disallow further receives/sends.
++   * @GNUTLS_SHUT_WR: Disallow further sends.
++   *
++   * Enumeration of how TLS session should be terminated.  See gnutls_bye().
++   */
++  typedef enum
++  {
++    GNUTLS_SHUT_RDWR = 0,
++    GNUTLS_SHUT_WR = 1
++  } gnutls_close_request_t;
++
++  /**
++   * gnutls_protocol_t:
++   * @GNUTLS_SSL3: SSL version 3.0.
++   * @GNUTLS_TLS1_0: TLS version 1.0.
++   * @GNUTLS_TLS1: Same as %GNUTLS_TLS1_0.
++   * @GNUTLS_TLS1_1: TLS version 1.1.
++   * @GNUTLS_TLS1_2: TLS version 1.2.
++   * @GNUTLS_VERSION_MAX: Maps to the highest supported TLS version.
++   * @GNUTLS_VERSION_UNKNOWN: Unknown SSL/TLS version.
++   *
++   * Enumeration of different SSL/TLS protocol versions.
++   */
++  typedef enum
++  {
++    GNUTLS_SSL3 = 1,
++    GNUTLS_TLS1_0 = 2,
++    GNUTLS_TLS1 = GNUTLS_TLS1_0,
++    GNUTLS_TLS1_1 = 3,
++    GNUTLS_TLS1_2 = 4,
++    GNUTLS_VERSION_MAX = GNUTLS_TLS1_2,
++    GNUTLS_VERSION_UNKNOWN = 0xff
++  } gnutls_protocol_t;
++
++  /**
++   * gnutls_certificate_type_t:
++   * @GNUTLS_CRT_UNKNOWN: Unknown certificate type.
++   * @GNUTLS_CRT_X509: X.509 Certificate.
++   * @GNUTLS_CRT_OPENPGP: OpenPGP certificate.
++   *
++   * Enumeration of different certificate types.
++   */
++  typedef enum
++  {
++    GNUTLS_CRT_UNKNOWN = 0,
++    GNUTLS_CRT_X509 = 1,
++    GNUTLS_CRT_OPENPGP = 2
++  } gnutls_certificate_type_t;
++
++  /**
++   * gnutls_x509_crt_fmt_t:
++   * @GNUTLS_X509_FMT_DER: X.509 certificate in DER format (binary).
++   * @GNUTLS_X509_FMT_PEM: X.509 certificate in PEM format (text).
++   *
++   * Enumeration of different certificate encoding formats.
++   */
++  typedef enum
++  {
++    GNUTLS_X509_FMT_DER = 0,
++    GNUTLS_X509_FMT_PEM = 1
++  } gnutls_x509_crt_fmt_t;
++
++  /**
++   * gnutls_certificate_print_formats_t:
++   * @GNUTLS_CRT_PRINT_FULL: Full information about certificate.
++   * @GNUTLS_CRT_PRINT_ONELINE: Information about certificate in one line.
++   * @GNUTLS_CRT_PRINT_UNSIGNED_FULL: All info for an unsigned certificate.
++   *
++   * Enumeration of different certificate printing variants.
++   */
++  typedef enum gnutls_certificate_print_formats
++  {
++    GNUTLS_CRT_PRINT_FULL = 0,
++    GNUTLS_CRT_PRINT_ONELINE = 1,
++    GNUTLS_CRT_PRINT_UNSIGNED_FULL = 2
++  } gnutls_certificate_print_formats_t;
++
++  /**
++   * gnutls_pk_algorithm_t:
++   * @GNUTLS_PK_UNKNOWN: Unknown public-key algorithm.
++   * @GNUTLS_PK_RSA: RSA public-key algorithm.
++   * @GNUTLS_PK_DSA: DSA public-key algorithm.
++   * @GNUTLS_PK_DH: Diffie-Hellman algorithm. Used to generate parameters.
++   *
++   * Enumeration of different public-key algorithms.
++   */
++  typedef enum
++  {
++    GNUTLS_PK_UNKNOWN = 0,
++    GNUTLS_PK_RSA = 1,
++    GNUTLS_PK_DSA = 2,
++    GNUTLS_PK_DH = 3
++  } gnutls_pk_algorithm_t;
++
++  const char *gnutls_pk_algorithm_get_name (gnutls_pk_algorithm_t algorithm);
++
++  /**
++   * gnutls_sign_algorithm_t:
++   * @GNUTLS_SIGN_UNKNOWN: Unknown signature algorithm.
++   * @GNUTLS_SIGN_RSA_SHA1: Digital signature algorithm RSA with SHA-1
++   * @GNUTLS_SIGN_RSA_SHA: Same as %GNUTLS_SIGN_RSA_SHA1.
++   * @GNUTLS_SIGN_DSA_SHA1: Digital signature algorithm DSA with SHA-1
++   * @GNUTLS_SIGN_DSA_SHA224: Digital signature algorithm DSA with SHA-224
++   * @GNUTLS_SIGN_DSA_SHA256: Digital signature algorithm DSA with SHA-256
++   * @GNUTLS_SIGN_DSA_SHA: Same as %GNUTLS_SIGN_DSA_SHA1.
++   * @GNUTLS_SIGN_RSA_MD5: Digital signature algorithm RSA with MD5.
++   * @GNUTLS_SIGN_RSA_MD2: Digital signature algorithm RSA with MD2.
++   * @GNUTLS_SIGN_RSA_RMD160: Digital signature algorithm RSA with RMD-160.
++   * @GNUTLS_SIGN_RSA_SHA256: Digital signature algorithm RSA with SHA-256.
++   * @GNUTLS_SIGN_RSA_SHA384: Digital signature algorithm RSA with SHA-384.
++   * @GNUTLS_SIGN_RSA_SHA512: Digital signature algorithm RSA with SHA-512.
++   * @GNUTLS_SIGN_RSA_SHA224: Digital signature algorithm RSA with SHA-224.
++   *
++   * Enumeration of different digital signature algorithms.
++   */
++  typedef enum
++  {
++    GNUTLS_SIGN_UNKNOWN = 0,
++    GNUTLS_SIGN_RSA_SHA1 = 1,
++    GNUTLS_SIGN_RSA_SHA = GNUTLS_SIGN_RSA_SHA1,
++    GNUTLS_SIGN_DSA_SHA1 = 2,
++    GNUTLS_SIGN_DSA_SHA = GNUTLS_SIGN_DSA_SHA1,
++    GNUTLS_SIGN_RSA_MD5 = 3,
++    GNUTLS_SIGN_RSA_MD2 = 4,
++    GNUTLS_SIGN_RSA_RMD160 = 5,
++    GNUTLS_SIGN_RSA_SHA256 = 6,
++    GNUTLS_SIGN_RSA_SHA384 = 7,
++    GNUTLS_SIGN_RSA_SHA512 = 8,
++    GNUTLS_SIGN_RSA_SHA224 = 9,
++    GNUTLS_SIGN_DSA_SHA224 = 10,
++    GNUTLS_SIGN_DSA_SHA256 = 11
++  } gnutls_sign_algorithm_t;
++
++  const char *gnutls_sign_algorithm_get_name (gnutls_sign_algorithm_t sign);
++
++  /**
++   * gnutls_sec_param_t:
++   * @GNUTLS_SEC_PARAM_UNKNOWN: Cannot be known
++   * @GNUTLS_SEC_PARAM_WEAK: 50 or less bits of security
++   * @GNUTLS_SEC_PARAM_LOW: 80 bits of security
++   * @GNUTLS_SEC_PARAM_NORMAL: 112 bits of security
++   * @GNUTLS_SEC_PARAM_HIGH: 128 bits of security
++   * @GNUTLS_SEC_PARAM_ULTRA: 192 bits of security
++   *
++   * Enumeration of security parameters for passive attacks
++   */
++  typedef enum
++  {
++    GNUTLS_SEC_PARAM_UNKNOWN,
++    GNUTLS_SEC_PARAM_WEAK,
++    GNUTLS_SEC_PARAM_LOW,
++    GNUTLS_SEC_PARAM_NORMAL,
++    GNUTLS_SEC_PARAM_HIGH,
++    GNUTLS_SEC_PARAM_ULTRA
++  } gnutls_sec_param_t;
++
++  /**
++   * gnutls_channel_binding_t:
++   * @GNUTLS_CB_TLS_UNIQUE: "tls-unique" (RFC 5929) channel binding
++   *
++   * Enumeration of support channel binding types.
++   */
++  typedef enum
++  {
++    GNUTLS_CB_TLS_UNIQUE
++  } gnutls_channel_binding_t;
++
++/* If you want to change this, then also change the define in
++ * gnutls_int.h, and recompile.
++ */
++  typedef void *gnutls_transport_ptr_t;
++
++  struct gnutls_session_int;
++  typedef struct gnutls_session_int *gnutls_session_t;
++
++  struct gnutls_dh_params_int;
++  typedef struct gnutls_dh_params_int *gnutls_dh_params_t;
++
++  /* XXX ugly. */
++  struct gnutls_x509_privkey_int;
++  typedef struct gnutls_x509_privkey_int *gnutls_rsa_params_t;
++
++  struct gnutls_priority_st;
++  typedef struct gnutls_priority_st *gnutls_priority_t;
++
++  typedef struct
++  {
++    unsigned char *data;
++    unsigned int size;
++  } gnutls_datum_t;
++
++
++  typedef struct gnutls_params_st
++  {
++    gnutls_params_type_t type;
++    union params
++    {
++      gnutls_dh_params_t dh;
++      gnutls_rsa_params_t rsa_export;
++    } params;
++    int deinit;
++  } gnutls_params_st;
++
++  typedef int gnutls_params_function (gnutls_session_t, gnutls_params_type_t,
++                                      gnutls_params_st *);
++
++/* internal functions */
++
++  int gnutls_init (gnutls_session_t * session,
++                   gnutls_connection_end_t con_end);
++  void gnutls_deinit (gnutls_session_t session);
++#define _gnutls_deinit(x) gnutls_deinit(x)
++
++  int gnutls_bye (gnutls_session_t session, gnutls_close_request_t how);
++
++  int gnutls_handshake (gnutls_session_t session);
++  int gnutls_rehandshake (gnutls_session_t session);
++
++  gnutls_alert_description_t gnutls_alert_get (gnutls_session_t session);
++  int gnutls_alert_send (gnutls_session_t session,
++                         gnutls_alert_level_t level,
++                         gnutls_alert_description_t desc);
++  int gnutls_alert_send_appropriate (gnutls_session_t session, int err);
++  const char *gnutls_alert_get_name (gnutls_alert_description_t alert);
++
++  gnutls_sec_param_t gnutls_pk_bits_to_sec_param (gnutls_pk_algorithm_t algo,
++                                                  unsigned int bits);
++  const char *gnutls_sec_param_get_name (gnutls_sec_param_t param);
++  unsigned int gnutls_sec_param_to_pk_bits (gnutls_pk_algorithm_t algo,
++                                            gnutls_sec_param_t param);
++
++/* get information on the current session */
++  gnutls_cipher_algorithm_t gnutls_cipher_get (gnutls_session_t session);
++  gnutls_kx_algorithm_t gnutls_kx_get (gnutls_session_t session);
++  gnutls_mac_algorithm_t gnutls_mac_get (gnutls_session_t session);
++    gnutls_compression_method_t
++    gnutls_compression_get (gnutls_session_t session);
++    gnutls_certificate_type_t
++    gnutls_certificate_type_get (gnutls_session_t session);
++  int gnutls_sign_algorithm_get_requested (gnutls_session_t session,
++                                           size_t indx,
++                                           gnutls_sign_algorithm_t * algo);
++
++  size_t gnutls_cipher_get_key_size (gnutls_cipher_algorithm_t algorithm);
++  size_t gnutls_mac_get_key_size (gnutls_mac_algorithm_t algorithm);
++
++/* the name of the specified algorithms */
++  const char *gnutls_cipher_get_name (gnutls_cipher_algorithm_t algorithm);
++  const char *gnutls_mac_get_name (gnutls_mac_algorithm_t algorithm);
++  const char *gnutls_compression_get_name (gnutls_compression_method_t
++                                           algorithm);
++  const char *gnutls_kx_get_name (gnutls_kx_algorithm_t algorithm);
++  const char *gnutls_certificate_type_get_name (gnutls_certificate_type_t
++                                                type);
++  const char *gnutls_pk_get_name (gnutls_pk_algorithm_t algorithm);
++  const char *gnutls_sign_get_name (gnutls_sign_algorithm_t algorithm);
++
++  gnutls_mac_algorithm_t gnutls_mac_get_id (const char *name);
++  gnutls_compression_method_t gnutls_compression_get_id (const char *name);
++  gnutls_cipher_algorithm_t gnutls_cipher_get_id (const char *name);
++  gnutls_kx_algorithm_t gnutls_kx_get_id (const char *name);
++  gnutls_protocol_t gnutls_protocol_get_id (const char *name);
++  gnutls_certificate_type_t gnutls_certificate_type_get_id (const char *name);
++  gnutls_pk_algorithm_t gnutls_pk_get_id (const char *name);
++  gnutls_sign_algorithm_t gnutls_sign_get_id (const char *name);
++
++  /* list supported algorithms */
++  const gnutls_cipher_algorithm_t *gnutls_cipher_list (void);
++  const gnutls_mac_algorithm_t *gnutls_mac_list (void);
++  const gnutls_compression_method_t *gnutls_compression_list (void);
++  const gnutls_protocol_t *gnutls_protocol_list (void);
++  const gnutls_certificate_type_t *gnutls_certificate_type_list (void);
++  const gnutls_kx_algorithm_t *gnutls_kx_list (void);
++  const gnutls_pk_algorithm_t *gnutls_pk_list (void);
++  const gnutls_sign_algorithm_t *gnutls_sign_list (void);
++  const char *gnutls_cipher_suite_info (size_t idx,
++                                        char *cs_id,
++                                        gnutls_kx_algorithm_t * kx,
++                                        gnutls_cipher_algorithm_t * cipher,
++                                        gnutls_mac_algorithm_t * mac,
++                                        gnutls_protocol_t * version);
++
++  /* error functions */
++  int gnutls_error_is_fatal (int error);
++  int gnutls_error_to_alert (int err, int *level);
++
++  void gnutls_perror (int error);
++  const char *gnutls_strerror (int error);
++  const char *gnutls_strerror_name (int error);
++
++/* Semi-internal functions.
++ */
++  void gnutls_handshake_set_private_extensions (gnutls_session_t session,
++                                                int allow);
++    gnutls_handshake_description_t
++    gnutls_handshake_get_last_out (gnutls_session_t session);
++    gnutls_handshake_description_t
++    gnutls_handshake_get_last_in (gnutls_session_t session);
++
++/* Record layer functions.
++ */
++  ssize_t gnutls_record_send (gnutls_session_t session, const void *data,
++                              size_t sizeofdata);
++  ssize_t gnutls_record_recv (gnutls_session_t session, void *data,
++                              size_t sizeofdata);
++#define gnutls_read gnutls_record_recv
++#define gnutls_write gnutls_record_send
++
++  void gnutls_session_enable_compatibility_mode (gnutls_session_t session);
++
++  void gnutls_record_disable_padding (gnutls_session_t session);
++
++  int gnutls_record_get_direction (gnutls_session_t session);
++
++  size_t gnutls_record_get_max_size (gnutls_session_t session);
++  ssize_t gnutls_record_set_max_size (gnutls_session_t session, size_t size);
++
++  size_t gnutls_record_check_pending (gnutls_session_t session);
++
++  int gnutls_prf (gnutls_session_t session,
++                  size_t label_size, const char *label,
++                  int server_random_first,
++                  size_t extra_size, const char *extra,
++                  size_t outsize, char *out);
++
++  int gnutls_prf_raw (gnutls_session_t session,
++                      size_t label_size, const char *label,
++                      size_t seed_size, const char *seed,
++                      size_t outsize, char *out);
++
++/* TLS Extensions */
++
++  typedef int (*gnutls_ext_recv_func) (gnutls_session_t session,
++                                       const unsigned char *data, size_t len);
++  typedef int (*gnutls_ext_send_func) (gnutls_session_t session,
++                                       unsigned char *data, size_t len);
++
++  /**
++   * gnutls_ext_parse_type_t:
++   * @GNUTLS_EXT_NONE: Never parsed
++   * @GNUTLS_EXT_ANY: Any extension type.
++   * @GNUTLS_EXT_APPLICATION: Application extension.
++   * @GNUTLS_EXT_TLS: TLS-internal extension.
++   * @GNUTLS_EXT_MANDATORY: Extension parsed even if resuming (or extensions are disabled).
++   *
++   * Enumeration of different TLS extension types.  This flag
++   * indicates for an extension whether it is useful to application
++   * level or TLS level only.  This is (only) used to parse the
++   * application level extensions before the "client_hello" callback
++   * is called.
++   */
++  typedef enum
++  {
++    GNUTLS_EXT_ANY = 0,
++    GNUTLS_EXT_APPLICATION = 1,
++    GNUTLS_EXT_TLS = 2,
++    GNUTLS_EXT_MANDATORY = 3,
++    GNUTLS_EXT_NONE = 4
++  } gnutls_ext_parse_type_t;
++
++
++  /**
++   * gnutls_server_name_type_t:
++   * @GNUTLS_NAME_DNS: Domain Name System name type.
++   *
++   * Enumeration of different server name types.
++   */
++  typedef enum
++  {
++    GNUTLS_NAME_DNS = 1
++  } gnutls_server_name_type_t;
++
++  int gnutls_server_name_set (gnutls_session_t session,
++                              gnutls_server_name_type_t type,
++                              const void *name, size_t name_length);
++
++  int gnutls_server_name_get (gnutls_session_t session,
++                              void *data, size_t * data_length,
++                              unsigned int *type, unsigned int indx);
++
++  /* Safe renegotiation */
++  int gnutls_safe_renegotiation_status (gnutls_session_t session);
++
++  /**
++   * gnutls_supplemental_data_format_type_t:
++   * @GNUTLS_SUPPLEMENTAL_USER_MAPPING_DATA: Supplemental user mapping data.
++   *
++   * Enumeration of different supplemental data types (RFC 4680).
++   */
++  typedef enum
++  {
++    GNUTLS_SUPPLEMENTAL_USER_MAPPING_DATA = 0
++  } gnutls_supplemental_data_format_type_t;
++
++  const char
++    *gnutls_supplemental_get_name (gnutls_supplemental_data_format_type_t
++                                   type);
++
++  /* SessionTicket, RFC 5077. */
++  int gnutls_session_ticket_key_generate (gnutls_datum_t * key);
++  int gnutls_session_ticket_enable_client (gnutls_session_t session);
++  int gnutls_session_ticket_enable_server (gnutls_session_t session,
++                                           const gnutls_datum_t * key);
++
++/* if you just want some defaults, use the following.
++ */
++  int gnutls_priority_init (gnutls_priority_t * priority_cache,
++                            const char *priorities, const char **err_pos);
++  void gnutls_priority_deinit (gnutls_priority_t priority_cache);
++
++  int gnutls_priority_set (gnutls_session_t session,
++                           gnutls_priority_t priority);
++  int gnutls_priority_set_direct (gnutls_session_t session,
++                                  const char *priorities,
++                                  const char **err_pos);
++
++  /* for compatibility
++   */
++  int gnutls_set_default_priority (gnutls_session_t session);
++  int gnutls_set_default_export_priority (gnutls_session_t session);
++
++/* Returns the name of a cipher suite */
++  const char *gnutls_cipher_suite_get_name (gnutls_kx_algorithm_t
++                                            kx_algorithm,
++                                            gnutls_cipher_algorithm_t
++                                            cipher_algorithm,
++                                            gnutls_mac_algorithm_t
++                                            mac_algorithm);
++
++/* get the currently used protocol version */
++  gnutls_protocol_t gnutls_protocol_get_version (gnutls_session_t session);
++
++  const char *gnutls_protocol_get_name (gnutls_protocol_t version);
++
++
++/* get/set session 
++ */
++  int gnutls_session_set_data (gnutls_session_t session,
++                               const void *session_data,
++                               size_t session_data_size);
++  int gnutls_session_get_data (gnutls_session_t session, void *session_data,
++                               size_t * session_data_size);
++  int gnutls_session_get_data2 (gnutls_session_t session,
++                                gnutls_datum_t * data);
++
++/* returns the session ID */
++#define GNUTLS_MAX_SESSION_ID 32
++  int gnutls_session_get_id (gnutls_session_t session, void *session_id,
++                             size_t * session_id_size);
++
++
++  int gnutls_session_channel_binding (gnutls_session_t session,
++                                      gnutls_channel_binding_t cbtype,
++                                      gnutls_datum_t * cb);
++
++/* checks if this session is a resumed one 
++ */
++  int gnutls_session_is_resumed (gnutls_session_t session);
++
++  typedef int (*gnutls_db_store_func) (void *, gnutls_datum_t key,
++                                       gnutls_datum_t data);
++  typedef int (*gnutls_db_remove_func) (void *, gnutls_datum_t key);
++  typedef gnutls_datum_t (*gnutls_db_retr_func) (void *, gnutls_datum_t key);
++
++  void gnutls_db_set_cache_expiration (gnutls_session_t session, int seconds);
++
++  void gnutls_db_remove_session (gnutls_session_t session);
++  void gnutls_db_set_retrieve_function (gnutls_session_t session,
++                                        gnutls_db_retr_func retr_func);
++  void gnutls_db_set_remove_function (gnutls_session_t session,
++                                      gnutls_db_remove_func rem_func);
++  void gnutls_db_set_store_function (gnutls_session_t session,
++                                     gnutls_db_store_func store_func);
++  void gnutls_db_set_ptr (gnutls_session_t session, void *ptr);
++  void *gnutls_db_get_ptr (gnutls_session_t session);
++  int gnutls_db_check_entry (gnutls_session_t session,
++                             gnutls_datum_t session_entry);
++
++  typedef int (*gnutls_handshake_post_client_hello_func) (gnutls_session_t);
++  void
++    gnutls_handshake_set_post_client_hello_function (gnutls_session_t session,
++                                                     gnutls_handshake_post_client_hello_func
++                                                     func);
++
++  void gnutls_handshake_set_max_packet_length (gnutls_session_t session,
++                                               size_t max);
++
++/* returns libgnutls version (call it with a NULL argument)
++ */
++  const char *gnutls_check_version (const char *req_version);
++
++/* Functions for setting/clearing credentials
++ */
++  void gnutls_credentials_clear (gnutls_session_t session);
++
++/* cred is a structure defined by the kx algorithm
++ */
++  int gnutls_credentials_set (gnutls_session_t session,
++                              gnutls_credentials_type_t type, void *cred);
++#define gnutls_cred_set	gnutls_credentials_set
++
++/* Credential structures - used in gnutls_credentials_set(); */
++
++  struct gnutls_certificate_credentials_st;
++  typedef struct gnutls_certificate_credentials_st
++    *gnutls_certificate_credentials_t;
++  typedef gnutls_certificate_credentials_t
++    gnutls_certificate_server_credentials;
++  typedef gnutls_certificate_credentials_t
++    gnutls_certificate_client_credentials;
++
++  typedef struct gnutls_anon_server_credentials_st
++    *gnutls_anon_server_credentials_t;
++  typedef struct gnutls_anon_client_credentials_st
++    *gnutls_anon_client_credentials_t;
++
++  void gnutls_anon_free_server_credentials (gnutls_anon_server_credentials_t
++                                            sc);
++  int
++    gnutls_anon_allocate_server_credentials (gnutls_anon_server_credentials_t
++                                             * sc);
++
++  void gnutls_anon_set_server_dh_params (gnutls_anon_server_credentials_t res,
++                                         gnutls_dh_params_t dh_params);
++
++  void
++    gnutls_anon_set_server_params_function (gnutls_anon_server_credentials_t
++                                            res,
++                                            gnutls_params_function * func);
++
++  void
++    gnutls_anon_free_client_credentials (gnutls_anon_client_credentials_t sc);
++  int
++    gnutls_anon_allocate_client_credentials (gnutls_anon_client_credentials_t
++                                             * sc);
++
++/* CERTFILE is an x509 certificate in PEM form.
++ * KEYFILE is a pkcs-1 private key in PEM form (for RSA keys).
++ */
++  void
++    gnutls_certificate_free_credentials (gnutls_certificate_credentials_t sc);
++  int
++    gnutls_certificate_allocate_credentials (gnutls_certificate_credentials_t
++                                             * res);
++
++  void gnutls_certificate_free_keys (gnutls_certificate_credentials_t sc);
++  void gnutls_certificate_free_cas (gnutls_certificate_credentials_t sc);
++  void gnutls_certificate_free_ca_names (gnutls_certificate_credentials_t sc);
++  void gnutls_certificate_free_crls (gnutls_certificate_credentials_t sc);
++
++  void gnutls_certificate_set_dh_params (gnutls_certificate_credentials_t res,
++                                         gnutls_dh_params_t dh_params);
++  void
++    gnutls_certificate_set_rsa_export_params (gnutls_certificate_credentials_t
++                                              res,
++                                              gnutls_rsa_params_t rsa_params);
++  void gnutls_certificate_set_verify_flags (gnutls_certificate_credentials_t
++                                            res, unsigned int flags);
++  void gnutls_certificate_set_verify_limits (gnutls_certificate_credentials_t
++                                             res, unsigned int max_bits,
++                                             unsigned int max_depth);
++
++  int
++    gnutls_certificate_set_x509_trust_file (gnutls_certificate_credentials_t
++                                            res, const char *cafile,
++                                            gnutls_x509_crt_fmt_t type);
++  int gnutls_certificate_set_x509_trust_mem (gnutls_certificate_credentials_t
++                                             res, const gnutls_datum_t * ca,
++                                             gnutls_x509_crt_fmt_t type);
++
++  int
++    gnutls_certificate_set_x509_crl_file (gnutls_certificate_credentials_t
++                                          res, const char *crlfile,
++                                          gnutls_x509_crt_fmt_t type);
++  int gnutls_certificate_set_x509_crl_mem (gnutls_certificate_credentials_t
++                                           res, const gnutls_datum_t * CRL,
++                                           gnutls_x509_crt_fmt_t type);
++
++  int
++    gnutls_certificate_set_x509_key_file (gnutls_certificate_credentials_t
++                                          res, const char *certfile,
++                                          const char *keyfile,
++                                          gnutls_x509_crt_fmt_t type);
++  int gnutls_certificate_set_x509_key_mem (gnutls_certificate_credentials_t
++                                           res, const gnutls_datum_t * cert,
++                                           const gnutls_datum_t * key,
++                                           gnutls_x509_crt_fmt_t type);
++
++  void gnutls_certificate_send_x509_rdn_sequence (gnutls_session_t session,
++                                                  int status);
++
++  int gnutls_certificate_set_x509_simple_pkcs12_file
++    (gnutls_certificate_credentials_t res, const char *pkcs12file,
++     gnutls_x509_crt_fmt_t type, const char *password);
++  int gnutls_certificate_set_x509_simple_pkcs12_mem
++    (gnutls_certificate_credentials_t res, const gnutls_datum_t * p12blob,
++     gnutls_x509_crt_fmt_t type, const char *password);
++
++/* New functions to allow setting already parsed X.509 stuff.
++ */
++  struct gnutls_x509_privkey_int;
++  typedef struct gnutls_x509_privkey_int *gnutls_x509_privkey_t;
++
++  struct gnutls_x509_crl_int;
++  typedef struct gnutls_x509_crl_int *gnutls_x509_crl_t;
++
++  struct gnutls_x509_crt_int;
++  typedef struct gnutls_x509_crt_int *gnutls_x509_crt_t;
++
++  struct gnutls_x509_crq_int;
++  typedef struct gnutls_x509_crq_int *gnutls_x509_crq_t;
++
++  struct gnutls_openpgp_keyring_int;
++  typedef struct gnutls_openpgp_keyring_int *gnutls_openpgp_keyring_t;
++
++  int
++    gnutls_certificate_get_issuer (gnutls_certificate_credentials_t sc,
++    gnutls_x509_crt_t cert, gnutls_x509_crt_t* issuer, unsigned int flags);
++
++  int gnutls_certificate_set_x509_key (gnutls_certificate_credentials_t res,
++                                       gnutls_x509_crt_t * cert_list,
++                                       int cert_list_size,
++                                       gnutls_x509_privkey_t key);
++  int gnutls_certificate_set_x509_trust (gnutls_certificate_credentials_t res,
++                                         gnutls_x509_crt_t * ca_list,
++                                         int ca_list_size);
++  int gnutls_certificate_set_x509_crl (gnutls_certificate_credentials_t res,
++                                       gnutls_x509_crl_t * crl_list,
++                                       int crl_list_size);
++
++
++
++/* global state functions
++ */
++  int gnutls_global_init (void);
++  void gnutls_global_deinit (void);
++
++  typedef time_t (*gnutls_time_func) (time_t *t);
++  typedef int (*mutex_init_func) (void **mutex);
++  typedef int (*mutex_lock_func) (void **mutex);
++  typedef int (*mutex_unlock_func) (void **mutex);
++  typedef int (*mutex_deinit_func) (void **mutex);
++
++  void gnutls_global_set_mutex (mutex_init_func init, mutex_deinit_func deinit,
++                                mutex_lock_func lock, mutex_unlock_func unlock);
++
++  typedef void *(*gnutls_alloc_function) (size_t);
++  typedef void *(*gnutls_calloc_function) (size_t, size_t);
++  typedef int (*gnutls_is_secure_function) (const void *);
++  typedef void (*gnutls_free_function) (void *);
++  typedef void *(*gnutls_realloc_function) (void *, size_t);
++
++  void
++    gnutls_global_set_mem_functions (gnutls_alloc_function alloc_func,
++                                     gnutls_alloc_function secure_alloc_func,
++                                     gnutls_is_secure_function is_secure_func,
++                                     gnutls_realloc_function realloc_func,
++                                     gnutls_free_function free_func);
++
++  void gnutls_global_set_time_function (gnutls_time_func);
++
++/* For use in callbacks */
++  extern gnutls_alloc_function gnutls_malloc;
++  extern gnutls_alloc_function gnutls_secure_malloc;
++  extern gnutls_realloc_function gnutls_realloc;
++  extern gnutls_calloc_function gnutls_calloc;
++  extern gnutls_free_function gnutls_free;
++
++  extern char *(*gnutls_strdup) (const char *);
++
++  typedef void (*gnutls_log_func) (int, const char *);
++  void gnutls_global_set_log_function (gnutls_log_func log_func);
++  void gnutls_global_set_log_level (int level);
++
++/* Diffie-Hellman parameter handling.
++ */
++  int gnutls_dh_params_init (gnutls_dh_params_t * dh_params);
++  void gnutls_dh_params_deinit (gnutls_dh_params_t dh_params);
++  int gnutls_dh_params_import_raw (gnutls_dh_params_t dh_params,
++                                   const gnutls_datum_t * prime,
++                                   const gnutls_datum_t * generator);
++  int gnutls_dh_params_import_pkcs3 (gnutls_dh_params_t params,
++                                     const gnutls_datum_t * pkcs3_params,
++                                     gnutls_x509_crt_fmt_t format);
++  int gnutls_dh_params_generate2 (gnutls_dh_params_t params,
++                                  unsigned int bits);
++  int gnutls_dh_params_export_pkcs3 (gnutls_dh_params_t params,
++                                     gnutls_x509_crt_fmt_t format,
++                                     unsigned char *params_data,
++                                     size_t * params_data_size);
++  int gnutls_dh_params_export_raw (gnutls_dh_params_t params,
++                                   gnutls_datum_t * prime,
++                                   gnutls_datum_t * generator,
++                                   unsigned int *bits);
++  int gnutls_dh_params_cpy (gnutls_dh_params_t dst, gnutls_dh_params_t src);
++
++
++/* RSA params 
++ */
++  int gnutls_rsa_params_init (gnutls_rsa_params_t * rsa_params);
++  void gnutls_rsa_params_deinit (gnutls_rsa_params_t rsa_params);
++  int gnutls_rsa_params_cpy (gnutls_rsa_params_t dst,
++                             gnutls_rsa_params_t src);
++  int gnutls_rsa_params_import_raw (gnutls_rsa_params_t rsa_params,
++                                    const gnutls_datum_t * m,
++                                    const gnutls_datum_t * e,
++                                    const gnutls_datum_t * d,
++                                    const gnutls_datum_t * p,
++                                    const gnutls_datum_t * q,
++                                    const gnutls_datum_t * u);
++  int gnutls_rsa_params_generate2 (gnutls_rsa_params_t params,
++                                   unsigned int bits);
++  int gnutls_rsa_params_export_raw (gnutls_rsa_params_t params,
++                                    gnutls_datum_t * m, gnutls_datum_t * e,
++                                    gnutls_datum_t * d, gnutls_datum_t * p,
++                                    gnutls_datum_t * q, gnutls_datum_t * u,
++                                    unsigned int *bits);
++  int gnutls_rsa_params_export_pkcs1 (gnutls_rsa_params_t params,
++                                      gnutls_x509_crt_fmt_t format,
++                                      unsigned char *params_data,
++                                      size_t * params_data_size);
++  int gnutls_rsa_params_import_pkcs1 (gnutls_rsa_params_t params,
++                                      const gnutls_datum_t * pkcs1_params,
++                                      gnutls_x509_crt_fmt_t format);
++
++/* Session stuff
++ */
++  typedef struct
++  {
++    void *iov_base;             /* Starting address */
++    size_t iov_len;             /* Number of bytes to transfer */
++  } giovec_t;
++
++  typedef ssize_t (*gnutls_pull_func) (gnutls_transport_ptr_t, void *,
++                                       size_t);
++  typedef ssize_t (*gnutls_push_func) (gnutls_transport_ptr_t, const void *,
++                                       size_t);
++
++  typedef ssize_t (*gnutls_vec_push_func) (gnutls_transport_ptr_t,
++                                           const giovec_t * iov, int iovcnt);
++
++  typedef int (*gnutls_errno_func) (gnutls_transport_ptr_t);
++
++  void gnutls_transport_set_ptr (gnutls_session_t session,
++                                 gnutls_transport_ptr_t ptr);
++  void gnutls_transport_set_ptr2 (gnutls_session_t session,
++                                  gnutls_transport_ptr_t recv_ptr,
++                                  gnutls_transport_ptr_t send_ptr);
++
++  gnutls_transport_ptr_t gnutls_transport_get_ptr (gnutls_session_t session);
++  void gnutls_transport_get_ptr2 (gnutls_session_t session,
++                                  gnutls_transport_ptr_t * recv_ptr,
++                                  gnutls_transport_ptr_t * send_ptr);
++
++
++
++  void gnutls_transport_set_vec_push_function (gnutls_session_t session,
++                                            gnutls_vec_push_func vec_func);
++  void gnutls_transport_set_push_function (gnutls_session_t session,
++                                           gnutls_push_func push_func);
++  void gnutls_transport_set_pull_function (gnutls_session_t session,
++                                           gnutls_pull_func pull_func);
++
++  void gnutls_transport_set_errno_function (gnutls_session_t session,
++                                            gnutls_errno_func errno_func);
++
++  void gnutls_transport_set_errno (gnutls_session_t session, int err);
++
++/* session specific 
++ */
++  void gnutls_session_set_ptr (gnutls_session_t session, void *ptr);
++  void *gnutls_session_get_ptr (gnutls_session_t session);
++
++  void gnutls_openpgp_send_cert (gnutls_session_t session,
++                                 gnutls_openpgp_crt_status_t status);
++
++/* fingerprint 
++ * Actually this function returns the hash of the given data.
++ */
++  int gnutls_fingerprint (gnutls_digest_algorithm_t algo,
++                          const gnutls_datum_t * data, void *result,
++                          size_t * result_size);
++
++
++/* SRP 
++ */
++
++  typedef struct gnutls_srp_server_credentials_st
++    *gnutls_srp_server_credentials_t;
++  typedef struct gnutls_srp_client_credentials_st
++    *gnutls_srp_client_credentials_t;
++
++  void
++    gnutls_srp_free_client_credentials (gnutls_srp_client_credentials_t sc);
++  int
++    gnutls_srp_allocate_client_credentials (gnutls_srp_client_credentials_t *
++                                            sc);
++  int gnutls_srp_set_client_credentials (gnutls_srp_client_credentials_t res,
++                                         const char *username,
++                                         const char *password);
++
++  void
++    gnutls_srp_free_server_credentials (gnutls_srp_server_credentials_t sc);
++  int
++    gnutls_srp_allocate_server_credentials (gnutls_srp_server_credentials_t *
++                                            sc);
++  int gnutls_srp_set_server_credentials_file (gnutls_srp_server_credentials_t
++                                              res, const char *password_file,
++                                              const char *password_conf_file);
++
++  const char *gnutls_srp_server_get_username (gnutls_session_t session);
++
++  extern void gnutls_srp_set_prime_bits (gnutls_session_t session,
++                                         unsigned int bits);
++
++  int gnutls_srp_verifier (const char *username,
++                           const char *password,
++                           const gnutls_datum_t * salt,
++                           const gnutls_datum_t * generator,
++                           const gnutls_datum_t * prime,
++                           gnutls_datum_t * res);
++
++/* The static parameters defined in draft-ietf-tls-srp-05
++ * Those should be used as input to gnutls_srp_verifier().
++ */
++  extern const gnutls_datum_t gnutls_srp_2048_group_prime;
++  extern const gnutls_datum_t gnutls_srp_2048_group_generator;
++
++  extern const gnutls_datum_t gnutls_srp_1536_group_prime;
++  extern const gnutls_datum_t gnutls_srp_1536_group_generator;
++
++  extern const gnutls_datum_t gnutls_srp_1024_group_prime;
++  extern const gnutls_datum_t gnutls_srp_1024_group_generator;
++
++  typedef int gnutls_srp_server_credentials_function (gnutls_session_t,
++                                                      const char *username,
++                                                      gnutls_datum_t * salt,
++                                                      gnutls_datum_t *
++                                                      verifier,
++                                                      gnutls_datum_t *
++                                                      generator,
++                                                      gnutls_datum_t * prime);
++  void
++    gnutls_srp_set_server_credentials_function
++    (gnutls_srp_server_credentials_t cred,
++     gnutls_srp_server_credentials_function * func);
++
++  typedef int gnutls_srp_client_credentials_function (gnutls_session_t,
++                                                      char **, char **);
++  void
++    gnutls_srp_set_client_credentials_function
++    (gnutls_srp_client_credentials_t cred,
++     gnutls_srp_client_credentials_function * func);
++
++  int gnutls_srp_base64_encode (const gnutls_datum_t * data, char *result,
++                                size_t * result_size);
++  int gnutls_srp_base64_encode_alloc (const gnutls_datum_t * data,
++                                      gnutls_datum_t * result);
++
++  int gnutls_srp_base64_decode (const gnutls_datum_t * b64_data, char *result,
++                                size_t * result_size);
++  int gnutls_srp_base64_decode_alloc (const gnutls_datum_t * b64_data,
++                                      gnutls_datum_t * result);
++
++/* PSK stuff */
++  typedef struct gnutls_psk_server_credentials_st
++    *gnutls_psk_server_credentials_t;
++  typedef struct gnutls_psk_client_credentials_st
++    *gnutls_psk_client_credentials_t;
++
++  /**
++   * gnutls_psk_key_flags:
++   * @GNUTLS_PSK_KEY_RAW: PSK-key in raw format.
++   * @GNUTLS_PSK_KEY_HEX: PSK-key in hex format.
++   *
++   * Enumeration of different PSK key flags.
++   */
++  typedef enum gnutls_psk_key_flags
++  {
++    GNUTLS_PSK_KEY_RAW = 0,
++    GNUTLS_PSK_KEY_HEX
++  } gnutls_psk_key_flags;
++
++  void
++    gnutls_psk_free_client_credentials (gnutls_psk_client_credentials_t sc);
++  int
++    gnutls_psk_allocate_client_credentials (gnutls_psk_client_credentials_t *
++                                            sc);
++  int gnutls_psk_set_client_credentials (gnutls_psk_client_credentials_t res,
++                                         const char *username,
++                                         const gnutls_datum_t * key,
++                                         gnutls_psk_key_flags format);
++
++  void
++    gnutls_psk_free_server_credentials (gnutls_psk_server_credentials_t sc);
++  int
++    gnutls_psk_allocate_server_credentials (gnutls_psk_server_credentials_t *
++                                            sc);
++  int gnutls_psk_set_server_credentials_file (gnutls_psk_server_credentials_t
++                                              res, const char *password_file);
++
++  int
++    gnutls_psk_set_server_credentials_hint (gnutls_psk_server_credentials_t
++                                            res, const char *hint);
++
++  const char *gnutls_psk_server_get_username (gnutls_session_t session);
++  const char *gnutls_psk_client_get_hint (gnutls_session_t session);
++
++  typedef int gnutls_psk_server_credentials_function (gnutls_session_t,
++                                                      const char *username,
++                                                      gnutls_datum_t * key);
++  void
++    gnutls_psk_set_server_credentials_function
++    (gnutls_psk_server_credentials_t cred,
++     gnutls_psk_server_credentials_function * func);
++
++  typedef int gnutls_psk_client_credentials_function (gnutls_session_t,
++                                                      char **username,
++                                                      gnutls_datum_t * key);
++  void
++    gnutls_psk_set_client_credentials_function
++    (gnutls_psk_client_credentials_t cred,
++     gnutls_psk_client_credentials_function * func);
++
++  int gnutls_hex_encode (const gnutls_datum_t * data, char *result,
++                         size_t * result_size);
++  int gnutls_hex_decode (const gnutls_datum_t * hex_data, char *result,
++                         size_t * result_size);
++
++  void
++    gnutls_psk_set_server_dh_params (gnutls_psk_server_credentials_t res,
++                                     gnutls_dh_params_t dh_params);
++
++  void
++    gnutls_psk_set_server_params_function (gnutls_psk_server_credentials_t
++                                           res,
++                                           gnutls_params_function * func);
++
++  /**
++   * gnutls_x509_subject_alt_name_t:
++   * @GNUTLS_SAN_DNSNAME: DNS-name SAN.
++   * @GNUTLS_SAN_RFC822NAME: E-mail address SAN.
++   * @GNUTLS_SAN_URI: URI SAN.
++   * @GNUTLS_SAN_IPADDRESS: IP address SAN.
++   * @GNUTLS_SAN_OTHERNAME: OtherName SAN.
++   * @GNUTLS_SAN_DN: DN SAN.
++   * @GNUTLS_SAN_OTHERNAME_XMPP: Virtual SAN, used by
++   *   gnutls_x509_crt_get_subject_alt_othername_oid().
++   *
++   * Enumeration of different subject alternative names types.
++   */
++  typedef enum gnutls_x509_subject_alt_name_t
++  {
++    GNUTLS_SAN_DNSNAME = 1,
++    GNUTLS_SAN_RFC822NAME = 2,
++    GNUTLS_SAN_URI = 3,
++    GNUTLS_SAN_IPADDRESS = 4,
++    GNUTLS_SAN_OTHERNAME = 5,
++    GNUTLS_SAN_DN = 6,
++    /* The following are "virtual" subject alternative name types, in
++       that they are represented by an otherName value and an OID.
++       Used by gnutls_x509_crt_get_subject_alt_othername_oid().  */
++    GNUTLS_SAN_OTHERNAME_XMPP = 1000
++  } gnutls_x509_subject_alt_name_t;
++
++  struct gnutls_openpgp_crt_int;
++  typedef struct gnutls_openpgp_crt_int *gnutls_openpgp_crt_t;
++
++  struct gnutls_openpgp_privkey_int;
++  typedef struct gnutls_openpgp_privkey_int *gnutls_openpgp_privkey_t;
++
++  struct gnutls_pkcs11_privkey_st;
++  typedef struct gnutls_pkcs11_privkey_st *gnutls_pkcs11_privkey_t;
++
++  typedef enum
++  {
++    GNUTLS_PRIVKEY_X509,        /* gnutls_x509_privkey_t */
++    GNUTLS_PRIVKEY_OPENPGP,     /* gnutls_openpgp_privkey_t */
++    GNUTLS_PRIVKEY_PKCS11       /* gnutls_pkcs11_privkey_t */
++  } gnutls_privkey_type_t;
++
++  typedef struct gnutls_retr2_st
++  {
++    gnutls_certificate_type_t cert_type;
++    gnutls_privkey_type_t key_type;
++
++    union
++    {
++      gnutls_x509_crt_t *x509;
++      gnutls_openpgp_crt_t pgp;
++    } cert;
++    unsigned int ncerts;        /* one for pgp keys */
++
++    union
++    {
++      gnutls_x509_privkey_t x509;
++      gnutls_openpgp_privkey_t pgp;
++      gnutls_pkcs11_privkey_t pkcs11;
++    } key;
++
++    unsigned int deinit_all;    /* if non zero all keys will be deinited */
++  } gnutls_retr2_st;
++
++
++  /* Functions that allow auth_info_t structures handling
++   */
++
++  gnutls_credentials_type_t gnutls_auth_get_type (gnutls_session_t session);
++    gnutls_credentials_type_t
++    gnutls_auth_server_get_type (gnutls_session_t session);
++    gnutls_credentials_type_t
++    gnutls_auth_client_get_type (gnutls_session_t session);
++
++  /* DH */
++
++  void gnutls_dh_set_prime_bits (gnutls_session_t session, unsigned int bits);
++  int gnutls_dh_get_secret_bits (gnutls_session_t session);
++  int gnutls_dh_get_peers_public_bits (gnutls_session_t session);
++  int gnutls_dh_get_prime_bits (gnutls_session_t session);
++
++  int gnutls_dh_get_group (gnutls_session_t session, gnutls_datum_t * raw_gen,
++                           gnutls_datum_t * raw_prime);
++  int gnutls_dh_get_pubkey (gnutls_session_t session,
++                            gnutls_datum_t * raw_key);
++
++  /* RSA */
++  int gnutls_rsa_export_get_pubkey (gnutls_session_t session,
++                                    gnutls_datum_t * exponent,
++                                    gnutls_datum_t * modulus);
++  int gnutls_rsa_export_get_modulus_bits (gnutls_session_t session);
++
++  /* X509PKI */
++
++
++  /* These are set on the credentials structure.
++   */
++
++  typedef int gnutls_certificate_retrieve_function (gnutls_session_t,
++                                                    const
++                                                    gnutls_datum_t *
++                                                    req_ca_rdn,
++                                                    int nreqs,
++                                                    const
++                                                    gnutls_pk_algorithm_t
++                                                    * pk_algos,
++                                                    int
++                                                    pk_algos_length,
++                                                    gnutls_retr2_st *);
++
++
++  void gnutls_certificate_set_retrieve_function
++    (gnutls_certificate_credentials_t cred,
++     gnutls_certificate_retrieve_function * func);
++
++  typedef int gnutls_certificate_verify_function (gnutls_session_t);
++  void
++    gnutls_certificate_set_verify_function (gnutls_certificate_credentials_t
++                                            cred,
++                                            gnutls_certificate_verify_function
++                                            * func);
++
++  void
++    gnutls_certificate_server_set_request (gnutls_session_t session,
++                                           gnutls_certificate_request_t req);
++
++  /* get data from the session
++   */
++  const gnutls_datum_t *gnutls_certificate_get_peers (gnutls_session_t
++                                                      session,
++                                                      unsigned int
++                                                      *list_size);
++  const gnutls_datum_t *gnutls_certificate_get_ours (gnutls_session_t
++                                                     session);
++
++  time_t gnutls_certificate_activation_time_peers (gnutls_session_t session);
++  time_t gnutls_certificate_expiration_time_peers (gnutls_session_t session);
++
++  int gnutls_certificate_client_get_request_status (gnutls_session_t session);
++  int gnutls_certificate_verify_peers2 (gnutls_session_t session,
++                                        unsigned int *status);
++
++  int gnutls_pem_base64_encode (const char *msg, const gnutls_datum_t * data,
++                                char *result, size_t * result_size);
++  int gnutls_pem_base64_decode (const char *header,
++                                const gnutls_datum_t * b64_data,
++                                unsigned char *result, size_t * result_size);
++
++  int gnutls_pem_base64_encode_alloc (const char *msg,
++                                      const gnutls_datum_t * data,
++                                      gnutls_datum_t * result);
++  int gnutls_pem_base64_decode_alloc (const char *header,
++                                      const gnutls_datum_t * b64_data,
++                                      gnutls_datum_t * result);
++
++  /* key_usage will be an OR of the following values:
++   */
++
++  /* when the key is to be used for signing: */
++#define GNUTLS_KEY_DIGITAL_SIGNATURE	128
++#define GNUTLS_KEY_NON_REPUDIATION	64
++  /* when the key is to be used for encryption: */
++#define GNUTLS_KEY_KEY_ENCIPHERMENT	32
++#define GNUTLS_KEY_DATA_ENCIPHERMENT	16
++#define GNUTLS_KEY_KEY_AGREEMENT	8
++#define GNUTLS_KEY_KEY_CERT_SIGN	4
++#define GNUTLS_KEY_CRL_SIGN		2
++#define GNUTLS_KEY_ENCIPHER_ONLY	1
++#define GNUTLS_KEY_DECIPHER_ONLY	32768
++
++  void
++    gnutls_certificate_set_params_function (gnutls_certificate_credentials_t
++                                            res,
++                                            gnutls_params_function * func);
++  void gnutls_anon_set_params_function (gnutls_anon_server_credentials_t res,
++                                        gnutls_params_function * func);
++  void gnutls_psk_set_params_function (gnutls_psk_server_credentials_t res,
++                                       gnutls_params_function * func);
++
++  int gnutls_hex2bin (const char *hex_data, size_t hex_size,
++                      char *bin_data, size_t * bin_size);
++
++  /* Gnutls error codes. The mapping to a TLS alert is also shown in
++   * comments.
++   */
++
++#define GNUTLS_E_SUCCESS 0
++#define	GNUTLS_E_UNKNOWN_COMPRESSION_ALGORITHM -3
++#define	GNUTLS_E_UNKNOWN_CIPHER_TYPE -6
++#define	GNUTLS_E_LARGE_PACKET -7
++#define GNUTLS_E_UNSUPPORTED_VERSION_PACKET -8  /* GNUTLS_A_PROTOCOL_VERSION */
++#define GNUTLS_E_UNEXPECTED_PACKET_LENGTH -9    /* GNUTLS_A_RECORD_OVERFLOW */
++#define GNUTLS_E_INVALID_SESSION -10
++#define GNUTLS_E_FATAL_ALERT_RECEIVED -12
++#define GNUTLS_E_UNEXPECTED_PACKET -15  /* GNUTLS_A_UNEXPECTED_MESSAGE */
++#define GNUTLS_E_WARNING_ALERT_RECEIVED -16
++#define GNUTLS_E_ERROR_IN_FINISHED_PACKET -18
++#define GNUTLS_E_UNEXPECTED_HANDSHAKE_PACKET -19
++#define	GNUTLS_E_UNKNOWN_CIPHER_SUITE -21       /* GNUTLS_A_HANDSHAKE_FAILURE */
++#define	GNUTLS_E_UNWANTED_ALGORITHM -22
++#define	GNUTLS_E_MPI_SCAN_FAILED -23
++#define GNUTLS_E_DECRYPTION_FAILED -24  /* GNUTLS_A_DECRYPTION_FAILED, GNUTLS_A_BAD_RECORD_MAC */
++#define GNUTLS_E_MEMORY_ERROR -25
++#define GNUTLS_E_DECOMPRESSION_FAILED -26       /* GNUTLS_A_DECOMPRESSION_FAILURE */
++#define GNUTLS_E_COMPRESSION_FAILED -27
++#define GNUTLS_E_AGAIN -28
++#define GNUTLS_E_EXPIRED -29
++#define GNUTLS_E_DB_ERROR -30
++#define GNUTLS_E_SRP_PWD_ERROR -31
++#define GNUTLS_E_INSUFFICIENT_CREDENTIALS -32
++#define GNUTLS_E_INSUFICIENT_CREDENTIALS GNUTLS_E_INSUFFICIENT_CREDENTIALS      /* for backwards compatibility only */
++#define GNUTLS_E_INSUFFICIENT_CRED GNUTLS_E_INSUFFICIENT_CREDENTIALS
++#define GNUTLS_E_INSUFICIENT_CRED GNUTLS_E_INSUFFICIENT_CREDENTIALS     /* for backwards compatibility only */
++
++#define GNUTLS_E_HASH_FAILED -33
++#define GNUTLS_E_BASE64_DECODING_ERROR -34
++
++#define	GNUTLS_E_MPI_PRINT_FAILED -35
++#define GNUTLS_E_REHANDSHAKE -37        /* GNUTLS_A_NO_RENEGOTIATION */
++#define GNUTLS_E_GOT_APPLICATION_DATA -38
++#define GNUTLS_E_RECORD_LIMIT_REACHED -39
++#define GNUTLS_E_ENCRYPTION_FAILED -40
++
++#define GNUTLS_E_PK_ENCRYPTION_FAILED -44
++#define GNUTLS_E_PK_DECRYPTION_FAILED -45
++#define GNUTLS_E_PK_SIGN_FAILED -46
++#define GNUTLS_E_X509_UNSUPPORTED_CRITICAL_EXTENSION -47
++#define GNUTLS_E_KEY_USAGE_VIOLATION -48
++#define GNUTLS_E_NO_CERTIFICATE_FOUND -49       /* GNUTLS_A_BAD_CERTIFICATE */
++#define GNUTLS_E_INVALID_REQUEST -50
++#define GNUTLS_E_SHORT_MEMORY_BUFFER -51
++#define GNUTLS_E_INTERRUPTED -52
++#define GNUTLS_E_PUSH_ERROR -53
++#define GNUTLS_E_PULL_ERROR -54
++#define GNUTLS_E_RECEIVED_ILLEGAL_PARAMETER -55 /* GNUTLS_A_ILLEGAL_PARAMETER */
++#define GNUTLS_E_REQUESTED_DATA_NOT_AVAILABLE -56
++#define GNUTLS_E_PKCS1_WRONG_PAD -57
++#define GNUTLS_E_RECEIVED_ILLEGAL_EXTENSION -58
++#define GNUTLS_E_INTERNAL_ERROR -59
++#define GNUTLS_E_DH_PRIME_UNACCEPTABLE -63
++#define GNUTLS_E_FILE_ERROR -64
++#define GNUTLS_E_TOO_MANY_EMPTY_PACKETS -78
++#define GNUTLS_E_UNKNOWN_PK_ALGORITHM -80
++
++
++  /* returned if libextra functionality was requested but
++   * gnutls_global_init_extra() was not called.
++   */
++#define GNUTLS_E_INIT_LIBEXTRA -82
++#define GNUTLS_E_LIBRARY_VERSION_MISMATCH -83
++
++
++  /* returned if you need to generate temporary RSA
++   * parameters. These are needed for export cipher suites.
++   */
++#define GNUTLS_E_NO_TEMPORARY_RSA_PARAMS -84
++
++#define GNUTLS_E_LZO_INIT_FAILED -85
++#define GNUTLS_E_NO_COMPRESSION_ALGORITHMS -86
++#define GNUTLS_E_NO_CIPHER_SUITES -87
++
++#define GNUTLS_E_OPENPGP_GETKEY_FAILED -88
++#define GNUTLS_E_PK_SIG_VERIFY_FAILED -89
++
++#define GNUTLS_E_ILLEGAL_SRP_USERNAME -90
++#define GNUTLS_E_SRP_PWD_PARSING_ERROR -91
++#define GNUTLS_E_NO_TEMPORARY_DH_PARAMS -93
++
++  /* For certificate and key stuff
++   */
++#define GNUTLS_E_ASN1_ELEMENT_NOT_FOUND -67
++#define GNUTLS_E_ASN1_IDENTIFIER_NOT_FOUND -68
++#define GNUTLS_E_ASN1_DER_ERROR -69
++#define GNUTLS_E_ASN1_VALUE_NOT_FOUND -70
++#define GNUTLS_E_ASN1_GENERIC_ERROR -71
++#define GNUTLS_E_ASN1_VALUE_NOT_VALID -72
++#define GNUTLS_E_ASN1_TAG_ERROR -73
++#define GNUTLS_E_ASN1_TAG_IMPLICIT -74
++#define GNUTLS_E_ASN1_TYPE_ANY_ERROR -75
++#define GNUTLS_E_ASN1_SYNTAX_ERROR -76
++#define GNUTLS_E_ASN1_DER_OVERFLOW -77
++#define GNUTLS_E_OPENPGP_UID_REVOKED -79
++#define GNUTLS_E_CERTIFICATE_ERROR -43
++#define GNUTLS_E_X509_CERTIFICATE_ERROR GNUTLS_E_CERTIFICATE_ERROR
++#define GNUTLS_E_CERTIFICATE_KEY_MISMATCH -60
++#define GNUTLS_E_UNSUPPORTED_CERTIFICATE_TYPE -61       /* GNUTLS_A_UNSUPPORTED_CERTIFICATE */
++#define GNUTLS_E_X509_UNKNOWN_SAN -62
++#define GNUTLS_E_OPENPGP_FINGERPRINT_UNSUPPORTED -94
++#define GNUTLS_E_X509_UNSUPPORTED_ATTRIBUTE -95
++#define GNUTLS_E_UNKNOWN_HASH_ALGORITHM -96
++#define GNUTLS_E_UNKNOWN_PKCS_CONTENT_TYPE -97
++#define GNUTLS_E_UNKNOWN_PKCS_BAG_TYPE -98
++#define GNUTLS_E_INVALID_PASSWORD -99
++#define GNUTLS_E_MAC_VERIFY_FAILED -100 /* for PKCS #12 MAC */
++#define GNUTLS_E_CONSTRAINT_ERROR -101
++
++#define GNUTLS_E_WARNING_IA_IPHF_RECEIVED -102
++#define GNUTLS_E_WARNING_IA_FPHF_RECEIVED -103
++
++#define GNUTLS_E_IA_VERIFY_FAILED -104
++#define GNUTLS_E_UNKNOWN_ALGORITHM -105
++#define GNUTLS_E_UNSUPPORTED_SIGNATURE_ALGORITHM -106
++#define GNUTLS_E_SAFE_RENEGOTIATION_FAILED -107
++#define GNUTLS_E_UNSAFE_RENEGOTIATION_DENIED -108
++#define GNUTLS_E_UNKNOWN_SRP_USERNAME -109
++
++#define GNUTLS_E_BASE64_ENCODING_ERROR -201
++#define GNUTLS_E_INCOMPATIBLE_GCRYPT_LIBRARY -202       /* obsolete */
++#define GNUTLS_E_INCOMPATIBLE_CRYPTO_LIBRARY -202
++#define GNUTLS_E_INCOMPATIBLE_LIBTASN1_LIBRARY -203
++
++#define GNUTLS_E_OPENPGP_KEYRING_ERROR -204
++#define GNUTLS_E_X509_UNSUPPORTED_OID -205
++
++#define GNUTLS_E_RANDOM_FAILED -206
++#define GNUTLS_E_BASE64_UNEXPECTED_HEADER_ERROR -207
++
++#define GNUTLS_E_OPENPGP_SUBKEY_ERROR -208
++
++#define GNUTLS_E_CRYPTO_ALREADY_REGISTERED -209
++
++#define GNUTLS_E_HANDSHAKE_TOO_LARGE -210
++
++#define GNUTLS_E_CRYPTODEV_IOCTL_ERROR -211
++#define GNUTLS_E_CRYPTODEV_DEVICE_ERROR -212
++
++#define GNUTLS_E_CHANNEL_BINDING_NOT_AVAILABLE -213
++#define GNUTLS_E_OPENPGP_PREFERRED_KEY_ERROR -215
++#define GNUTLS_E_INCOMPAT_DSA_KEY_WITH_TLS_PROTOCOL -216
++
++/* PKCS11 related */
++#define GNUTLS_E_PKCS11_ERROR -300
++#define GNUTLS_E_PKCS11_LOAD_ERROR -301
++#define GNUTLS_E_PARSING_ERROR -302
++#define GNUTLS_E_PKCS11_PIN_ERROR -303
++
++#define GNUTLS_E_PKCS11_SLOT_ERROR -305
++#define GNUTLS_E_LOCKING_ERROR -306
++#define GNUTLS_E_PKCS11_ATTRIBUTE_ERROR -307
++#define GNUTLS_E_PKCS11_DEVICE_ERROR -308
++#define GNUTLS_E_PKCS11_DATA_ERROR -309
++#define GNUTLS_E_PKCS11_UNSUPPORTED_FEATURE_ERROR -310
++#define GNUTLS_E_PKCS11_KEY_ERROR -311
++#define GNUTLS_E_PKCS11_PIN_EXPIRED -312
++#define GNUTLS_E_PKCS11_PIN_LOCKED -313
++#define GNUTLS_E_PKCS11_SESSION_ERROR -314
++#define GNUTLS_E_PKCS11_SIGNATURE_ERROR -315
++#define GNUTLS_E_PKCS11_TOKEN_ERROR -316
++#define GNUTLS_E_PKCS11_USER_ERROR -317
++
++#define GNUTLS_E_CRYPTO_INIT_FAILED -318
++#define GNUTLS_E_CERTIFICATE_LIST_UNSORTED -324
++
++#define GNUTLS_E_UNIMPLEMENTED_FEATURE -1250
++
++
++
++#define GNUTLS_E_APPLICATION_ERROR_MAX -65000
++#define GNUTLS_E_APPLICATION_ERROR_MIN -65500
++
++#ifdef __cplusplus
++}
++#endif
++
++#include <gnutls26/compat.h>
++
++#endif                          /* GNUTLS_H */
+diff -urN empty/include/gnutls26/openpgp.h contrib/include/gnutls26/openpgp.h
+--- empty/include/gnutls26/openpgp.h	1970-01-01 03:00:00.000000000 +0300
++++ contrib/include/gnutls26/openpgp.h	2019-02-18 16:14:12.219343390 +0300
+@@ -0,0 +1,365 @@
++/*
++ * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free
++ * Software Foundation, Inc.
++ *
++ * Author: Nikos Mavrogiannopoulos
++ *
++ * This file is part of GnuTLS.
++ *
++ * The GnuTLS is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public License
++ * as published by the Free Software Foundation; either version 2.1 of
++ * the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful, but
++ * WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301
++ * USA
++ *
++ */
++
++/* This file contains the types and prototypes for the OpenPGP
++ * key and private key parsing functions.
++ */
++
++#ifndef GNUTLS_OPENPGP_H
++#define GNUTLS_OPENPGP_H
++
++#include <gnutls26/gnutls.h>
++
++#ifdef __cplusplus
++extern "C"
++{
++#endif
++
++/* Openpgp certificate stuff
++ */
++
++/**
++ * gnutls_openpgp_crt_fmt_t:
++ * @GNUTLS_OPENPGP_FMT_RAW: OpenPGP certificate in raw format.
++ * @GNUTLS_OPENPGP_FMT_BASE64: OpenPGP certificate in base64 format.
++ *
++ * Enumeration of different OpenPGP key formats.
++ */
++  typedef enum gnutls_openpgp_crt_fmt
++  {
++    GNUTLS_OPENPGP_FMT_RAW,
++    GNUTLS_OPENPGP_FMT_BASE64
++  } gnutls_openpgp_crt_fmt_t;
++
++#define GNUTLS_OPENPGP_KEYID_SIZE 8
++  typedef unsigned char gnutls_openpgp_keyid_t[GNUTLS_OPENPGP_KEYID_SIZE];
++
++/* gnutls_openpgp_cert_t should be defined in gnutls.h
++ */
++
++  /* initializes the memory for gnutls_openpgp_crt_t struct */
++  int gnutls_openpgp_crt_init (gnutls_openpgp_crt_t * key);
++  /* frees all memory */
++  void gnutls_openpgp_crt_deinit (gnutls_openpgp_crt_t key);
++
++  int gnutls_openpgp_crt_import (gnutls_openpgp_crt_t key,
++                                 const gnutls_datum_t * data,
++                                 gnutls_openpgp_crt_fmt_t format);
++  int gnutls_openpgp_crt_export (gnutls_openpgp_crt_t key,
++                                 gnutls_openpgp_crt_fmt_t format,
++                                 void *output_data,
++                                 size_t * output_data_size);
++
++  int gnutls_openpgp_crt_print (gnutls_openpgp_crt_t cert,
++                                gnutls_certificate_print_formats_t format,
++                                gnutls_datum_t * out);
++
++/* The key_usage flags are defined in gnutls.h. They are
++ * the GNUTLS_KEY_* definitions.
++ */
++  int gnutls_openpgp_crt_get_key_usage (gnutls_openpgp_crt_t key,
++                                        unsigned int *key_usage);
++  int gnutls_openpgp_crt_get_fingerprint (gnutls_openpgp_crt_t key, void *fpr,
++                                          size_t * fprlen);
++  int gnutls_openpgp_crt_get_subkey_fingerprint (gnutls_openpgp_crt_t key,
++                                                 unsigned int idx,
++                                                 void *fpr, size_t * fprlen);
++
++  int gnutls_openpgp_crt_get_name (gnutls_openpgp_crt_t key,
++                                   int idx, char *buf, size_t * sizeof_buf);
++
++    gnutls_pk_algorithm_t
++    gnutls_openpgp_crt_get_pk_algorithm (gnutls_openpgp_crt_t key,
++                                         unsigned int *bits);
++
++  int gnutls_openpgp_crt_get_version (gnutls_openpgp_crt_t key);
++
++  time_t gnutls_openpgp_crt_get_creation_time (gnutls_openpgp_crt_t key);
++  time_t gnutls_openpgp_crt_get_expiration_time (gnutls_openpgp_crt_t key);
++
++  int gnutls_openpgp_crt_get_key_id (gnutls_openpgp_crt_t key,
++                                     gnutls_openpgp_keyid_t keyid);
++
++  int gnutls_openpgp_crt_check_hostname (gnutls_openpgp_crt_t key,
++                                         const char *hostname);
++
++  int gnutls_openpgp_crt_get_revoked_status (gnutls_openpgp_crt_t key);
++
++  int gnutls_openpgp_crt_get_subkey_count (gnutls_openpgp_crt_t key);
++  int gnutls_openpgp_crt_get_subkey_idx (gnutls_openpgp_crt_t key,
++                                         const gnutls_openpgp_keyid_t keyid);
++  int gnutls_openpgp_crt_get_subkey_revoked_status (gnutls_openpgp_crt_t key,
++                                                    unsigned int idx);
++    gnutls_pk_algorithm_t
++    gnutls_openpgp_crt_get_subkey_pk_algorithm (gnutls_openpgp_crt_t key,
++                                                unsigned int idx,
++                                                unsigned int *bits);
++  time_t gnutls_openpgp_crt_get_subkey_creation_time (gnutls_openpgp_crt_t
++                                                      key, unsigned int idx);
++  time_t gnutls_openpgp_crt_get_subkey_expiration_time (gnutls_openpgp_crt_t
++                                                        key,
++                                                        unsigned int idx);
++  int gnutls_openpgp_crt_get_subkey_id (gnutls_openpgp_crt_t key,
++                                        unsigned int idx,
++                                        gnutls_openpgp_keyid_t keyid);
++  int gnutls_openpgp_crt_get_subkey_usage (gnutls_openpgp_crt_t key,
++                                           unsigned int idx,
++                                           unsigned int *key_usage);
++
++  int gnutls_openpgp_crt_get_subkey_pk_dsa_raw (gnutls_openpgp_crt_t crt,
++                                                unsigned int idx,
++                                                gnutls_datum_t * p,
++                                                gnutls_datum_t * q,
++                                                gnutls_datum_t * g,
++                                                gnutls_datum_t * y);
++  int gnutls_openpgp_crt_get_subkey_pk_rsa_raw (gnutls_openpgp_crt_t crt,
++                                                unsigned int idx,
++                                                gnutls_datum_t * m,
++                                                gnutls_datum_t * e);
++  int gnutls_openpgp_crt_get_pk_dsa_raw (gnutls_openpgp_crt_t crt,
++                                         gnutls_datum_t * p,
++                                         gnutls_datum_t * q,
++                                         gnutls_datum_t * g,
++                                         gnutls_datum_t * y);
++  int gnutls_openpgp_crt_get_pk_rsa_raw (gnutls_openpgp_crt_t crt,
++                                         gnutls_datum_t * m,
++                                         gnutls_datum_t * e);
++
++  int gnutls_openpgp_crt_get_preferred_key_id (gnutls_openpgp_crt_t key,
++                                               gnutls_openpgp_keyid_t keyid);
++  int
++    gnutls_openpgp_crt_set_preferred_key_id (gnutls_openpgp_crt_t key,
++                                             const gnutls_openpgp_keyid_t
++                                             keyid);
++
++/* privkey stuff.
++ */
++  int gnutls_openpgp_privkey_init (gnutls_openpgp_privkey_t * key);
++  void gnutls_openpgp_privkey_deinit (gnutls_openpgp_privkey_t key);
++    gnutls_pk_algorithm_t
++    gnutls_openpgp_privkey_get_pk_algorithm (gnutls_openpgp_privkey_t key,
++                                             unsigned int *bits);
++
++    gnutls_sec_param_t
++    gnutls_openpgp_privkey_sec_param (gnutls_openpgp_privkey_t key);
++  int gnutls_openpgp_privkey_import (gnutls_openpgp_privkey_t key,
++                                     const gnutls_datum_t * data,
++                                     gnutls_openpgp_crt_fmt_t format,
++                                     const char *password,
++                                     unsigned int flags);
++
++  int gnutls_openpgp_privkey_get_fingerprint (gnutls_openpgp_privkey_t key,
++                                              void *fpr, size_t * fprlen);
++  int gnutls_openpgp_privkey_get_subkey_fingerprint (gnutls_openpgp_privkey_t
++                                                     key, unsigned int idx,
++                                                     void *fpr,
++                                                     size_t * fprlen);
++  int gnutls_openpgp_privkey_get_key_id (gnutls_openpgp_privkey_t key,
++                                         gnutls_openpgp_keyid_t keyid);
++  int gnutls_openpgp_privkey_get_subkey_count (gnutls_openpgp_privkey_t key);
++  int gnutls_openpgp_privkey_get_subkey_idx (gnutls_openpgp_privkey_t key,
++                                             const gnutls_openpgp_keyid_t
++                                             keyid);
++
++  int
++    gnutls_openpgp_privkey_get_subkey_revoked_status (gnutls_openpgp_privkey_t
++                                                      key, unsigned int idx);
++
++  int gnutls_openpgp_privkey_get_revoked_status (gnutls_openpgp_privkey_t
++                                                 key);
++
++    gnutls_pk_algorithm_t
++    gnutls_openpgp_privkey_get_subkey_pk_algorithm (gnutls_openpgp_privkey_t
++                                                    key, unsigned int idx,
++                                                    unsigned int *bits);
++
++    time_t
++    gnutls_openpgp_privkey_get_subkey_expiration_time
++    (gnutls_openpgp_privkey_t key, unsigned int idx);
++
++  int gnutls_openpgp_privkey_get_subkey_id (gnutls_openpgp_privkey_t key,
++                                            unsigned int idx,
++                                            gnutls_openpgp_keyid_t keyid);
++
++    time_t
++    gnutls_openpgp_privkey_get_subkey_creation_time (gnutls_openpgp_privkey_t
++                                                     key, unsigned int idx);
++
++  int
++    gnutls_openpgp_privkey_export_subkey_dsa_raw (gnutls_openpgp_privkey_t
++                                                  pkey, unsigned int idx,
++                                                  gnutls_datum_t * p,
++                                                  gnutls_datum_t * q,
++                                                  gnutls_datum_t * g,
++                                                  gnutls_datum_t * y,
++                                                  gnutls_datum_t * x);
++  int gnutls_openpgp_privkey_export_subkey_rsa_raw (gnutls_openpgp_privkey_t
++                                                    pkey, unsigned int idx,
++                                                    gnutls_datum_t * m,
++                                                    gnutls_datum_t * e,
++                                                    gnutls_datum_t * d,
++                                                    gnutls_datum_t * p,
++                                                    gnutls_datum_t * q,
++                                                    gnutls_datum_t * u);
++
++  int gnutls_openpgp_privkey_export_dsa_raw (gnutls_openpgp_privkey_t pkey,
++                                             gnutls_datum_t * p,
++                                             gnutls_datum_t * q,
++                                             gnutls_datum_t * g,
++                                             gnutls_datum_t * y,
++                                             gnutls_datum_t * x);
++  int gnutls_openpgp_privkey_export_rsa_raw (gnutls_openpgp_privkey_t pkey,
++                                             gnutls_datum_t * m,
++                                             gnutls_datum_t * e,
++                                             gnutls_datum_t * d,
++                                             gnutls_datum_t * p,
++                                             gnutls_datum_t * q,
++                                             gnutls_datum_t * u);
++
++  int gnutls_openpgp_privkey_export (gnutls_openpgp_privkey_t key,
++                                     gnutls_openpgp_crt_fmt_t format,
++                                     const char *password,
++                                     unsigned int flags,
++                                     void *output_data,
++                                     size_t * output_data_size);
++
++  int
++    gnutls_openpgp_privkey_set_preferred_key_id (gnutls_openpgp_privkey_t key,
++                                                 const gnutls_openpgp_keyid_t
++                                                 keyid);
++  int gnutls_openpgp_privkey_get_preferred_key_id (gnutls_openpgp_privkey_t
++                                                   key,
++                                                   gnutls_openpgp_keyid_t
++                                                   keyid);
++
++  int gnutls_openpgp_crt_get_auth_subkey (gnutls_openpgp_crt_t crt,
++                                          gnutls_openpgp_keyid_t keyid,
++                                          unsigned int flag);
++
++/* Keyring stuff.
++ */
++
++  int gnutls_openpgp_keyring_init (gnutls_openpgp_keyring_t * keyring);
++  void gnutls_openpgp_keyring_deinit (gnutls_openpgp_keyring_t keyring);
++
++  int gnutls_openpgp_keyring_import (gnutls_openpgp_keyring_t keyring,
++                                     const gnutls_datum_t * data,
++                                     gnutls_openpgp_crt_fmt_t format);
++
++  int gnutls_openpgp_keyring_check_id (gnutls_openpgp_keyring_t ring,
++                                       const gnutls_openpgp_keyid_t keyid,
++                                       unsigned int flags);
++
++
++  int gnutls_openpgp_crt_verify_ring (gnutls_openpgp_crt_t key,
++                                      gnutls_openpgp_keyring_t keyring,
++                                      unsigned int flags, unsigned int *verify
++                                      /* the output of the verification */ );
++
++  int gnutls_openpgp_crt_verify_self (gnutls_openpgp_crt_t key,
++                                      unsigned int flags,
++                                      unsigned int *verify);
++
++  int gnutls_openpgp_keyring_get_crt (gnutls_openpgp_keyring_t ring,
++                                      unsigned int idx,
++                                      gnutls_openpgp_crt_t * cert);
++
++  int gnutls_openpgp_keyring_get_crt_count (gnutls_openpgp_keyring_t ring);
++
++
++
++/**
++ * gnutls_openpgp_recv_key_func:
++ * @session: a TLS session
++ * @keyfpr: key fingerprint
++ * @keyfpr_length: length of key fingerprint
++ * @key: output key.
++ *
++ * A callback of this type is used to retrieve OpenPGP keys.  Only
++ * useful on the server, and will only be used if the peer send a key
++ * fingerprint instead of a full key.  See also
++ * gnutls_openpgp_set_recv_key_function().
++ *
++ * Returns: On success, %GNUTLS_E_SUCCESS (zero) is returned,
++ *   otherwise an error code is returned.
++ */
++  typedef int (*gnutls_openpgp_recv_key_func) (gnutls_session_t session,
++                                               const unsigned char *keyfpr,
++                                               unsigned int keyfpr_length,
++                                               gnutls_datum_t * key);
++
++  void
++    gnutls_openpgp_set_recv_key_function (gnutls_session_t session,
++                                          gnutls_openpgp_recv_key_func func);
++
++
++
++/* certificate authentication stuff.
++ */
++  int gnutls_certificate_set_openpgp_key (gnutls_certificate_credentials_t
++                                          res, gnutls_openpgp_crt_t key,
++                                          gnutls_openpgp_privkey_t pkey);
++
++  int
++    gnutls_certificate_set_openpgp_key_file (gnutls_certificate_credentials_t
++                                             res, const char *certfile,
++                                             const char *keyfile,
++                                             gnutls_openpgp_crt_fmt_t format);
++  int gnutls_certificate_set_openpgp_key_mem (gnutls_certificate_credentials_t
++                                              res,
++                                              const gnutls_datum_t * cert,
++                                              const gnutls_datum_t * key,
++                                              gnutls_openpgp_crt_fmt_t
++                                              format);
++
++  int
++    gnutls_certificate_set_openpgp_key_file2 (gnutls_certificate_credentials_t
++                                              res, const char *certfile,
++                                              const char *keyfile,
++                                              const char *subkey_id,
++                                              gnutls_openpgp_crt_fmt_t
++                                              format);
++  int
++    gnutls_certificate_set_openpgp_key_mem2 (gnutls_certificate_credentials_t
++                                             res, const gnutls_datum_t * cert,
++                                             const gnutls_datum_t * key,
++                                             const char *subkey_id,
++                                             gnutls_openpgp_crt_fmt_t format);
++
++  int
++    gnutls_certificate_set_openpgp_keyring_mem
++    (gnutls_certificate_credentials_t c, const unsigned char *data,
++     size_t dlen, gnutls_openpgp_crt_fmt_t format);
++
++  int
++    gnutls_certificate_set_openpgp_keyring_file
++    (gnutls_certificate_credentials_t c, const char *file,
++     gnutls_openpgp_crt_fmt_t format);
++
++#ifdef __cplusplus
++}
++#endif
++
++#endif                          /* GNUTLS_OPENPGP_H */
+diff -urN empty/include/gnutls26/pkcs11.h contrib/include/gnutls26/pkcs11.h
+--- empty/include/gnutls26/pkcs11.h	1970-01-01 03:00:00.000000000 +0300
++++ contrib/include/gnutls26/pkcs11.h	2019-02-18 16:14:12.219343390 +0300
+@@ -0,0 +1,304 @@
++#ifndef __GNUTLS_PKCS11_H
++#define __GNUTLS_PKCS11_H
++
++
++#include <stdarg.h>
++#include <gnutls26/gnutls.h>
++#include <gnutls26/x509.h>
++
++#define GNUTLS_PKCS11_MAX_PIN_LEN 32
++
++/* Token callback function. The callback will be used to
++ * ask the user to re-enter the token with given null terminated
++ * label. Callback should return zero if token has been inserted
++ * by user and a negative error code otherwise. It might be called
++ * multiple times if the token is not detected and the retry counter
++ * will be increased.
++ */
++typedef int (*gnutls_pkcs11_token_callback_t) (void *const global_data,
++                                               const char *const label,
++                                               const unsigned retry);
++
++/**
++ * gnutls_pkcs11_pin_flag_t:
++ * @GNUTLS_PKCS11_PIN_USER: The PIN for the user.
++ * @GNUTLS_PKCS11_PIN_SO: The PIN for the security officer.
++ * @GNUTLS_PKCS11_PIN_CONTEXT_SPECIFIC: The PIN is for a specific action and key like signing.
++ * @GNUTLS_PKCS11_PIN_FINAL_TRY: This is the final try before blocking.
++ * @GNUTLS_PKCS11_PIN_COUNT_LOW: Few tries remain before token blocks.
++ * @GNUTLS_PKCS11_PIN_WRONG: Last given PIN was not correct.
++ *
++ * Enumeration of different PIN flags.
++ */
++typedef enum
++  {
++    GNUTLS_PKCS11_PIN_USER = (1 << 0),
++    GNUTLS_PKCS11_PIN_SO = (1 << 1),
++    GNUTLS_PKCS11_PIN_FINAL_TRY = (1 << 2),
++    GNUTLS_PKCS11_PIN_COUNT_LOW = (1 << 3),
++    GNUTLS_PKCS11_PIN_CONTEXT_SPECIFIC = (1 << 4),
++    GNUTLS_PKCS11_PIN_WRONG = (1 << 5),
++  } gnutls_pkcs11_pin_flag_t;
++
++/**
++ * gnutls_pkcs11_pin_callback_t:
++ * @userdata: user-controlled data from gnutls_pkcs11_set_pin_function().
++ * @attempt: pin-attempt counter, initially 0.
++ * @token_url: PKCS11 URL.
++ * @token_label: label of PKCS11 token.
++ * @flags: a #gnutls_pkcs11_pin_flag_t flag.
++ * @pin: buffer to hold PIN, of size @pin_max.
++ * @pin_max: size of @pin buffer.
++ *
++ * Callback function type for PKCS#11 PIN entry.  It is set by
++ * gnutls_pkcs11_set_pin_function().
++ *
++ * The callback should provides the PIN code to unlock the token with
++ * label @token_label, specified by the URL @token_url.
++ *
++ * The PIN code, as a NUL-terminated ASCII string, should be copied
++ * into the @pin buffer (of maximum size @pin_max), and return 0 to
++ * indicate success.  Alternatively, the callback may return a
++ * negative gnutls error code to indicate failure and cancel PIN entry
++ * (in which case, the contents of the @pin parameter are ignored).
++ *
++ * When a PIN is required, the callback will be invoked repeatedly
++ * (and indefinitely) until either the returned PIN code is correct,
++ * the callback returns failure, or the token refuses login (e.g. when
++ * the token is locked due to too many incorrect PINs!).  For the
++ * first such invocation, the @attempt counter will have value zero;
++ * it will increase by one for each subsequent attempt.
++ *
++ * Returns: %GNUTLS_E_SUCCESS (0) on success or a negative error code on error.
++ *
++ * Since: 2.12.0
++ **/
++typedef int (*gnutls_pkcs11_pin_callback_t) (void *userdata, int attempt,
++                                             const char *token_url,
++                                             const char *token_label,
++                                             unsigned int flags
++                                             /*gnutls_pkcs11_pin_flag_t */ ,
++                                             char *pin, size_t pin_max);
++
++struct gnutls_pkcs11_obj_st;
++typedef struct gnutls_pkcs11_obj_st *gnutls_pkcs11_obj_t;
++
++
++#define GNUTLS_PKCS11_FLAG_MANUAL 0     /* Manual loading of libraries */
++#define GNUTLS_PKCS11_FLAG_AUTO 1       /* Automatically load libraries by reading /etc/gnutls/pkcs11.conf */
++
++/* pkcs11.conf format:
++ * load = /lib/xxx-pkcs11.so
++ * load = /lib/yyy-pkcs11.so
++ */
++
++int gnutls_pkcs11_init (unsigned int flags, const char *deprecated_config_file);
++void gnutls_pkcs11_deinit (void);
++void gnutls_pkcs11_set_token_function (gnutls_pkcs11_token_callback_t fn,
++                                       void *userdata);
++
++void gnutls_pkcs11_set_pin_function (gnutls_pkcs11_pin_callback_t fn,
++                                     void *userdata);
++int gnutls_pkcs11_add_provider (const char *name, const char *params);
++int gnutls_pkcs11_obj_init (gnutls_pkcs11_obj_t * obj);
++
++#define GNUTLS_PKCS11_OBJ_FLAG_LOGIN (1<<0)     /* force login in the token for the operation */
++#define GNUTLS_PKCS11_OBJ_FLAG_MARK_TRUSTED (1<<1)      /* object marked as trusted */
++#define GNUTLS_PKCS11_OBJ_FLAG_MARK_SENSITIVE (1<<2)    /* object marked as sensitive (unexportable) */
++#define GNUTLS_PKCS11_OBJ_FLAG_LOGIN_SO (1<<3)     /* force login as a security officer in the token for the operation */
++
++  /**
++   * gnutls_pkcs11_url_type_t:
++   * @GNUTLS_PKCS11_URL_GENERIC: A generic-purpose URL.
++   * @GNUTLS_PKCS11_URL_LIB: A URL that specifies the library used as well.
++   * @GNUTLS_PKCS11_URL_LIB_VERSION: A URL that specifies the library and its version.
++   *
++   * Enumeration of different URL extraction flags.
++   */
++typedef enum
++{
++  GNUTLS_PKCS11_URL_GENERIC,    /* URL specifies the object on token level */
++  GNUTLS_PKCS11_URL_LIB,        /* URL specifies the object on module level */
++  GNUTLS_PKCS11_URL_LIB_VERSION /* URL specifies the object on module and version level */
++} gnutls_pkcs11_url_type_t;
++
++int gnutls_pkcs11_obj_import_url (gnutls_pkcs11_obj_t, const char *url,
++                                  unsigned int flags
++                                  /* GNUTLS_PKCS11_OBJ_FLAG_* */ );
++int gnutls_pkcs11_obj_export_url (gnutls_pkcs11_obj_t obj,
++                                  gnutls_pkcs11_url_type_t detailed,
++                                  char **url);
++void gnutls_pkcs11_obj_deinit (gnutls_pkcs11_obj_t obj);
++
++int gnutls_pkcs11_obj_export (gnutls_pkcs11_obj_t obj,
++                              void *output_data, size_t * output_data_size);
++
++
++int gnutls_pkcs11_copy_x509_crt (const char *token_url, gnutls_x509_crt_t crt,
++                                 const char *label, unsigned int flags
++                                 /* GNUTLS_PKCS11_OBJ_FLAG_* */ );
++int gnutls_pkcs11_copy_x509_privkey (const char *token_url, gnutls_x509_privkey_t key, 
++  const char *label, unsigned int key_usage /*GNUTLS_KEY_* */, unsigned int flags
++                                     /* GNUTLS_PKCS11_OBJ_FLAG_* */ );
++int gnutls_pkcs11_delete_url (const char *object_url, unsigned int flags
++                              /* GNUTLS_PKCS11_OBJ_FLAG_* */ );
++
++int gnutls_pkcs11_copy_secret_key (const char *token_url,
++                                   gnutls_datum_t * key, const char *label,
++                                   unsigned int key_usage /* GNUTLS_KEY_* */ ,
++                                   unsigned int flags
++                                   /* GNUTLS_PKCS11_OBJ_FLAG_* */ );
++
++  /**
++   * gnutls_pkcs11_obj_info_t:
++   * @GNUTLS_PKCS11_OBJ_ID_HEX: The object ID in hex.
++   * @GNUTLS_PKCS11_OBJ_LABEL: The object label.
++   * @GNUTLS_PKCS11_OBJ_TOKEN_LABEL: The token's label.
++   * @GNUTLS_PKCS11_OBJ_TOKEN_SERIAL: The token's serial number.
++   * @GNUTLS_PKCS11_OBJ_TOKEN_MANUFACTURER: The token's manufacturer.
++   * @GNUTLS_PKCS11_OBJ_TOKEN_MODEL: The token's model.
++   * @GNUTLS_PKCS11_OBJ_ID: The object ID.
++   * @GNUTLS_PKCS11_OBJ_LIBRARY_VERSION: The library's used to access the object version.
++   * @GNUTLS_PKCS11_OBJ_LIBRARY_DESCRIPTION: The library's used to access the object description (name).
++   * @GNUTLS_PKCS11_OBJ_LIBRARY_MANUFACTURER: The library's used to access the object manufacturer name.
++   *
++   * Enumeration of several object information types.
++   */
++typedef enum
++{
++  GNUTLS_PKCS11_OBJ_ID_HEX = 1,
++  GNUTLS_PKCS11_OBJ_LABEL,
++  GNUTLS_PKCS11_OBJ_TOKEN_LABEL,
++  GNUTLS_PKCS11_OBJ_TOKEN_SERIAL,
++  GNUTLS_PKCS11_OBJ_TOKEN_MANUFACTURER,
++  GNUTLS_PKCS11_OBJ_TOKEN_MODEL,
++  GNUTLS_PKCS11_OBJ_ID,
++  /* the pkcs11 provider library info  */
++  GNUTLS_PKCS11_OBJ_LIBRARY_VERSION,
++  GNUTLS_PKCS11_OBJ_LIBRARY_DESCRIPTION,
++  GNUTLS_PKCS11_OBJ_LIBRARY_MANUFACTURER
++} gnutls_pkcs11_obj_info_t;
++
++int gnutls_pkcs11_obj_get_info (gnutls_pkcs11_obj_t crt,
++                                gnutls_pkcs11_obj_info_t itype, void *output,
++                                size_t * output_size);
++
++  /**
++   * gnutls_pkcs11_obj_attr_t:
++   * @GNUTLS_PKCS11_OBJ_ATTR_CRT_ALL: Specify all certificates.
++   * @GNUTLS_PKCS11_OBJ_ATTR_CRT_TRUSTED: Specify all certificates marked as trusted.
++   * @GNUTLS_PKCS11_OBJ_ATTR_CRT_WITH_PRIVKEY: Specify all certificates with a corresponding private key.
++   * @GNUTLS_PKCS11_OBJ_ATTR_PUBKEY: Specify all public keys.
++   * @GNUTLS_PKCS11_OBJ_ATTR_PRIVKEY: Specify all private keys.
++   * @GNUTLS_PKCS11_OBJ_ATTR_ALL: Specify all objects.
++   *
++   * Enumeration of several attributes for object enumeration.
++   */
++typedef enum
++{
++  GNUTLS_PKCS11_OBJ_ATTR_CRT_ALL = 1,   /* all certificates */
++  GNUTLS_PKCS11_OBJ_ATTR_CRT_TRUSTED,   /* certificates marked as trusted */
++  GNUTLS_PKCS11_OBJ_ATTR_CRT_WITH_PRIVKEY,      /* certificates with corresponding private key */
++  GNUTLS_PKCS11_OBJ_ATTR_PUBKEY,        /* public keys */
++  GNUTLS_PKCS11_OBJ_ATTR_PRIVKEY,       /* private keys */
++  GNUTLS_PKCS11_OBJ_ATTR_ALL    /* everything! */
++} gnutls_pkcs11_obj_attr_t;
++
++  /**
++   * gnutls_pkcs11_token_info_t:
++   * @GNUTLS_PKCS11_TOKEN_LABEL: The token's label
++   * @GNUTLS_PKCS11_TOKEN_SERIAL: The token's serial number
++   * @GNUTLS_PKCS11_TOKEN_MANUFACTURER: The token's manufacturer
++   * @GNUTLS_PKCS11_TOKEN_MODEL: The token's model
++   *
++   * Enumeration of types for retrieving token information.
++   */
++typedef enum
++{
++  GNUTLS_PKCS11_TOKEN_LABEL,
++  GNUTLS_PKCS11_TOKEN_SERIAL,
++  GNUTLS_PKCS11_TOKEN_MANUFACTURER,
++  GNUTLS_PKCS11_TOKEN_MODEL
++} gnutls_pkcs11_token_info_t;
++
++  /**
++   * gnutls_pkcs11_obj_type_t:
++   * @GNUTLS_PKCS11_OBJ_UNKNOWN: Unknown PKCS11 object.
++   * @GNUTLS_PKCS11_OBJ_X509_CRT: X.509 certificate.
++   * @GNUTLS_PKCS11_OBJ_PUBKEY: Public key.
++   * @GNUTLS_PKCS11_OBJ_PRIVKEY: Private key.
++   * @GNUTLS_PKCS11_OBJ_SECRET_KEY: Secret key.
++   * @GNUTLS_PKCS11_OBJ_DATA: Data object.
++   *
++   * Enumeration of object types.
++   */
++typedef enum
++{
++  GNUTLS_PKCS11_OBJ_UNKNOWN,
++  GNUTLS_PKCS11_OBJ_X509_CRT,
++  GNUTLS_PKCS11_OBJ_PUBKEY,
++  GNUTLS_PKCS11_OBJ_PRIVKEY,
++  GNUTLS_PKCS11_OBJ_SECRET_KEY,
++  GNUTLS_PKCS11_OBJ_DATA
++} gnutls_pkcs11_obj_type_t;
++
++int
++gnutls_pkcs11_token_init (const char *token_url,
++                          const char *so_pin, const char *label);
++
++int
++gnutls_pkcs11_token_get_mechanism (const char *url, int idx,
++                                   unsigned long *mechanism);
++
++int gnutls_pkcs11_token_set_pin (const char *token_url, const char *oldpin, const char *newpin, unsigned int flags      /*gnutls_pkcs11_pin_flag_t */
++  );
++
++int gnutls_pkcs11_token_get_url (unsigned int seq,
++                                 gnutls_pkcs11_url_type_t detailed,
++                                 char **url);
++int gnutls_pkcs11_token_get_info (const char *url, gnutls_pkcs11_token_info_t ttype,
++                                  void *output, size_t * output_size);
++
++#define GNUTLS_PKCS11_TOKEN_HW 1
++int gnutls_pkcs11_token_get_flags (const char *url, unsigned int *flags);
++
++int gnutls_pkcs11_obj_list_import_url (gnutls_pkcs11_obj_t * p_list,
++                                       unsigned int *const n_list,
++                                       const char *url,
++                                       gnutls_pkcs11_obj_attr_t attrs,
++                                       unsigned int flags
++                                       /* GNUTLS_PKCS11_OBJ_FLAG_* */ );
++
++int gnutls_x509_crt_import_pkcs11 (gnutls_x509_crt_t crt,
++                                   gnutls_pkcs11_obj_t pkcs11_crt);
++int gnutls_x509_crt_import_pkcs11_url (gnutls_x509_crt_t crt, const char *url,
++                                       unsigned int flags
++                                       /* GNUTLS_PKCS11_OBJ_FLAG_* */ );
++
++gnutls_pkcs11_obj_type_t gnutls_pkcs11_obj_get_type (gnutls_pkcs11_obj_t
++                                                     certificate);
++const char *gnutls_pkcs11_type_get_name (gnutls_pkcs11_obj_type_t);
++
++int gnutls_x509_crt_list_import_pkcs11 (gnutls_x509_crt_t * certs, unsigned int cert_max, 
++  gnutls_pkcs11_obj_t * const objs, unsigned int flags  /* must be zero */);
++
++
++/* private key functions...*/
++int gnutls_pkcs11_privkey_init (gnutls_pkcs11_privkey_t * key);
++void gnutls_pkcs11_privkey_deinit (gnutls_pkcs11_privkey_t key);
++int gnutls_pkcs11_privkey_get_pk_algorithm (gnutls_pkcs11_privkey_t key,
++                                            unsigned int *bits);
++int gnutls_pkcs11_privkey_get_info (gnutls_pkcs11_privkey_t pkey,
++                                    gnutls_pkcs11_obj_info_t itype,
++                                    void *output, size_t * output_size);
++
++int gnutls_pkcs11_privkey_import_url (gnutls_pkcs11_privkey_t pkey,
++                                      const char *url, unsigned int flags);
++
++int gnutls_pkcs11_privkey_export_url (gnutls_pkcs11_privkey_t key,
++                                      gnutls_pkcs11_url_type_t detailed,
++                                      char **url);
++
++/** @} */
++
++#endif
+diff -urN empty/include/gnutls26/pkcs12.h contrib/include/gnutls26/pkcs12.h
+--- empty/include/gnutls26/pkcs12.h	1970-01-01 03:00:00.000000000 +0300
++++ contrib/include/gnutls26/pkcs12.h	2019-02-18 16:14:12.219343390 +0300
+@@ -0,0 +1,123 @@
++/*
++ * Copyright (C) 2003, 2004, 2005, 2007, 2008, 2009, 2010 Free Software
++ * Foundation, Inc.
++ *
++ * Author: Nikos Mavrogiannopoulos
++ *
++ * This file is part of GnuTLS.
++ *
++ * The GnuTLS is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public License
++ * as published by the Free Software Foundation; either version 2.1 of
++ * the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful, but
++ * WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301
++ * USA
++ *
++ */
++
++#ifndef GNUTLS_PKCS12_H
++#define GNUTLS_PKCS12_H
++
++#include <gnutls26/x509.h>
++
++#ifdef __cplusplus
++extern "C"
++{
++#endif
++
++  /* PKCS12 structures handling
++   */
++  struct gnutls_pkcs12_int;
++  typedef struct gnutls_pkcs12_int *gnutls_pkcs12_t;
++
++  struct gnutls_pkcs12_bag_int;
++  typedef struct gnutls_pkcs12_bag_int *gnutls_pkcs12_bag_t;
++
++  int gnutls_pkcs12_init (gnutls_pkcs12_t * pkcs12);
++  void gnutls_pkcs12_deinit (gnutls_pkcs12_t pkcs12);
++  int gnutls_pkcs12_import (gnutls_pkcs12_t pkcs12,
++                            const gnutls_datum_t * data,
++                            gnutls_x509_crt_fmt_t format, unsigned int flags);
++  int gnutls_pkcs12_export (gnutls_pkcs12_t pkcs12,
++                            gnutls_x509_crt_fmt_t format,
++                            void *output_data, size_t * output_data_size);
++
++  int gnutls_pkcs12_get_bag (gnutls_pkcs12_t pkcs12,
++                             int indx, gnutls_pkcs12_bag_t bag);
++  int gnutls_pkcs12_set_bag (gnutls_pkcs12_t pkcs12, gnutls_pkcs12_bag_t bag);
++
++  int gnutls_pkcs12_generate_mac (gnutls_pkcs12_t pkcs12, const char *pass);
++  int gnutls_pkcs12_verify_mac (gnutls_pkcs12_t pkcs12, const char *pass);
++
++  int gnutls_pkcs12_bag_decrypt (gnutls_pkcs12_bag_t bag, const char *pass);
++  int gnutls_pkcs12_bag_encrypt (gnutls_pkcs12_bag_t bag, const char *pass,
++                                 unsigned int flags);
++
++  /**
++   * gnutls_pkcs12_bag_type_t:
++   * @GNUTLS_BAG_EMPTY: Empty PKCS-12 bag.
++   * @GNUTLS_BAG_PKCS8_ENCRYPTED_KEY: PKCS-12 bag with PKCS-8 encrypted key.
++   * @GNUTLS_BAG_PKCS8_KEY: PKCS-12 bag with PKCS-8 key.
++   * @GNUTLS_BAG_CERTIFICATE: PKCS-12 bag with certificate.
++   * @GNUTLS_BAG_CRL: PKCS-12 bag with CRL.
++   * @GNUTLS_BAG_SECRET: PKCS-12 bag with secret PKCS-9 keys.
++   * @GNUTLS_BAG_ENCRYPTED: Encrypted PKCS-12 bag.
++   * @GNUTLS_BAG_UNKNOWN: Unknown PKCS-12 bag.
++   *
++   * Enumeration of different PKCS 12 bag types.
++   */
++  typedef enum gnutls_pkcs12_bag_type_t
++  {
++    GNUTLS_BAG_EMPTY = 0,
++    GNUTLS_BAG_PKCS8_ENCRYPTED_KEY = 1,
++    GNUTLS_BAG_PKCS8_KEY = 2,
++    GNUTLS_BAG_CERTIFICATE = 3,
++    GNUTLS_BAG_CRL = 4,
++    GNUTLS_BAG_SECRET = 5,      /* Secret data. Underspecified in pkcs-12,
++                                 * gnutls extension. We use the PKCS-9
++                                 * random nonce ID 1.2.840.113549.1.9.25.3
++                                 * to store randomly generated keys.
++                                 */
++    GNUTLS_BAG_ENCRYPTED = 10,
++    GNUTLS_BAG_UNKNOWN = 20
++  } gnutls_pkcs12_bag_type_t;
++
++    gnutls_pkcs12_bag_type_t
++    gnutls_pkcs12_bag_get_type (gnutls_pkcs12_bag_t bag, int indx);
++  int gnutls_pkcs12_bag_get_data (gnutls_pkcs12_bag_t bag, int indx,
++                                  gnutls_datum_t * data);
++  int gnutls_pkcs12_bag_set_data (gnutls_pkcs12_bag_t bag,
++                                  gnutls_pkcs12_bag_type_t type,
++                                  const gnutls_datum_t * data);
++  int gnutls_pkcs12_bag_set_crl (gnutls_pkcs12_bag_t bag,
++                                 gnutls_x509_crl_t crl);
++  int gnutls_pkcs12_bag_set_crt (gnutls_pkcs12_bag_t bag,
++                                 gnutls_x509_crt_t crt);
++
++  int gnutls_pkcs12_bag_init (gnutls_pkcs12_bag_t * bag);
++  void gnutls_pkcs12_bag_deinit (gnutls_pkcs12_bag_t bag);
++  int gnutls_pkcs12_bag_get_count (gnutls_pkcs12_bag_t bag);
++
++  int gnutls_pkcs12_bag_get_key_id (gnutls_pkcs12_bag_t bag, int indx,
++                                    gnutls_datum_t * id);
++  int gnutls_pkcs12_bag_set_key_id (gnutls_pkcs12_bag_t bag, int indx,
++                                    const gnutls_datum_t * id);
++
++  int gnutls_pkcs12_bag_get_friendly_name (gnutls_pkcs12_bag_t bag, int indx,
++                                           char **name);
++  int gnutls_pkcs12_bag_set_friendly_name (gnutls_pkcs12_bag_t bag, int indx,
++                                           const char *name);
++
++#ifdef __cplusplus
++}
++#endif
++
++#endif                          /* GNUTLS_PKCS12_H */
+diff -urN empty/include/gnutls26/x509.h contrib/include/gnutls26/x509.h
+--- empty/include/gnutls26/x509.h	1970-01-01 03:00:00.000000000 +0300
++++ contrib/include/gnutls26/x509.h	2019-02-18 16:14:12.220343403 +0300
+@@ -0,0 +1,827 @@
++/*
++ * Copyright (C) 2003, 2004, 2005, 2007, 2008, 2009, 2010 Free Software
++ * Foundation, Inc.
++ *
++ * Author: Nikos Mavrogiannopoulos
++ *
++ * This file is part of GnuTLS.
++ *
++ * The GnuTLS is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public License
++ * as published by the Free Software Foundation; either version 2.1 of
++ * the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful, but
++ * WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301
++ * USA
++ *
++ */
++
++/* This file contains the types and prototypes for the X.509
++ * certificate and CRL handling functions.
++ */
++
++#ifndef GNUTLS_X509_H
++#define GNUTLS_X509_H
++
++#include <gnutls26/gnutls.h>
++
++#ifdef __cplusplus
++extern "C"
++{
++#endif
++
++/* Some OIDs usually found in Distinguished names, or
++ * in Subject Directory Attribute extensions.
++ */
++#define GNUTLS_OID_X520_COUNTRY_NAME		"2.5.4.6"
++#define GNUTLS_OID_X520_ORGANIZATION_NAME	"2.5.4.10"
++#define GNUTLS_OID_X520_ORGANIZATIONAL_UNIT_NAME "2.5.4.11"
++#define GNUTLS_OID_X520_COMMON_NAME		"2.5.4.3"
++#define GNUTLS_OID_X520_LOCALITY_NAME		"2.5.4.7"
++#define GNUTLS_OID_X520_STATE_OR_PROVINCE_NAME	"2.5.4.8"
++
++#define GNUTLS_OID_X520_INITIALS		"2.5.4.43"
++#define GNUTLS_OID_X520_GENERATION_QUALIFIER	"2.5.4.44"
++#define GNUTLS_OID_X520_SURNAME			"2.5.4.4"
++#define GNUTLS_OID_X520_GIVEN_NAME		"2.5.4.42"
++#define GNUTLS_OID_X520_TITLE			"2.5.4.12"
++#define GNUTLS_OID_X520_DN_QUALIFIER		"2.5.4.46"
++#define GNUTLS_OID_X520_PSEUDONYM		"2.5.4.65"
++#define GNUTLS_OID_X520_POSTALCODE              "2.5.4.17"
++#define GNUTLS_OID_X520_NAME                    "2.5.4.41"
++
++#define GNUTLS_OID_LDAP_DC			"0.9.2342.19200300.100.1.25"
++#define GNUTLS_OID_LDAP_UID			"0.9.2342.19200300.100.1.1"
++
++/* The following should not be included in DN.
++ */
++#define GNUTLS_OID_PKCS9_EMAIL			"1.2.840.113549.1.9.1"
++
++#define GNUTLS_OID_PKIX_DATE_OF_BIRTH		"1.3.6.1.5.5.7.9.1"
++#define GNUTLS_OID_PKIX_PLACE_OF_BIRTH		"1.3.6.1.5.5.7.9.2"
++#define GNUTLS_OID_PKIX_GENDER			"1.3.6.1.5.5.7.9.3"
++#define GNUTLS_OID_PKIX_COUNTRY_OF_CITIZENSHIP	"1.3.6.1.5.5.7.9.4"
++#define GNUTLS_OID_PKIX_COUNTRY_OF_RESIDENCE	"1.3.6.1.5.5.7.9.5"
++
++/* Key purpose Object Identifiers.
++ */
++#define GNUTLS_KP_TLS_WWW_SERVER		"1.3.6.1.5.5.7.3.1"
++#define GNUTLS_KP_TLS_WWW_CLIENT                "1.3.6.1.5.5.7.3.2"
++#define GNUTLS_KP_CODE_SIGNING			"1.3.6.1.5.5.7.3.3"
++#define GNUTLS_KP_EMAIL_PROTECTION		"1.3.6.1.5.5.7.3.4"
++#define GNUTLS_KP_TIME_STAMPING			"1.3.6.1.5.5.7.3.8"
++#define GNUTLS_KP_OCSP_SIGNING			"1.3.6.1.5.5.7.3.9"
++#define GNUTLS_KP_IPSEC_IKE			"1.3.6.1.5.5.7.3.17"
++#define GNUTLS_KP_ANY				"2.5.29.37.0"
++
++#define GNUTLS_FSAN_SET 0
++#define GNUTLS_FSAN_APPEND 1
++
++/* Certificate handling functions.
++ */
++
++/**
++ * gnutls_certificate_import_flags:
++ * @GNUTLS_X509_CRT_LIST_IMPORT_FAIL_IF_EXCEED: Fail if the
++ *   certificates in the buffer are more than the space allocated for
++ *   certificates. The error code will be %GNUTLS_E_SHORT_MEMORY_BUFFER.
++ * @GNUTLS_X509_CRT_LIST_FAIL_IF_UNSORTED: Fail if the certificates
++ *   in the buffer are not ordered starting from subject to issuer.
++ *   The error code will be %GNUTLS_E_CERTIFICATE_LIST_UNSORTED.
++ *
++ * Enumeration of different certificate import flags.
++ */
++  typedef enum gnutls_certificate_import_flags
++  {
++    GNUTLS_X509_CRT_LIST_IMPORT_FAIL_IF_EXCEED = 1,
++    GNUTLS_X509_CRT_LIST_FAIL_IF_UNSORTED = 2
++  } gnutls_certificate_import_flags;
++
++  int gnutls_x509_crt_init (gnutls_x509_crt_t * cert);
++  void gnutls_x509_crt_deinit (gnutls_x509_crt_t cert);
++  int gnutls_x509_crt_import (gnutls_x509_crt_t cert,
++                              const gnutls_datum_t * data,
++                              gnutls_x509_crt_fmt_t format);
++  int gnutls_x509_crt_list_import (gnutls_x509_crt_t * certs,
++                                   unsigned int *cert_max,
++                                   const gnutls_datum_t * data,
++                                   gnutls_x509_crt_fmt_t format,
++                                   unsigned int flags);
++  int gnutls_x509_crt_export (gnutls_x509_crt_t cert,
++                              gnutls_x509_crt_fmt_t format,
++                              void *output_data, size_t * output_data_size);
++  int gnutls_x509_crt_get_issuer_dn (gnutls_x509_crt_t cert, char *buf,
++                                     size_t * sizeof_buf);
++  int gnutls_x509_crt_get_issuer_dn_oid (gnutls_x509_crt_t cert, int indx,
++                                         void *oid, size_t * sizeof_oid);
++  int gnutls_x509_crt_get_issuer_dn_by_oid (gnutls_x509_crt_t cert,
++                                            const char *oid, int indx,
++                                            unsigned int raw_flag,
++                                            void *buf, size_t * sizeof_buf);
++  int gnutls_x509_crt_get_dn (gnutls_x509_crt_t cert, char *buf,
++                              size_t * sizeof_buf);
++  int gnutls_x509_crt_get_dn_oid (gnutls_x509_crt_t cert, int indx,
++                                  void *oid, size_t * sizeof_oid);
++  int gnutls_x509_crt_get_dn_by_oid (gnutls_x509_crt_t cert,
++                                     const char *oid, int indx,
++                                     unsigned int raw_flag, void *buf,
++                                     size_t * sizeof_buf);
++  int gnutls_x509_crt_check_hostname (gnutls_x509_crt_t cert,
++                                      const char *hostname);
++
++  int gnutls_x509_crt_get_signature_algorithm (gnutls_x509_crt_t cert);
++  int gnutls_x509_crt_get_signature (gnutls_x509_crt_t cert,
++                                     char *sig, size_t * sizeof_sig);
++  int gnutls_x509_crt_get_version (gnutls_x509_crt_t cert);
++  int gnutls_x509_crt_get_key_id (gnutls_x509_crt_t crt,
++                                  unsigned int flags,
++                                  unsigned char *output_data,
++                                  size_t * output_data_size);
++
++  int gnutls_x509_crt_set_authority_key_id (gnutls_x509_crt_t cert,
++                                            const void *id, size_t id_size);
++  int gnutls_x509_crt_get_authority_key_id (gnutls_x509_crt_t cert,
++                                            void *ret, size_t * ret_size,
++                                            unsigned int *critical);
++
++  int gnutls_x509_crt_get_subject_key_id (gnutls_x509_crt_t cert,
++                                          void *ret, size_t * ret_size,
++                                          unsigned int *critical);
++
++  int gnutls_x509_crt_get_subject_unique_id (gnutls_x509_crt_t crt, char *buf,
++                                             size_t * sizeof_buf);
++
++  int gnutls_x509_crt_get_issuer_unique_id (gnutls_x509_crt_t crt, char *buf,
++                                            size_t * sizeof_buf);
++
++#define GNUTLS_CRL_REASON_UNUSED 128
++#define GNUTLS_CRL_REASON_KEY_COMPROMISE 64
++#define GNUTLS_CRL_REASON_CA_COMPROMISE 32
++#define GNUTLS_CRL_REASON_AFFILIATION_CHANGED 16
++#define GNUTLS_CRL_REASON_SUPERSEDED 8
++#define GNUTLS_CRL_REASON_SUPERSEEDED GNUTLS_CRL_REASON_SUPERSEDED
++#define GNUTLS_CRL_REASON_CESSATION_OF_OPERATION 4
++#define GNUTLS_CRL_REASON_CERTIFICATE_HOLD 2
++#define GNUTLS_CRL_REASON_PRIVILEGE_WITHDRAWN 1
++#define GNUTLS_CRL_REASON_AA_COMPROMISE 32768
++
++  int gnutls_x509_crt_get_crl_dist_points (gnutls_x509_crt_t cert,
++                                           unsigned int seq, void *ret,
++                                           size_t * ret_size,
++                                           unsigned int *reason_flags,
++                                           unsigned int *critical);
++  int gnutls_x509_crt_set_crl_dist_points2 (gnutls_x509_crt_t crt,
++                                            gnutls_x509_subject_alt_name_t
++                                            type, const void *data,
++                                            unsigned int data_size,
++                                            unsigned int reason_flags);
++  int gnutls_x509_crt_set_crl_dist_points (gnutls_x509_crt_t crt,
++                                           gnutls_x509_subject_alt_name_t
++                                           type, const void *data_string,
++                                           unsigned int reason_flags);
++  int gnutls_x509_crt_cpy_crl_dist_points (gnutls_x509_crt_t dst,
++                                           gnutls_x509_crt_t src);
++
++  time_t gnutls_x509_crt_get_activation_time (gnutls_x509_crt_t cert);
++  time_t gnutls_x509_crt_get_expiration_time (gnutls_x509_crt_t cert);
++  int gnutls_x509_crt_get_serial (gnutls_x509_crt_t cert, void *result,
++                                  size_t * result_size);
++
++  int gnutls_x509_crt_get_pk_algorithm (gnutls_x509_crt_t cert,
++                                        unsigned int *bits);
++  int gnutls_x509_crt_get_pk_rsa_raw (gnutls_x509_crt_t crt,
++                                      gnutls_datum_t * m, gnutls_datum_t * e);
++  int gnutls_x509_crt_get_pk_dsa_raw (gnutls_x509_crt_t crt,
++                                      gnutls_datum_t * p,
++                                      gnutls_datum_t * q,
++                                      gnutls_datum_t * g, gnutls_datum_t * y);
++
++  int gnutls_x509_crt_get_subject_alt_name (gnutls_x509_crt_t cert,
++                                            unsigned int seq, void *ret,
++                                            size_t * ret_size,
++                                            unsigned int *critical);
++  int gnutls_x509_crt_get_subject_alt_name2 (gnutls_x509_crt_t cert,
++                                             unsigned int seq, void *ret,
++                                             size_t * ret_size,
++                                             unsigned int *ret_type,
++                                             unsigned int *critical);
++
++  int gnutls_x509_crt_get_subject_alt_othername_oid (gnutls_x509_crt_t cert,
++                                                     unsigned int seq,
++                                                     void *ret,
++                                                     size_t * ret_size);
++
++  int gnutls_x509_crt_get_issuer_alt_name (gnutls_x509_crt_t cert,
++                                           unsigned int seq, void *ret,
++                                           size_t * ret_size,
++                                           unsigned int *critical);
++  int gnutls_x509_crt_get_issuer_alt_name2 (gnutls_x509_crt_t cert,
++                                            unsigned int seq, void *ret,
++                                            size_t * ret_size,
++                                            unsigned int *ret_type,
++                                            unsigned int *critical);
++
++  int gnutls_x509_crt_get_issuer_alt_othername_oid (gnutls_x509_crt_t cert,
++                                                    unsigned int seq,
++                                                    void *ret,
++                                                    size_t * ret_size);
++
++  int gnutls_x509_crt_get_ca_status (gnutls_x509_crt_t cert,
++                                     unsigned int *critical);
++  int gnutls_x509_crt_get_basic_constraints (gnutls_x509_crt_t cert,
++                                             unsigned int *critical,
++                                             int *ca, int *pathlen);
++
++/* The key_usage flags are defined in gnutls.h. They are the
++ * GNUTLS_KEY_* definitions.
++ */
++  int gnutls_x509_crt_get_key_usage (gnutls_x509_crt_t cert,
++                                     unsigned int *key_usage,
++                                     unsigned int *critical);
++  int gnutls_x509_crt_set_key_usage (gnutls_x509_crt_t crt,
++                                     unsigned int usage);
++
++  int gnutls_x509_crt_get_proxy (gnutls_x509_crt_t cert,
++                                 unsigned int *critical,
++                                 int *pathlen,
++                                 char **policyLanguage,
++                                 char **policy, size_t * sizeof_policy);
++
++  int gnutls_x509_dn_oid_known (const char *oid);
++
++  /* Read extensions by OID. */
++  int gnutls_x509_crt_get_extension_oid (gnutls_x509_crt_t cert, int indx,
++                                         void *oid, size_t * sizeof_oid);
++  int gnutls_x509_crt_get_extension_by_oid (gnutls_x509_crt_t cert,
++                                            const char *oid, int indx,
++                                            void *buf,
++                                            size_t * sizeof_buf,
++                                            unsigned int *critical);
++
++  /* Read extensions by sequence number. */
++  int gnutls_x509_crt_get_extension_info (gnutls_x509_crt_t cert, int indx,
++                                          void *oid, size_t * sizeof_oid,
++                                          int *critical);
++  int gnutls_x509_crt_get_extension_data (gnutls_x509_crt_t cert, int indx,
++                                          void *data, size_t * sizeof_data);
++
++  int gnutls_x509_crt_set_extension_by_oid (gnutls_x509_crt_t crt,
++                                            const char *oid,
++                                            const void *buf,
++                                            size_t sizeof_buf,
++                                            unsigned int critical);
++
++/* X.509 Certificate writing.
++ */
++  int gnutls_x509_crt_set_dn_by_oid (gnutls_x509_crt_t crt,
++                                     const char *oid,
++                                     unsigned int raw_flag,
++                                     const void *name,
++                                     unsigned int sizeof_name);
++  int gnutls_x509_crt_set_issuer_dn_by_oid (gnutls_x509_crt_t crt,
++                                            const char *oid,
++                                            unsigned int raw_flag,
++                                            const void *name,
++                                            unsigned int sizeof_name);
++  int gnutls_x509_crt_set_version (gnutls_x509_crt_t crt,
++                                   unsigned int version);
++  int gnutls_x509_crt_set_key (gnutls_x509_crt_t crt,
++                               gnutls_x509_privkey_t key);
++  int gnutls_x509_crt_set_ca_status (gnutls_x509_crt_t crt, unsigned int ca);
++  int gnutls_x509_crt_set_basic_constraints (gnutls_x509_crt_t crt,
++                                             unsigned int ca,
++                                             int pathLenConstraint);
++  int gnutls_x509_crt_set_subject_alternative_name (gnutls_x509_crt_t crt,
++                                                    gnutls_x509_subject_alt_name_t
++                                                    type,
++                                                    const char *data_string);
++  int gnutls_x509_crt_set_subject_alt_name (gnutls_x509_crt_t crt,
++                                            gnutls_x509_subject_alt_name_t
++                                            type, const void *data,
++                                            unsigned int data_size,
++                                            unsigned int flags);
++  int gnutls_x509_crt_sign (gnutls_x509_crt_t crt, gnutls_x509_crt_t issuer,
++                            gnutls_x509_privkey_t issuer_key);
++  int gnutls_x509_crt_sign2 (gnutls_x509_crt_t crt, gnutls_x509_crt_t issuer,
++                             gnutls_x509_privkey_t issuer_key,
++                             gnutls_digest_algorithm_t dig,
++                             unsigned int flags);
++  int gnutls_x509_crt_set_activation_time (gnutls_x509_crt_t cert,
++                                           time_t act_time);
++  int gnutls_x509_crt_set_expiration_time (gnutls_x509_crt_t cert,
++                                           time_t exp_time);
++  int gnutls_x509_crt_set_serial (gnutls_x509_crt_t cert, const void *serial,
++                                  size_t serial_size);
++
++  int gnutls_x509_crt_set_subject_key_id (gnutls_x509_crt_t cert,
++                                          const void *id, size_t id_size);
++
++  int gnutls_x509_crt_set_proxy_dn (gnutls_x509_crt_t crt,
++                                    gnutls_x509_crt_t eecrt,
++                                    unsigned int raw_flag,
++                                    const void *name,
++                                    unsigned int sizeof_name);
++  int gnutls_x509_crt_set_proxy (gnutls_x509_crt_t crt,
++                                 int pathLenConstraint,
++                                 const char *policyLanguage,
++                                 const char *policy, size_t sizeof_policy);
++
++  int gnutls_x509_crt_print (gnutls_x509_crt_t cert,
++                             gnutls_certificate_print_formats_t format,
++                             gnutls_datum_t * out);
++  int gnutls_x509_crl_print (gnutls_x509_crl_t crl,
++                             gnutls_certificate_print_formats_t format,
++                             gnutls_datum_t * out);
++
++  /* Access to internal Certificate fields.
++   */
++  int gnutls_x509_crt_get_raw_issuer_dn (gnutls_x509_crt_t cert,
++                                         gnutls_datum_t * start);
++  int gnutls_x509_crt_get_raw_dn (gnutls_x509_crt_t cert,
++                                  gnutls_datum_t * start);
++
++/* RDN handling.
++ */
++  int gnutls_x509_rdn_get (const gnutls_datum_t * idn,
++                           char *buf, size_t * sizeof_buf);
++  int gnutls_x509_rdn_get_oid (const gnutls_datum_t * idn,
++                               int indx, void *buf, size_t * sizeof_buf);
++
++  int gnutls_x509_rdn_get_by_oid (const gnutls_datum_t * idn,
++                                  const char *oid, int indx,
++                                  unsigned int raw_flag, void *buf,
++                                  size_t * sizeof_buf);
++
++  typedef void *gnutls_x509_dn_t;
++
++  typedef struct gnutls_x509_ava_st
++  {
++    gnutls_datum_t oid;
++    gnutls_datum_t value;
++    unsigned long value_tag;
++  } gnutls_x509_ava_st;
++
++  int gnutls_x509_crt_get_subject (gnutls_x509_crt_t cert,
++                                   gnutls_x509_dn_t * dn);
++  int gnutls_x509_crt_get_issuer (gnutls_x509_crt_t cert,
++                                  gnutls_x509_dn_t * dn);
++  int gnutls_x509_dn_get_rdn_ava (gnutls_x509_dn_t dn, int irdn,
++                                  int iava, gnutls_x509_ava_st * ava);
++
++  int gnutls_x509_dn_init (gnutls_x509_dn_t * dn);
++
++  int gnutls_x509_dn_import (gnutls_x509_dn_t dn,
++                             const gnutls_datum_t * data);
++
++  int gnutls_x509_dn_export (gnutls_x509_dn_t dn,
++                             gnutls_x509_crt_fmt_t format, void *output_data,
++                             size_t * output_data_size);
++
++  void gnutls_x509_dn_deinit (gnutls_x509_dn_t dn);
++
++
++/* CRL handling functions.
++ */
++  int gnutls_x509_crl_init (gnutls_x509_crl_t * crl);
++  void gnutls_x509_crl_deinit (gnutls_x509_crl_t crl);
++
++  int gnutls_x509_crl_import (gnutls_x509_crl_t crl,
++                              const gnutls_datum_t * data,
++                              gnutls_x509_crt_fmt_t format);
++  int gnutls_x509_crl_export (gnutls_x509_crl_t crl,
++                              gnutls_x509_crt_fmt_t format,
++                              void *output_data, size_t * output_data_size);
++
++  int
++  gnutls_x509_crl_get_raw_issuer_dn (gnutls_x509_crl_t crl,
++                                      gnutls_datum_t * dn);
++
++  int gnutls_x509_crl_get_issuer_dn (const gnutls_x509_crl_t crl,
++                                     char *buf, size_t * sizeof_buf);
++  int gnutls_x509_crl_get_issuer_dn_by_oid (gnutls_x509_crl_t crl,
++                                            const char *oid, int indx,
++                                            unsigned int raw_flag,
++                                            void *buf, size_t * sizeof_buf);
++  int gnutls_x509_crl_get_dn_oid (gnutls_x509_crl_t crl, int indx,
++                                  void *oid, size_t * sizeof_oid);
++
++  int gnutls_x509_crl_get_signature_algorithm (gnutls_x509_crl_t crl);
++  int gnutls_x509_crl_get_signature (gnutls_x509_crl_t crl,
++                                     char *sig, size_t * sizeof_sig);
++  int gnutls_x509_crl_get_version (gnutls_x509_crl_t crl);
++
++  time_t gnutls_x509_crl_get_this_update (gnutls_x509_crl_t crl);
++  time_t gnutls_x509_crl_get_next_update (gnutls_x509_crl_t crl);
++
++  int gnutls_x509_crl_get_crt_count (gnutls_x509_crl_t crl);
++  int gnutls_x509_crl_get_crt_serial (gnutls_x509_crl_t crl, int indx,
++                                      unsigned char *serial,
++                                      size_t * serial_size, time_t * t);
++#define gnutls_x509_crl_get_certificate_count gnutls_x509_crl_get_crt_count
++#define gnutls_x509_crl_get_certificate gnutls_x509_crl_get_crt_serial
++
++  int gnutls_x509_crl_check_issuer (gnutls_x509_crl_t crl,
++                                    gnutls_x509_crt_t issuer);
++
++/* CRL writing.
++ */
++  int gnutls_x509_crl_set_version (gnutls_x509_crl_t crl,
++                                   unsigned int version);
++  int gnutls_x509_crl_set_this_update (gnutls_x509_crl_t crl,
++                                       time_t act_time);
++  int gnutls_x509_crl_set_next_update (gnutls_x509_crl_t crl,
++                                       time_t exp_time);
++  int gnutls_x509_crl_set_crt_serial (gnutls_x509_crl_t crl,
++                                      const void *serial,
++                                      size_t serial_size,
++                                      time_t revocation_time);
++  int gnutls_x509_crl_set_crt (gnutls_x509_crl_t crl,
++                               gnutls_x509_crt_t crt, time_t revocation_time);
++
++  int gnutls_x509_crl_get_authority_key_id (gnutls_x509_crl_t crl, void *ret,
++                                            size_t * ret_size,
++                                            unsigned int *critical);
++
++  int gnutls_x509_crl_get_number (gnutls_x509_crl_t crl, void *ret,
++                                  size_t * ret_size, unsigned int *critical);
++
++  int gnutls_x509_crl_get_extension_oid (gnutls_x509_crl_t crl, int indx,
++                                         void *oid, size_t * sizeof_oid);
++
++  int gnutls_x509_crl_get_extension_info (gnutls_x509_crl_t crl, int indx,
++                                          void *oid, size_t * sizeof_oid,
++                                          int *critical);
++
++  int gnutls_x509_crl_get_extension_data (gnutls_x509_crl_t crl, int indx,
++                                          void *data, size_t * sizeof_data);
++
++  int gnutls_x509_crl_set_authority_key_id (gnutls_x509_crl_t crl,
++                                            const void *id, size_t id_size);
++
++  int gnutls_x509_crl_set_number (gnutls_x509_crl_t crl,
++                                  const void *nr, size_t nr_size);
++
++
++/* PKCS7 structures handling
++ */
++  struct gnutls_pkcs7_int;
++  typedef struct gnutls_pkcs7_int *gnutls_pkcs7_t;
++
++  int gnutls_pkcs7_init (gnutls_pkcs7_t * pkcs7);
++  void gnutls_pkcs7_deinit (gnutls_pkcs7_t pkcs7);
++  int gnutls_pkcs7_import (gnutls_pkcs7_t pkcs7,
++                           const gnutls_datum_t * data,
++                           gnutls_x509_crt_fmt_t format);
++  int gnutls_pkcs7_export (gnutls_pkcs7_t pkcs7,
++                           gnutls_x509_crt_fmt_t format,
++                           void *output_data, size_t * output_data_size);
++
++  int gnutls_pkcs7_get_crt_count (gnutls_pkcs7_t pkcs7);
++  int gnutls_pkcs7_get_crt_raw (gnutls_pkcs7_t pkcs7, int indx,
++                                void *certificate, size_t * certificate_size);
++
++  int gnutls_pkcs7_set_crt_raw (gnutls_pkcs7_t pkcs7,
++                                const gnutls_datum_t * crt);
++  int gnutls_pkcs7_set_crt (gnutls_pkcs7_t pkcs7, gnutls_x509_crt_t crt);
++  int gnutls_pkcs7_delete_crt (gnutls_pkcs7_t pkcs7, int indx);
++
++  int gnutls_pkcs7_get_crl_raw (gnutls_pkcs7_t pkcs7,
++                                int indx, void *crl, size_t * crl_size);
++  int gnutls_pkcs7_get_crl_count (gnutls_pkcs7_t pkcs7);
++
++  int gnutls_pkcs7_set_crl_raw (gnutls_pkcs7_t pkcs7,
++                                const gnutls_datum_t * crl);
++  int gnutls_pkcs7_set_crl (gnutls_pkcs7_t pkcs7, gnutls_x509_crl_t crl);
++  int gnutls_pkcs7_delete_crl (gnutls_pkcs7_t pkcs7, int indx);
++
++/* X.509 Certificate verification functions.
++ */
++
++/**
++ * gnutls_certificate_verify_flags:
++ * @GNUTLS_VERIFY_DISABLE_CA_SIGN: If set a signer does not have to be
++ *   a certificate authority. This flag should normaly be disabled,
++ *   unless you know what this means.
++ * @GNUTLS_VERIFY_DISABLE_TRUSTED_TIME_CHECKS: If set a signer in the trusted
++ *   list is never checked for expiration or activation.
++ * @GNUTLS_VERIFY_ALLOW_X509_V1_CA_CRT: Allow trusted CA
++ *   certificates that have version 1.  This is the default.
++ * @GNUTLS_VERIFY_DO_NOT_ALLOW_X509_V1_CA_CRT: Do not allow trusted CA
++ *   certificates that have version 1.  This option is to be used
++ *   to deprecate all V1 certificates.
++ * @GNUTLS_VERIFY_DO_NOT_ALLOW_SAME: If a certificate is not signed by
++ *   anyone trusted but exists in the trusted CA list do not treat it
++ *   as trusted.
++ * @GNUTLS_VERIFY_ALLOW_ANY_X509_V1_CA_CRT: Allow CA certificates that
++ *   have version 1 (both root and intermediate). This might be
++ *   dangerous since those haven't the basicConstraints
++ *   extension. Must be used in combination with
++ *   %GNUTLS_VERIFY_ALLOW_X509_V1_CA_CRT.
++ * @GNUTLS_VERIFY_ALLOW_SIGN_RSA_MD2: Allow certificates to be signed
++ *   using the broken MD2 algorithm.
++ * @GNUTLS_VERIFY_ALLOW_SIGN_RSA_MD5: Allow certificates to be signed
++ *   using the broken MD5 algorithm.
++ * @GNUTLS_VERIFY_DISABLE_TIME_CHECKS: Disable checking of activation
++ *   and expiration validity periods of certificate chains. Don't set
++ *   this unless you understand the security implications.
++ *
++ * Enumeration of different certificate verify flags.
++ */
++  typedef enum gnutls_certificate_verify_flags
++  {
++    GNUTLS_VERIFY_DISABLE_CA_SIGN = 1,
++    GNUTLS_VERIFY_ALLOW_X509_V1_CA_CRT = 2,
++    GNUTLS_VERIFY_DO_NOT_ALLOW_SAME = 4,
++    GNUTLS_VERIFY_ALLOW_ANY_X509_V1_CA_CRT = 8,
++    GNUTLS_VERIFY_ALLOW_SIGN_RSA_MD2 = 16,
++    GNUTLS_VERIFY_ALLOW_SIGN_RSA_MD5 = 32,
++    GNUTLS_VERIFY_DISABLE_TIME_CHECKS = 64,
++    GNUTLS_VERIFY_DISABLE_TRUSTED_TIME_CHECKS = 128,
++    GNUTLS_VERIFY_DO_NOT_ALLOW_X509_V1_CA_CRT = 256
++  } gnutls_certificate_verify_flags;
++
++  int gnutls_x509_crt_check_issuer (gnutls_x509_crt_t cert,
++                                    gnutls_x509_crt_t issuer);
++
++  int gnutls_x509_crt_list_verify (const gnutls_x509_crt_t * cert_list,
++                                   int cert_list_length,
++                                   const gnutls_x509_crt_t * CA_list,
++                                   int CA_list_length,
++                                   const gnutls_x509_crl_t * CRL_list,
++                                   int CRL_list_length,
++                                   unsigned int flags, unsigned int *verify);
++
++  int gnutls_x509_crt_verify (gnutls_x509_crt_t cert,
++                              const gnutls_x509_crt_t * CA_list,
++                              int CA_list_length, unsigned int flags,
++                              unsigned int *verify);
++  int gnutls_x509_crl_verify (gnutls_x509_crl_t crl,
++                              const gnutls_x509_crt_t * CA_list,
++                              int CA_list_length, unsigned int flags,
++                              unsigned int *verify);
++
++  int gnutls_x509_crt_check_revocation (gnutls_x509_crt_t cert,
++                                        const gnutls_x509_crl_t *
++                                        crl_list, int crl_list_length);
++
++  int gnutls_x509_crt_get_fingerprint (gnutls_x509_crt_t cert,
++                                       gnutls_digest_algorithm_t algo,
++                                       void *buf, size_t * sizeof_buf);
++
++  int gnutls_x509_crt_get_key_purpose_oid (gnutls_x509_crt_t cert,
++                                           int indx, void *oid,
++                                           size_t * sizeof_oid,
++                                           unsigned int *critical);
++  int gnutls_x509_crt_set_key_purpose_oid (gnutls_x509_crt_t cert,
++                                           const void *oid,
++                                           unsigned int critical);
++
++/* Private key handling.
++ */
++
++/* Flags for the gnutls_x509_privkey_export_pkcs8() function.
++ */
++
++/**
++ * gnutls_pkcs_encrypt_flags_t:
++ * @GNUTLS_PKCS_PLAIN: Unencrypted private key.
++ * @GNUTLS_PKCS8_PLAIN: Same as %GNUTLS_PKCS_PLAIN.
++ * @GNUTLS_PKCS_USE_PKCS12_3DES: PKCS-12 3DES.
++ * @GNUTLS_PKCS8_USE_PKCS12_3DES: Same as %GNUTLS_PKCS_USE_PKCS12_3DES.
++ * @GNUTLS_PKCS_USE_PKCS12_ARCFOUR: PKCS-12 ARCFOUR.
++ * @GNUTLS_PKCS8_USE_PKCS12_ARCFOUR: Same as %GNUTLS_PKCS_USE_PKCS12_ARCFOUR.
++ * @GNUTLS_PKCS_USE_PKCS12_RC2_40: PKCS-12 RC2-40.
++ * @GNUTLS_PKCS8_USE_PKCS12_RC2_40: Same as %GNUTLS_PKCS_USE_PKCS12_RC2_40.
++ * @GNUTLS_PKCS_USE_PBES2_3DES: PBES2 3DES.
++ * @GNUTLS_PKCS_USE_PBES2_AES_128: PBES2 AES-128.
++ * @GNUTLS_PKCS_USE_PBES2_AES_192: PBES2 AES-192.
++ * @GNUTLS_PKCS_USE_PBES2_AES_256: PBES2 AES-256.
++ *
++ * Enumeration of different PKCS encryption flags.
++ */
++  typedef enum gnutls_pkcs_encrypt_flags_t
++  {
++    GNUTLS_PKCS_PLAIN = 1,
++    GNUTLS_PKCS8_PLAIN = GNUTLS_PKCS_PLAIN,
++    GNUTLS_PKCS_USE_PKCS12_3DES = 2,
++    GNUTLS_PKCS8_USE_PKCS12_3DES = GNUTLS_PKCS_USE_PKCS12_3DES,
++    GNUTLS_PKCS_USE_PKCS12_ARCFOUR = 4,
++    GNUTLS_PKCS8_USE_PKCS12_ARCFOUR = GNUTLS_PKCS_USE_PKCS12_ARCFOUR,
++    GNUTLS_PKCS_USE_PKCS12_RC2_40 = 8,
++    GNUTLS_PKCS8_USE_PKCS12_RC2_40 = GNUTLS_PKCS_USE_PKCS12_RC2_40,
++    GNUTLS_PKCS_USE_PBES2_3DES = 16,
++    GNUTLS_PKCS_USE_PBES2_AES_128 = 32,
++    GNUTLS_PKCS_USE_PBES2_AES_192 = 64,
++    GNUTLS_PKCS_USE_PBES2_AES_256 = 128
++  } gnutls_pkcs_encrypt_flags_t;
++
++  int gnutls_x509_privkey_init (gnutls_x509_privkey_t * key);
++  void gnutls_x509_privkey_deinit (gnutls_x509_privkey_t key);
++  gnutls_sec_param_t gnutls_x509_privkey_sec_param (gnutls_x509_privkey_t
++                                                    key);
++  int gnutls_x509_privkey_cpy (gnutls_x509_privkey_t dst,
++                               gnutls_x509_privkey_t src);
++  int gnutls_x509_privkey_import (gnutls_x509_privkey_t key,
++                                  const gnutls_datum_t * data,
++                                  gnutls_x509_crt_fmt_t format);
++  int gnutls_x509_privkey_import_pkcs8 (gnutls_x509_privkey_t key,
++                                        const gnutls_datum_t * data,
++                                        gnutls_x509_crt_fmt_t format,
++                                        const char *password,
++                                        unsigned int flags);
++  int gnutls_x509_privkey_import_rsa_raw (gnutls_x509_privkey_t key,
++                                          const gnutls_datum_t * m,
++                                          const gnutls_datum_t * e,
++                                          const gnutls_datum_t * d,
++                                          const gnutls_datum_t * p,
++                                          const gnutls_datum_t * q,
++                                          const gnutls_datum_t * u);
++  int gnutls_x509_privkey_import_rsa_raw2 (gnutls_x509_privkey_t key,
++                                           const gnutls_datum_t * m,
++                                           const gnutls_datum_t * e,
++                                           const gnutls_datum_t * d,
++                                           const gnutls_datum_t * p,
++                                           const gnutls_datum_t * q,
++                                           const gnutls_datum_t * u,
++                                           const gnutls_datum_t * e1,
++                                           const gnutls_datum_t * e2);
++  int gnutls_x509_privkey_fix (gnutls_x509_privkey_t key);
++
++  int gnutls_x509_privkey_export_dsa_raw (gnutls_x509_privkey_t key,
++                                          gnutls_datum_t * p,
++                                          gnutls_datum_t * q,
++                                          gnutls_datum_t * g,
++                                          gnutls_datum_t * y,
++                                          gnutls_datum_t * x);
++  int gnutls_x509_privkey_import_dsa_raw (gnutls_x509_privkey_t key,
++                                          const gnutls_datum_t * p,
++                                          const gnutls_datum_t * q,
++                                          const gnutls_datum_t * g,
++                                          const gnutls_datum_t * y,
++                                          const gnutls_datum_t * x);
++
++  int gnutls_x509_privkey_get_pk_algorithm (gnutls_x509_privkey_t key);
++  int gnutls_x509_privkey_get_key_id (gnutls_x509_privkey_t key,
++                                      unsigned int flags,
++                                      unsigned char *output_data,
++                                      size_t * output_data_size);
++
++  int gnutls_x509_privkey_generate (gnutls_x509_privkey_t key,
++                                    gnutls_pk_algorithm_t algo,
++                                    unsigned int bits, unsigned int flags);
++
++  int gnutls_x509_privkey_export (gnutls_x509_privkey_t key,
++                                  gnutls_x509_crt_fmt_t format,
++                                  void *output_data,
++                                  size_t * output_data_size);
++  int gnutls_x509_privkey_export_pkcs8 (gnutls_x509_privkey_t key,
++                                        gnutls_x509_crt_fmt_t format,
++                                        const char *password,
++                                        unsigned int flags,
++                                        void *output_data,
++                                        size_t * output_data_size);
++  int gnutls_x509_privkey_export_rsa_raw2 (gnutls_x509_privkey_t key,
++                                           gnutls_datum_t * m,
++                                           gnutls_datum_t * e,
++                                           gnutls_datum_t * d,
++                                           gnutls_datum_t * p,
++                                           gnutls_datum_t * q,
++                                           gnutls_datum_t * u,
++                                           gnutls_datum_t * e1,
++                                           gnutls_datum_t * e2);
++  int gnutls_x509_privkey_export_rsa_raw (gnutls_x509_privkey_t key,
++                                          gnutls_datum_t * m,
++                                          gnutls_datum_t * e,
++                                          gnutls_datum_t * d,
++                                          gnutls_datum_t * p,
++                                          gnutls_datum_t * q,
++                                          gnutls_datum_t * u);
++
++/* Certificate request stuff.
++ */
++
++  int gnutls_x509_crq_print (gnutls_x509_crq_t crq,
++                             gnutls_certificate_print_formats_t format,
++                             gnutls_datum_t * out);
++
++  int gnutls_x509_crq_verify (gnutls_x509_crq_t crq, unsigned int flags);
++
++  int gnutls_x509_crq_init (gnutls_x509_crq_t * crq);
++  void gnutls_x509_crq_deinit (gnutls_x509_crq_t crq);
++  int gnutls_x509_crq_import (gnutls_x509_crq_t crq,
++                              const gnutls_datum_t * data,
++                              gnutls_x509_crt_fmt_t format);
++
++  int gnutls_x509_crq_get_dn (gnutls_x509_crq_t crq, char *buf,
++                              size_t * sizeof_buf);
++  int gnutls_x509_crq_get_dn_oid (gnutls_x509_crq_t crq, int indx,
++                                  void *oid, size_t * sizeof_oid);
++  int gnutls_x509_crq_get_dn_by_oid (gnutls_x509_crq_t crq,
++                                     const char *oid, int indx,
++                                     unsigned int raw_flag, void *buf,
++                                     size_t * sizeof_buf);
++  int gnutls_x509_crq_set_dn_by_oid (gnutls_x509_crq_t crq,
++                                     const char *oid,
++                                     unsigned int raw_flag,
++                                     const void *data,
++                                     unsigned int sizeof_data);
++  int gnutls_x509_crq_set_version (gnutls_x509_crq_t crq,
++                                   unsigned int version);
++  int gnutls_x509_crq_get_version (gnutls_x509_crq_t crq);
++  int gnutls_x509_crq_set_key (gnutls_x509_crq_t crq,
++                               gnutls_x509_privkey_t key);
++
++  int gnutls_x509_crq_set_challenge_password (gnutls_x509_crq_t crq,
++                                              const char *pass);
++  int gnutls_x509_crq_get_challenge_password (gnutls_x509_crq_t crq,
++                                              char *pass,
++                                              size_t * sizeof_pass);
++
++  int gnutls_x509_crq_set_attribute_by_oid (gnutls_x509_crq_t crq,
++                                            const char *oid, void *buf,
++                                            size_t sizeof_buf);
++  int gnutls_x509_crq_get_attribute_by_oid (gnutls_x509_crq_t crq,
++                                            const char *oid, int indx,
++                                            void *buf, size_t * sizeof_buf);
++
++  int gnutls_x509_crq_export (gnutls_x509_crq_t crq,
++                              gnutls_x509_crt_fmt_t format,
++                              void *output_data, size_t * output_data_size);
++
++  int gnutls_x509_crt_set_crq (gnutls_x509_crt_t crt, gnutls_x509_crq_t crq);
++  int gnutls_x509_crt_set_crq_extensions (gnutls_x509_crt_t crt,
++                                          gnutls_x509_crq_t crq);
++
++  int gnutls_x509_crq_set_key_rsa_raw (gnutls_x509_crq_t crq,
++                                       const gnutls_datum_t * m,
++                                       const gnutls_datum_t * e);
++  int gnutls_x509_crq_set_subject_alt_name (gnutls_x509_crq_t crq,
++                                            gnutls_x509_subject_alt_name_t nt,
++                                            const void *data,
++                                            unsigned int data_size,
++                                            unsigned int flags);
++
++  int gnutls_x509_crq_set_key_usage (gnutls_x509_crq_t crq,
++                                     unsigned int usage);
++  int gnutls_x509_crq_set_basic_constraints (gnutls_x509_crq_t crq,
++                                             unsigned int ca,
++                                             int pathLenConstraint);
++  int gnutls_x509_crq_set_key_purpose_oid (gnutls_x509_crq_t crq,
++                                           const void *oid,
++                                           unsigned int critical);
++  int gnutls_x509_crq_get_key_purpose_oid (gnutls_x509_crq_t crq, int indx,
++                                           void *oid, size_t * sizeof_oid,
++                                           unsigned int *critical);
++
++  int gnutls_x509_crq_get_extension_data (gnutls_x509_crq_t crq, int indx,
++                                          void *data, size_t * sizeof_data);
++  int gnutls_x509_crq_get_extension_info (gnutls_x509_crq_t crq, int indx,
++                                          void *oid, size_t * sizeof_oid,
++                                          int *critical);
++  int gnutls_x509_crq_get_attribute_data (gnutls_x509_crq_t crq, int indx,
++                                          void *data, size_t * sizeof_data);
++  int gnutls_x509_crq_get_attribute_info (gnutls_x509_crq_t crq, int indx,
++                                          void *oid, size_t * sizeof_oid);
++  int gnutls_x509_crq_get_pk_algorithm (gnutls_x509_crq_t crq,
++                                        unsigned int *bits);
++
++  int gnutls_x509_crq_get_key_id (gnutls_x509_crq_t crq, unsigned int flags,
++                                  unsigned char *output_data,
++                                  size_t * output_data_size);
++  int gnutls_x509_crq_get_key_rsa_raw (gnutls_x509_crq_t crq,
++                                       gnutls_datum_t * m,
++                                       gnutls_datum_t * e);
++
++  int gnutls_x509_crq_get_key_usage (gnutls_x509_crq_t crq,
++                                     unsigned int *key_usage,
++                                     unsigned int *critical);
++  int gnutls_x509_crq_get_basic_constraints (gnutls_x509_crq_t crq,
++                                             unsigned int *critical,
++                                             int *ca, int *pathlen);
++  int gnutls_x509_crq_get_subject_alt_name (gnutls_x509_crq_t crq,
++                                            unsigned int seq, void *ret,
++                                            size_t * ret_size,
++                                            unsigned int *ret_type,
++                                            unsigned int *critical);
++  int gnutls_x509_crq_get_subject_alt_othername_oid (gnutls_x509_crq_t crq,
++                                                     unsigned int seq,
++                                                     void *ret,
++                                                     size_t * ret_size);
++
++  int gnutls_x509_crq_get_extension_by_oid (gnutls_x509_crq_t crq,
++                                            const char *oid, int indx,
++                                            void *buf, size_t * sizeof_buf,
++                                            unsigned int *critical);
++
++#ifdef __cplusplus
++}
++#endif
++
++#endif                          /* GNUTLS_X509_H */
