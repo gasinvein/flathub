@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="addon">
+  <id>ua.org.brezblock.q4wine.wine.esync</id>
+  <extends>ua.org.brezblock.q4wine</extends>
+  <name>Wine Esync</name>
+  <summary>Wine with esync patchset</summary>
+  <url type="homepage">https://winehq.org/</url>
+  <project_license>LGPL-2.1</project_license>
+  <metadata_license>CC0-1.0</metadata_license>
+</component>
