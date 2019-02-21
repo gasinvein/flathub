@@ -1,0 +1,72 @@
+id: io.github.lurkki14.TuxClocker
+sdk: org.kde.Sdk
+runtime: org.kde.Platform
+runtime-version: "5.12"
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --socket=wayland
+  - --device=dri
+command: tuxclocker
+cleanup:
+  - "*.a"
+  - "*.la"
+  - /inlcude
+modules:
+
+  - name: tuxclocker
+    buildsystem: qmake
+    config-opts:
+      - QMAKE_STRIP=
+      - LIBS+=-L/app/lib
+    no-make-install: true
+    post-install:
+      - install -Dm755 tuxclocker -t /app/bin/
+    sources:
+      - type: git
+        url: "https://github.com/Lurkki14/tuxclocker.git"
+    modules:
+
+      - name: libXNVCtrl
+        no-autogen: true
+        subdir: src/libXNVCtrl
+        make-args:
+          - NVDEBUG=1
+          - NV_VERBOSE=1
+        no-make-install: true
+        build-commands:
+          - install -Dm755 libXNVCtrl.a -t /app/lib/
+          - install -Dm655 {nv_control,NVCtrl,NVCtrlLib}.h -t /app/include/NVCtrl
+        sources:
+          - type: archive
+            url: "https://download.nvidia.com/XFree86/nvidia-settings/nvidia-settings-418.30.tar.bz2"
+            sha256: 415b4f848872742662188cb86978c5fd649ab23d5df2b5d79b0ec192e1ddce8b
+
+      # libnvidia-ml.so is included in NVIDIA Cuda Toolkit,
+      # which is too huge and needed only at link-time
+      - name: nvidia-ml
+        buildsystem: simple
+        build-commands:
+          - ar p libnvidia-ml1.deb data.tar.xz | tar -xJf -
+          - cp -av usr/lib/*/nvidia/current/. /app/lib/
+        cleanup:
+          - "*"
+        sources:
+          - type: file
+            dest-filename: libnvidia-ml1.deb
+            only-arches:
+              - "x86_64"
+            url: "http://http.us.debian.org/debian/pool/non-free/n/nvidia-graphics-drivers/libnvidia-ml1_390.87-8~deb9u1_amd64.deb"
+            sha256: 06b2e5b57792ab1ac6e74ac373e2b398ccd311935c869f970f0ea1044c5195a4
+          - type: file
+            dest-filename: libnvidia-ml1.deb
+            only-arches:
+              - "i386"
+            url: "http://http.us.debian.org/debian/pool/non-free/n/nvidia-graphics-drivers/libnvidia-ml1_390.87-8~deb9u1_i386.deb"
+            sha256: 2733cb0daba15423390bf77afdd2379d09ae9bf7a9ee88f177ba3ab49d0acba7
+          - type: file
+            dest-filename: libnvidia-ml1.deb
+            only-arches:
+              - "arm"
+            url: "http://ftp.us.debian.org/debian/pool/non-free/n/nvidia-graphics-drivers/libnvidia-ml1_390.87-8~deb9u1_armhf.deb"
+            sha256: 7fcb19c842e430ebf41f4f58d5d290edaa3fe8903a6a2fc51e52a1253bac4e1e
