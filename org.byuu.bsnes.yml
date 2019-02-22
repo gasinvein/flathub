@@ -1,0 +1,71 @@
+id: org.byuu.bsnes
+sdk: org.freedesktop.Sdk
+runtime: org.freedesktop.Platform
+runtime-version: "18.08"
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --socket=wayland
+  - --device=all
+  - --socket=pulseaudio
+command: bsnes
+rename-icon: bsnes
+rename-desktop-file: bsnes.desktop
+cleanup:
+  - "*.a"
+  - "*.la"
+  - /include
+  - /lib/pkgconfig
+  - /share/aclocal
+  - /share/doc
+  - /share/gtk-doc
+  - /share/man
+modules:
+  - shared-modules/gtk2/gtk2.json
+  - shared-modules/udev/udev-175.json
+
+  - name: gtksourceview2
+    config-opts:
+      - --disable-gtk-doc
+    sources:
+      - type: archive
+        url: "https://download.gnome.org/sources/gtksourceview/2.10/gtksourceview-2.10.5.tar.gz"
+        sha256: f5c3dda83d69c8746da78c1434585169dd8de1eecf2a6bcdda0d9925bf857c97
+
+  - name: libao
+    config-opts:
+      - --enable-pulse
+      - --disable-alsa
+    sources:
+      - type: archive
+        url: "http://downloads.xiph.org/releases/ao/libao-1.2.0.tar.gz"
+        sha256: 03ad231ad1f9d64b52474392d63c31197b0bc7bd416e58b1c10a329a5ed89caf
+
+  - name: bsnes
+    subdir: higan
+    no-autogen: true
+    make-args:
+      - target=bsnes
+      - prefix=/app
+    make-install-args:
+      - target=bsnes
+      - prefix=/app
+    post-install:
+      - mkdir -p /app/share/icons/hicolor/256x256/apps
+      - mv /app/share/icons/{,hicolor/256x256/apps/}bsnes.png
+      - mv /app/bin/bsnes{,.real}
+      - install -Dm755 ../bsnes.sh /app/bin/bsnes
+    sources:
+      - type: archive
+        url: "https://gitlab.com/higan/higan/-/archive/v107/higan-v107.tar.gz"
+        sha256: 5d1b4361b016a8b4644b2c5493a3b107cd0dc8ba907e940792d1b0a695b0d5b8
+
+      - type: script
+        dest-filename: bsnes.sh
+        commands:
+          - |
+            for d in bsnes hiro; do
+              test -d $XDG_DATA_HOME/$d || mkdir -p $XDG_DATA_HOME/$d
+              test -d $HOME/.local/share/$d || ln -s $XDG_DATA_HOME/$d $HOME/.local/share/$d
+            done
+          - exec bsnes.real "$@"
