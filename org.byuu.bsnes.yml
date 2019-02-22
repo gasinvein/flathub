@@ -11,6 +11,7 @@ finish-args:
 command: bsnes
 rename-icon: bsnes
 rename-desktop-file: bsnes.desktop
+rename-appdata-file: bsnes.appdata.xml
 cleanup:
   - "*.a"
   - "*.la"
@@ -55,6 +56,7 @@ modules:
       - mv /app/share/icons/{,hicolor/256x256/apps/}bsnes.png
       - mv /app/bin/bsnes{,.real}
       - install -Dm755 ../bsnes.sh /app/bin/bsnes
+      - install -Dm644 ../bsnes.appdata.xml -t /app/share/appdata/
     sources:
       - type: archive
         url: "https://gitlab.com/higan/higan/-/archive/v107/higan-v107.tar.gz"
@@ -69,3 +71,6 @@ modules:
               test -d $HOME/.local/share/$d || ln -s $XDG_DATA_HOME/$d $HOME/.local/share/$d
             done
           - exec bsnes.real "$@"
+      
+      - type: file
+        path: bsnes.appdata.xml

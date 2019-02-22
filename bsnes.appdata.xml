@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+    <id>bsnes.desktop</id>
+    <name>bsnes</name>
+    <developer_name>byuu</developer_name>
+    <summary>Nintendo multi-system emulator</summary>
+    <description>
+        <p>bsnes is a Super Nintendo / Super Famicom emulator that began development on October 14th, 2004. 
+        It is a subset project of higan, and focuses on performance, features, and ease of use.</p>
+    </description>
+    <launchable type="desktop-id">bsnes.desktop</launchable>
+    <categories>
+        <category>Game</category>
+    </categories>
+    <project_license>GPL-3.0</project_license>
+    <metadata_license>CC0-1.0</metadata_license>
+    <url type="homepage">https://byuu.org/emulation/bsnes/</url>
+    <releases>
+        <release version="107"/>
+    </releases>
+</component>
