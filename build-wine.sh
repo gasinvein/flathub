@@ -4,11 +4,12 @@ BRANCH=${1:-"stable"}
 REPO=$2
 EXPORT_ARGS=$3
 FB_ARGS=$4
+FLAVOURS=${@:5}
 
 set -e -x
-for flavour in vanilla staging proton esync tkg; do
+for flavour in $FLAVOURS; do
     for ARCH in x86_64 i386; do
-        flatpak-builder -v --force-clean --ccache --sandbox --delete-build-dirs \
+        flatpak-builder --force-clean --ccache --sandbox --delete-build-dirs \
             --arch=${ARCH} --repo="${REPO}" --default-branch="${BRANCH}" \
             ${FB_ARGS} ${EXPORT_ARGS} "build/wine/$flavour/$ARCH" \
             "ua.org.brezblock.q4wine.wine.$flavour.yml"
