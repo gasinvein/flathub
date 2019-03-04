@@ -16,9 +16,6 @@ finish-args:
   - --talk-name=org.gtk.Notifications
   - --talk-name=org.freedesktop.Notifications
   - --talk-name=org.kde.StatusNotifierWatcher
-  - --talk-name=org.gtk.vfs
-  - --talk-name=org.gtk.vfs.*
-  - --env=ELECTRON_TRASH=gio
   - --persist=.
 add-extensions:
   org.freedesktop.Platform.Compat.i386:
@@ -40,6 +37,7 @@ add-extensions:
     download-if: active-gl-driver
     enable-if: active-gl-driver
 modules:
+
   - name: itch
     buildsystem: simple
     build-commands:
