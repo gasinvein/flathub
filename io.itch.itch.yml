@@ -43,8 +43,7 @@ modules:
   - name: itch
     buildsystem: simple
     build-commands:
-      - mkdir -p /app/main
-      - unzip -d /app/main itch.zip
+      - cp -ax main /app/main
       - install -Dm755 itch.sh /app/bin/itch
       - install -Dm644 ${FLATPAK_ID}.desktop -t /app/share/applications/
       - install -Dm644 ${FLATPAK_ID}.appdata.xml -t /app/share/appdata/
@@ -60,19 +59,19 @@ modules:
         commands:
           - exec /app/main/itch $@
 
-      - type: file
+      - type: archive
         only-arches:
           - "i386"
-        dest-filename: itch.zip
-        url: "https://broth.itch.ovh/itch/linux-386/25.4.0/archive/default"
+        url: "https://broth.itch.ovh/itch/linux-386/25.4.0/itch-linux-386.zip"
         sha256: 06482a6aea361ddf4da99d8477b4e41c64bdd814665a62d4c5d3ba0a6381c9fd
+        dest: main
 
-      - type: file
+      - type: archive
         only-arches:
           - "x86_64"
-        dest-filename: itch.zip
-        url: "https://broth.itch.ovh/itch/linux-amd64/25.4.0/archive/default"
+        url: "https://broth.itch.ovh/itch/linux-amd64/25.4.0/itch-linux-amd64.zip"
         sha256: bb91c586bc4162a539c3394ba314fefebfaee380924fb0be37cab31586dad50e
+        dest: main
 
       - type: file
         path: io.itch.itch.desktop
