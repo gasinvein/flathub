@@ -48,7 +48,7 @@ modules:
       - install -Dm644 ${FLATPAK_ID}.desktop -t /app/share/applications/
       - install -Dm644 ${FLATPAK_ID}.appdata.xml -t /app/share/appdata/
       - |
-        for s in 16 32 48 64 128 256 512 1024; do
+        for s in 16 32 48 64 128 256 512; do
           install -Dm644 icon${s}.png /app/share/icons/hicolor/${s}x${s}/apps/${FLATPAK_ID}.png
         done
     post-install:
@@ -100,6 +100,3 @@ modules:
       - type: file
         url: "https://github.com/itchio/itch/raw/v25.4.0/release/images/itch-icons/icon512.png"
         sha256: ab6fbc4a51c5c171e725ff6ea0506b5083fc7cda984c3cbd04c870700321aece
-      - type: file
-        url: "https://github.com/itchio/itch/raw/v25.4.0/release/images/itch-icons/icon1024.png"
-        sha256: 054015fab28b1f3f163dc69eb12b20162d0915cb2a08b7679c5bbda33069b428
