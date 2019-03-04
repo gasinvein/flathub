@@ -64,6 +64,7 @@ modules:
           - "i386"
         url: "https://broth.itch.ovh/itch/linux-386/25.4.0/itch-linux-386.zip"
         sha256: 06482a6aea361ddf4da99d8477b4e41c64bdd814665a62d4c5d3ba0a6381c9fd
+        strip-components: 0
         dest: main
 
       - type: archive
@@ -71,6 +72,7 @@ modules:
           - "x86_64"
         url: "https://broth.itch.ovh/itch/linux-amd64/25.4.0/itch-linux-amd64.zip"
         sha256: bb91c586bc4162a539c3394ba314fefebfaee380924fb0be37cab31586dad50e
+        strip-components: 0
         dest: main
 
       - type: file
