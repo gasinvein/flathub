@@ -46,8 +46,8 @@ modules:
       - /share/applications
     sources:
       - type: archive
-        url: "https://dl.winehq.org/wine/source/4.x/wine-4.4.tar.xz"
-        sha256: db3a09cf4b0b4329ffed8014073c9868b5ecb4826adfb4a91aa49bd2841207b0
+        url: "https://dl.winehq.org/wine/source/4.x/wine-4.6.tar.xz"
+        sha256: 329001f924d3f825121a1b28cae8e36515405f2a1d22bc266897d3d926b562da
 
   - name: wineserver
     buildsystem: simple
