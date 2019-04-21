@@ -1,0 +1,45 @@
+id: org.freedesktop.Sdk.Extension.pacman
+branch: "18.08"
+build-extension: true
+sdk: org.freedesktop.Sdk
+runtime: org.freedesktop.Sdk
+runtime-version: "18.08"
+sdk-extensions: []
+separate-locales: false
+build-options:
+  prefix: /usr/lib/sdk/pacman
+  env:
+    C_INCLUDE_PATH: /usr/include:/usr/lib/sdk/pacman/include
+    CPLUS_INCLUDE_PATH: /usr/include:/usr/lib/sdk/pacman/include
+  prepend-path: /usr/lib/sdk/pacman/bin
+  prepend-ld-library-path: /usr/lib/sdk/pacman/lib
+  prepend-pkg-config-path: /usr/lib/sdk/pacman/lib/pkgconfig
+modules:
+
+  - name: pacman
+    config-opts:
+      - --localstatedir=/var
+    post-install:
+      - cat pacman-flatpak.conf >> ${FLATPAK_DEST}/etc/pacman.conf
+    sources:
+      - type: archive
+        url: "https://sources.archlinux.org/other/pacman/pacman-5.1.3.tar.gz"
+        sha256: 10db61a0928d619871340c3f93a677d1541d6c52353c516aec4f8d96e830d4eb
+      - type: patch
+        path: patches/0001-Never-need-root.patch
+      - type: file
+        path: pacman-flatpak.conf
+
+  - name: fakechroot
+    sources:
+      - type: archive
+        url: "https://github.com/dex4er/fakechroot/archive/2.20.1.tar.gz"
+        sha256: 7f9d60d0d48611969e195fadf84d05f6c74f71bbf8f41950ad8f5bf061773e18
+
+  - name: pacman-env
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 pacman-flatpak-init.sh ${FLATPAK_DEST}/init.sh
+    sources:
+      - type: file
+        path: pacman-flatpak-init.sh

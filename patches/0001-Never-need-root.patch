@@ -1,0 +1,60 @@
+From ce7f3cd54fac0c9e43f810ff41d4132920fac566 Mon Sep 17 00:00:00 2001
+From: gasinvein <gasinvein@gmail.com>
+Date: Sun, 21 Apr 2019 23:04:11 +0300
+Subject: [PATCH] Never need root
+
+---
+ scripts/pacman-key.sh.in |  5 -----
+ src/pacman/util.c        | 20 ++------------------
+ 2 files changed, 2 insertions(+), 23 deletions(-)
+
+diff --git a/scripts/pacman-key.sh.in b/scripts/pacman-key.sh.in
+index 5e75230f..2b70e4ae 100644
+--- a/scripts/pacman-key.sh.in
++++ b/scripts/pacman-key.sh.in
+@@ -569,11 +569,6 @@ if ! type -p gpg >/dev/null; then
+ 	exit 1
+ fi
+ 
+-if (( (ADD || DELETE || EDITKEY || IMPORT || IMPORT_TRUSTDB || INIT || LSIGNKEY || POPULATE || RECEIVE || REFRESH || UPDATEDB) && EUID != 0 )); then
+-	error "$(gettext "%s needs to be run as root for this operation.")" "pacman-key"
+-	exit 1
+-fi
+-
+ CONFIG=${CONFIG:-@sysconfdir@/pacman.conf}
+ if [[ ! -r "${CONFIG}" ]]; then
+ 	error "$(gettext "%s configuration file '%s' not found.")" "pacman" "$CONFIG"
+diff --git a/src/pacman/util.c b/src/pacman/util.c
+index 74e1037d..7573206b 100644
+--- a/src/pacman/util.c
++++ b/src/pacman/util.c
+@@ -103,24 +103,8 @@ int trans_release(void)
+ 
+ int needs_root(void)
+ {
+-	if(config->sysroot) {
+-		return 1;
+-	}
+-	switch(config->op) {
+-		case PM_OP_DATABASE:
+-			return !config->op_q_check;
+-		case PM_OP_UPGRADE:
+-		case PM_OP_REMOVE:
+-			return !config->print;
+-		case PM_OP_SYNC:
+-			return (config->op_s_clean || config->op_s_sync ||
+-					(!config->group && !config->op_s_info && !config->op_q_list &&
+-					 !config->op_s_search && !config->print));
+-		case PM_OP_FILES:
+-			return config->op_s_sync;
+-		default:
+-			return 0;
+-	}
++	/* We never need root in flatpak sandbox */
++	return 0;
+ }
+ 
+ int check_syncdbs(size_t need_repos, int check_valid)
+-- 
+2.21.0
+
