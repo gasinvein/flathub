@@ -38,6 +38,8 @@ add-extensions:
     enable-if: active-gl-driver
 modules:
 
+  - shared-modules/glu/glu-9.0.0.json
+
   - name: itch
     buildsystem: simple
     build-commands:
