@@ -1,0 +1,38 @@
+id: de.florian_diesch.Arronax
+sdk: org.gnome.Sdk
+runtime: org.gnome.Platform
+runtime-version: "3.32"
+finish-args:
+  - --share=ipc
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --device=dri
+  - --talk-name=ca.desrt.dconf
+  - --filesystem=xdg-run/dconf
+  - --filesystem=xdg-config/dconf:ro
+command: arronax
+rename-icon: arronax
+rename-desktop-file: arronax.desktop
+cleanup:
+  - "*.a"
+  - "*.la"
+  - /include
+  - /lib/pkgconfig
+  - /share/man
+modules:
+
+  - name: arronax
+    buildsystem: simple
+    build-commands:
+      - python3 setup.py install --prefix=/app --root=/
+    post-install:
+      - |
+        for i in /app/share/icons/hicolor/*/arronax.png; do
+          d=$(dirname $i)/apps/
+          mkdir -p $d
+          mv $i $d/
+        done
+    sources:
+      - type: archive
+        url: "https://www.florian-diesch.de/software/arronax/dist/arronax-0.7.0.tar.gz"
+        sha256: aabe836abcd1d4dd266275f9c1d26a01c2319b47703834f0996288613d538f31
