@@ -1,0 +1,25 @@
+id: org.winehq.Wine.gecko
+runtime: org.winehq.Wine
+sdk: org.freedesktop.Sdk//19.08
+build-extension: true
+separate-locales: false
+appstream-compose: false
+modules:
+
+  - name: wine-gecko
+    buildsystem: simple
+    build-commands:
+      - install -v -Dm755 *.msi -t ${FLATPAK_DEST}/
+    sources:
+      - type: file
+        only-arches:
+          - "i386"
+          - "x86_64"
+        url: "https://dl.winehq.org/wine/wine-gecko/2.47/wine_gecko-2.47-x86.msi"
+        sha256: 3b8a361f5d63952d21caafd74e849a774994822fb96c5922b01d554f1677643a
+
+      - type: file
+        only-arches:
+          - "x86_64"
+        url: "https://dl.winehq.org/wine/wine-gecko/2.47/wine_gecko-2.47-x86_64.msi"
+        sha256: c565ea25e50ea953937d4ab01299e4306da4a556946327d253ea9b28357e4a7d
