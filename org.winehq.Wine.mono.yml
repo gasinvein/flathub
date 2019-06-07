@@ -1,0 +1,16 @@
+id: org.winehq.Wine.mono
+runtime: org.winehq.Wine
+sdk: org.freedesktop.Sdk//19.08
+build-extension: true
+separate-locales: false
+appstream-compose: false
+modules:
+
+  - name: wine-mono
+    buildsystem: simple
+    build-commands:
+      - install -v -Dm755 *.msi -t ${FLATPAK_DEST}/
+    sources:
+      - type: file
+        url: "https://dl.winehq.org/wine/wine-mono/4.8.3/wine-mono-4.8.3.msi"
+        sha256: d6fa1f019bfa3c572438e4a2473ce25af1e937ed4cdcbe46554164ce25db0a76
