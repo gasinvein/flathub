@@ -1,7 +1,7 @@
 id: im.trillian.Trillian
-runtime: org.gnome.Platform
-sdk: org.gnome.Sdk
-runtime-version: '3.28'
+runtime: org.freedesktop.Platform
+sdk: org.freedesktop.Sdk
+runtime-version: "18.08"
 finish-args:
   - --share=ipc
   - --socket=x11
@@ -73,6 +73,21 @@ modules:
             url: "https://download.gnome.org/sources/atkmm/2.28/atkmm-2.28.0.tar.xz"
             sha256: 4c4cfc917fd42d3879ce997b463428d6982affa0fb660cafcc0bc2d9afcedd3a
 
+  - name: libnotify
+    sources:
+      - type: archive
+        url: "https://download.gnome.org/sources/libnotify/0.7/libnotify-0.7.8.tar.xz"
+        sha256: 69209e0b663776a00c7b6c0e560302a8dbf66b2551d55616304f240bba66e18c
+    modules:
+
+      - name: gnome-common
+        cleanup:
+          - "*"
+        sources:
+          - type: archive
+            url: "https://download.gnome.org/sources/gnome-common/3.18/gnome-common-3.18.0.tar.xz"
+            sha256: 22569e370ae755e04527b76328befc4c73b62bfd4a572499fde116b8318af8cf
+
   - shared-modules/dbus-glib/dbus-glib-0.110.json
 
   - shared-modules/libappindicator/libappindicator-gtk3-introspection-12.10.json
@@ -82,7 +97,7 @@ modules:
     build-commands:
       - mkdir -p /app/bin /app/lib
       - cp /usr/bin/ar /app/bin
-      - cp /usr/lib/libbfd-*.so /app/lib
+      - cp /usr/lib/$(gcc -print-multiarch)/libbfd-*.so /app/lib
       - install -Dm755 apply_extra /app/bin/apply_extra
       - ln -sf ../extra/trillian/trillian /app/bin/trillian
     sources:
