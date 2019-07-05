@@ -1,0 +1,128 @@
+id: io.github.ebruck.Radiotray-NG
+sdk: org.freedesktop.Sdk
+runtime: org.freedesktop.Platform
+runtime-version: "18.08"
+finish-args:
+  - --share=ipc
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --device=dri
+  - --socket=pulseaudio
+  - --share=network
+  - --talk-name=org.freedesktop.Notifications
+command: radiotray-ng
+rename-desktop-file: radiotray-ng.desktop
+rename-appdata-file: radiotray-ng.appdata.xml
+rename-icon: radiotray-ng-notification
+copy-icon: true
+cleanup:
+  - "*.a"
+  - "*.la"
+  - /include
+  - /lib/pkgconfig
+  - /share/aclocal
+  - /lib/cmake
+modules:
+
+  - name: radiotray-ng
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DUSER_AGENT_DISTRO="Freedesktop.org"
+      - -DUSER_AGENT_DISTRO_RELEASE="18.08"
+      - -DUSER_AGENT_DISTRO_CODENAME=""
+      - -DDISTRIBUTOR_ID="Freedesktop.org"
+      - -DRELEASE="18.08"
+      - -DCODENAME=""
+    post-install:
+      - desktop-file-edit --set-key=Exec --set-value="radiotray-ng" /app/share/applications/radiotray-ng.desktop
+      - desktop-file-edit --set-key=Exec --set-value="rtng-bookmark-editor" /app/share/applications/rtng-bookmark-editor.desktop
+      - desktop-file-edit --set-key=Icon --set-value="${FLATPAK_ID}" /app/share/applications/rtng-bookmark-editor.desktop
+      - mv /app/share/applications/{rtng,${FLATPAK_ID}}-bookmark-editor.desktop
+    sources:
+      - type: git
+        url: "https://github.com/ebruck/radiotray-ng.git"
+        branch: v0.2.6-dev
+      - type: shell
+        commands:
+          - sed '/execute_process(COMMAND lsb_release/d' -i package/CMakeLists.txt
+          - sed 's|/usr/|/app/|g' -i package/CMakeLists.txt
+          - sed 's|/etc/|/app/etc/|g' -i package/CMakeLists.txt
+    modules:
+
+      - name: boost
+        config-opts:
+          - --with-libraries=filesystem,system,log,program_options,thread
+        sources:
+          - type: archive
+            url: "https://dl.bintray.com/boostorg/release/1.66.0/source/boost_1_66_0.tar.gz"
+            sha256: bd0df411efd9a585e5a2212275f8762079fed8842264954675a4fddc46cfcf60
+          - type: script
+            dest-filename: configure
+            commands:
+              - exec ./bootstrap.sh "$@"
+          - type: file
+            dest-filename: Makefile
+            url: "data:all%3A%0A%09./b2%20-j%20%24%28FLATPAK_BUILDER_N_JOBS%29%0A%0Ainstall%3A%0A%09./b2%20install%0A"
+
+      - name: wxWidgets
+        sources:
+          - type: archive
+            url: "https://github.com/wxWidgets/wxWidgets/releases/download/v3.0.4/wxWidgets-3.0.4.tar.bz2"
+            sha256: 96157f988d261b7368e5340afa1a0cad943768f35929c22841f62c25b17bf7f0
+        cleanup:
+          - /bin
+          - /lib/wx/include
+
+      - shared-modules/dbus-glib/dbus-glib-0.110.json
+
+      - shared-modules/libappindicator/libappindicator-gtk3-12.10.json
+
+      - name: glibmm
+        config-opts:
+          - --disable-documentation
+        sources:
+          - type: archive
+            url: "http://ftp.gnome.org/pub/GNOME/sources/glibmm/2.56/glibmm-2.56.0.tar.xz"
+            sha256: 6e74fcba0d245451c58fc8a196e9d103789bc510e1eee1a9b1e816c5209e79a9
+        modules:
+
+          - name: sigc++
+            config-opts:
+              - --disable-documentation
+            sources:
+              - type: archive
+                url: "http://ftp.gnome.org/pub/GNOME/sources/libsigc++/2.10/libsigc++-2.10.0.tar.xz"
+                sha256: f843d6346260bfcb4426259e314512b99e296e8ca241d771d21ac64f28298d81
+
+      - name: jsoncpp
+        buildsystem: cmake-ninja
+        config-opts:
+          - -DBUILD_SHARED_LIBS=ON
+          - -DBUILD_STATIC_LIBS=OFF
+          - -DJSONCPP_WITH_TESTS=OFF
+        sources:
+          - type: archive
+            url: "https://github.com/open-source-parsers/jsoncpp/archive/1.8.4.tar.gz"
+            sha256: c49deac9e0933bcb7044f08516861a2d560988540b23de2ac1ad443b219afdb6
+
+      - name: libxdg-basedir
+        sources:
+          - type: archive
+            url: "https://github.com/devnev/libxdg-basedir/archive/libxdg-basedir-1.2.0.tar.gz"
+            sha256: 1c2b0032a539033313b5be2e48ddd0ae94c84faf21d93956d53562eef4614868
+
+      - name: libbsd
+        sources:
+          - type: archive
+            url: "https://libbsd.freedesktop.org/releases/libbsd-0.9.1.tar.xz"
+            sha256: 56d835742327d69faccd16955a60b6dcf30684a8da518c4eca0ac713b9e0a7a4
+
+      - name: libnotify
+        config-opts:
+          - --disable-static
+          - --disable-tests
+          - --disable-introspection
+        sources:
+          - type: archive
+            url: "https://download.gnome.org/sources/libnotify/0.7/libnotify-0.7.7.tar.xz"
+            sha256: 9cb4ce315b2655860c524d46b56010874214ec27e854086c1a1d0260137efc04
