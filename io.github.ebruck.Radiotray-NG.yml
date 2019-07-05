@@ -10,6 +10,9 @@ finish-args:
   - --socket=pulseaudio
   - --share=network
   - --talk-name=org.freedesktop.Notifications
+  - --talk-name=org.kde.StatusNotifierWatcher
+  - --own-name=com.github.radiotray_ng
+  - --talk-name=org.gnome.SettingsDaemon.MediaKeys
 command: radiotray-ng
 rename-desktop-file: radiotray-ng.desktop
 rename-appdata-file: radiotray-ng.appdata.xml
