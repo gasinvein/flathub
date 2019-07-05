@@ -50,6 +50,7 @@ modules:
           - sed '/execute_process(COMMAND lsb_release/d' -i package/CMakeLists.txt
           - sed 's|/usr/|/app/|g' -i package/CMakeLists.txt
           - sed 's|/etc/|/app/etc/|g' -i package/CMakeLists.txt
+          - sed 's|/usr/|/app/|g' -i include/radiotray-ng/common.hpp
     modules:
 
       - name: boost
