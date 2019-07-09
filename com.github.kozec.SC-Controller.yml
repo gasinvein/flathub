@@ -1,0 +1,98 @@
+id: com.github.kozec.SC-Controller
+sdk: org.freedesktop.Sdk
+runtime: org.freedesktop.Platform
+runtime-version: "18.08"
+finish-args:
+  - --share=ipc
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --device=all
+command: sc-controller
+rename-icon: sc-controller
+rename-desktop-file: sc-controller.desktop
+rename-appdata-file: sc-controller.appdata.xml
+cleanup:
+  - /include
+  - /lib/pkgconfig
+modules:
+  - shared-modules/python2.7/python-2.7.json
+
+  - name: sc-controller
+    buildsystem: simple
+    build-commands: &py2_build
+      - python2 setup.py build
+      - python2 setup.py install --prefix=/app --root=/
+    post-install:
+      - install -Dm644 scripts/sc-controller.appdata.xml -t /app/share/appdata/
+      - install -Dm644 /app/share/{pixmaps,icons/hicolor/scalable/apps}/sc-controller.svg
+      - |
+        icondir=/app/share/icons/hicolor
+        for s in 64 128 256 512; do
+          mkdir -p ${icondir}/${s}x${s}/apps
+          rsvg-convert -w ${s} -a -o ${icondir}/{${s}x${s},scalable}/apps/sc-controller.svg
+        done
+    sources:
+      - type: git
+        url: "https://github.com/kozec/sc-controller.git"
+        tag: v0.4.7
+
+    modules:
+
+      - name: pygobject
+        buildsystem: meson
+        config-opts:
+          - -Dpython=python2
+        sources:
+          - type: archive
+            url: "https://download.gnome.org/sources/pygobject/3.32/pygobject-3.32.1.tar.xz"
+            sha256: 32c99def94b8dea5ce9e4bc99576ef87591ea779b4db77cfdca7af81b76d04d8
+        modules:
+
+          - name: pycairo
+            buildsystem: meson
+            config-opts:
+              - -Dpython=python2
+            sources:
+              - type: archive
+                url: "https://github.com/pygobject/pycairo/archive/v1.18.1.tar.gz"
+                sha256: 9c282449741f82c016d5682e150d4a17785fad273600ce59535ca0e0339ba9cc
+
+      - name: python-evdev
+        buildsystem: simple
+        build-commands: *py2_build
+        sources:
+          - type: archive
+            url: "https://github.com/gvalkov/python-evdev/archive/v1.2.0.tar.gz"
+            sha256: f788584510620251c6a6c68802935b71c4b474df99b87ee223e18b84dd1719a6
+
+      - name: pylibacl
+        buildsystem: simple
+        build-commands: *py2_build
+        sources:
+          - type: archive
+            url: "https://pylibacl.k1024.org/downloads/pylibacl-0.5.3.tar.gz"
+            sha256: 40be9f1fc5de05e4c25505c45ad7cda61b3b8db5dd730e98b6d2c05574e07d30
+
+      - name: libusb
+        sources:
+          - type: archive
+            url: "https://github.com//libusb/libusb/releases/download/v1.0.22/libusb-1.0.22.tar.bz2"
+            sha256: 75aeb9d59a4fdb800d329a545c2e6799f732362193b465ea198f2aa275518157
+        modules:
+
+          - name: eudev
+            cleanup:
+              - /bin
+              - /sbin
+              - /lib*/udev
+            post-install:
+              - udevadm hwdb --update
+            sources:
+              - type: archive
+                url: "https://github.com/gentoo/eudev/archive/v3.2.7.tar.gz"
+                sha256: ce2fda4dea129bbcf824c947aab23504bcd26911481b47dbaf10646f723083a4
+
+  - name: kernel-headers
+    buildsystem: simple
+    build-commands:
+      - install -Dm644 /usr/include/linux/input-event-codes.h -t /app/lib/python2.7/site-packages/scc/
