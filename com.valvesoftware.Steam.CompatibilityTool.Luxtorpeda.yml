@@ -1,5 +1,7 @@
 id: com.valvesoftware.Steam.CompatibilityTool.Luxtorpeda
+branch: beta
 runtime: com.valvesoftware.Steam
+runtime-version: beta
 sdk: org.freedesktop.Sdk//19.08beta
 build-extension: true
 appstream-compose: false
