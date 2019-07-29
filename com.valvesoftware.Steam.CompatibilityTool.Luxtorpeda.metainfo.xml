@@ -4,6 +4,8 @@
   <extends>com.valvesoftware.Steam</extends>
   <name>Luxtorpeda</name>
   <summary>Compatibility tool to run games on Steam using native Linux engines</summary>
+  <summary xml:lang="pt_BR">Ferramenta de compatibilidade para rodar jogos no Steam usando motores nativos do Linux</summary>
+  <summary xml:lang="es">Herramienta de compatibilidad para ejecutar juegos en Steam usando motores nativos de Linux</summary>
   <url type="homepage">https://github.com/dreamer/Luxtorpeda</url>
   <url type="help">https://github.com/dreamer/Luxtorpeda/wiki</url>
   <url type="bugtracker">https://github.com/dreamer/Luxtorpeda/issues</url>
