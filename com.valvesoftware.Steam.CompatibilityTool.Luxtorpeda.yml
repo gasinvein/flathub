@@ -1,0 +1,33 @@
+id: com.valvesoftware.Steam.CompatibilityTool.Luxtorpeda
+runtime: com.valvesoftware.Steam
+sdk: org.freedesktop.Sdk//19.08beta
+build-extension: true
+appstream-compose: false
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.rust-stable
+build-options:
+  prefix: /app/compatibilitytools.d/Luxtorpeda
+  prepend-path: /usr/lib/sdk/rust-stable/bin
+  strip: true
+cleanup:
+  - "*.a"
+  - "*.la"
+  - /include
+  - /lib/pkgconfig
+  - /share/aclocal
+  - /share/man
+modules:
+
+  - name: luxtorpeda
+    build-options:
+      env:
+        CARGO_HOME: cargo
+    no-autogen: true
+    make-install-args:
+      - install_dir=${FLATPAK_DEST}
+      - STRIP=/bin/true
+    sources:
+      - type: git
+        url: "https://github.com/dreamer/luxtorpeda.git"
+        commit: e8f7d8ba386fdd0437b2ea4a1ba03c03c3e4808a
+      - generated-sources.json
