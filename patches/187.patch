@@ -1,0 +1,196 @@
+From 345e1f2e16a7cb4369e82d0cf13aa16d5f716a09 Mon Sep 17 00:00:00 2001
+From: Symphorien Gibol <symphorien+git@xlumurb.eu>
+Date: Sat, 30 Mar 2019 17:40:10 +0100
+Subject: [PATCH 1/5] cmake: use system libcmark and libssh2 when available
+
+---
+ dep/CMakeLists.txt         |  1 +
+ dep/cmark/CMakeLists.txt   | 20 +++++++++++++-------
+ dep/libssh2/CMakeLists.txt | 17 +++++++++++------
+ pack/CMakeLists.txt        |  1 +
+ src/update/CMakeLists.txt  |  2 +-
+ 5 files changed, 27 insertions(+), 14 deletions(-)
+
+diff --git a/dep/CMakeLists.txt b/dep/CMakeLists.txt
+index 16845171..4f4affe9 100644
+--- a/dep/CMakeLists.txt
++++ b/dep/CMakeLists.txt
+@@ -1,3 +1,4 @@
++find_package(PkgConfig)
+ add_subdirectory(openssl)
+ add_subdirectory(libssh2)
+ add_subdirectory(libgit2)
+diff --git a/dep/cmark/CMakeLists.txt b/dep/cmark/CMakeLists.txt
+index 7c9234cf..ed8ea78d 100644
+--- a/dep/cmark/CMakeLists.txt
++++ b/dep/cmark/CMakeLists.txt
+@@ -1,8 +1,14 @@
+-set(CMARK_TESTS OFF CACHE BOOL "" FORCE)
+-set(CMARK_SHARED OFF CACHE BOOL "" FORCE)
++IF (PKG_CONFIG_FOUND)
++  pkg_check_modules(LIBCMARK libcmark)
++ENDIF()
++IF (NOT LIBCMARK_FOUND)
++  set(CMARK_TESTS OFF CACHE BOOL "" FORCE)
++  set(CMARK_SHARED OFF CACHE BOOL "" FORCE)
+ 
+-add_subdirectory(cmark)
+-target_include_directories(libcmark_static INTERFACE
+-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/cmark/src>
+-  $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/cmark/src>
+-)
++  add_subdirectory(cmark)
++  target_include_directories(libcmark_static INTERFACE
++    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/cmark/src>
++    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/cmark/src>
++  )
++  set(LIBCMARK_LIBRARIES libcmark_static CACHE INTERNAL "libcmark implementation" FORCE)
++ENDIF()
+diff --git a/dep/libssh2/CMakeLists.txt b/dep/libssh2/CMakeLists.txt
+index b92a3841..4680e98a 100644
+--- a/dep/libssh2/CMakeLists.txt
++++ b/dep/libssh2/CMakeLists.txt
+@@ -1,8 +1,13 @@
+-set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+-set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
++IF (PKG_CONFIG_FOUND)
++  pkg_check_modules(LIBSSH2 libssh2)
++ENDIF()
++IF (NOT LIBSSH2_FOUND)
++  set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
++  set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
+ 
+-add_subdirectory(libssh2)
++  add_subdirectory(libssh2)
+ 
+-set(LIBSSH2_FOUND TRUE PARENT_SCOPE)
+-set(LIBSSH2_LIBRARIES libssh2 PARENT_SCOPE)
+-set(LIBSSH2_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/libssh2/include PARENT_SCOPE)
++  set(LIBSSH2_FOUND TRUE PARENT_SCOPE)
++  set(LIBSSH2_LIBRARIES libssh2 PARENT_SCOPE)
++  set(LIBSSH2_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/libssh2/include PARENT_SCOPE)
++ENDIF()
+diff --git a/pack/CMakeLists.txt b/pack/CMakeLists.txt
+index f1ee3354..1b623395 100644
+--- a/pack/CMakeLists.txt
++++ b/pack/CMakeLists.txt
+@@ -174,6 +174,7 @@ if(NOT APPLE)
+       PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
+         GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+       COMPONENT ${GITAHEAD_NAME}
++      OPTIONAL # if we use the system libssh, we have not build openssl
+     )
+   endforeach()
+ endif()
+diff --git a/src/update/CMakeLists.txt b/src/update/CMakeLists.txt
+index 552f8afb..a8a49fd9 100644
+--- a/src/update/CMakeLists.txt
++++ b/src/update/CMakeLists.txt
+@@ -15,7 +15,7 @@ add_library(update
+ 
+ target_link_libraries(update
+   conf
+-  libcmark_static
++  ${LIBCMARK_LIBRARIES}
+   Qt5::Network
+   Qt5::Widgets
+   ${UPDATER_IMPL_LIBS}
+
+From d55b33b7e15c2ed2464c37efb8e1a2e1766bd26f Mon Sep 17 00:00:00 2001
+From: Symphorien Gibol <symphorien+git@xlumurb.eu>
+Date: Sat, 30 Mar 2019 21:28:11 +0100
+Subject: [PATCH 2/5] cmake: use system lua if available
+
+---
+ dep/lua/CMakeLists.txt | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/dep/lua/CMakeLists.txt b/dep/lua/CMakeLists.txt
+index 13124362..f29ba627 100644
+--- a/dep/lua/CMakeLists.txt
++++ b/dep/lua/CMakeLists.txt
+@@ -1,3 +1,7 @@
++IF (PKG_CONFIG_FOUND)
++  pkg_check_modules(LUA lua>=5.3)
++ENDIF()
++IF (NOT LUA_FOUND)
+ set(LUA_DIR lua-5.3.4)
+ 
+ add_library(lua
+@@ -41,3 +45,6 @@ add_library(lua
+ target_include_directories(lua INTERFACE
+   ${CMAKE_CURRENT_SOURCE_DIR}/${LUA_DIR}/src
+ )
++
++set(LUA_LIBRARIES lua CACHE INTERNAL "lua implementation" FORCE)
++ENDIF()
+
+From 2f7f5fa4cc2ebc0641653fa88cfde3e34a035b1d Mon Sep 17 00:00:00 2001
+From: Symphorien Gibol <symphorien+git@xlumurb.eu>
+Date: Sun, 14 Apr 2019 23:46:01 +0200
+Subject: [PATCH 3/5] pkg-config: detect lua-5.3 and not only lua
+
+---
+ dep/lua/CMakeLists.txt | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/dep/lua/CMakeLists.txt b/dep/lua/CMakeLists.txt
+index f29ba627..e3497f2c 100644
+--- a/dep/lua/CMakeLists.txt
++++ b/dep/lua/CMakeLists.txt
+@@ -1,6 +1,9 @@
+ IF (PKG_CONFIG_FOUND)
+   pkg_check_modules(LUA lua>=5.3)
+ ENDIF()
++IF (PKG_CONFIG_FOUND AND (NOT LUA_FOUND))
++  pkg_check_modules(LUA lua-5.3)
++ENDIF()
+ IF (NOT LUA_FOUND)
+ set(LUA_DIR lua-5.3.4)
+ 
+
+From 55a18cf612ac417d5bff94899128b61c2b2d7d4e Mon Sep 17 00:00:00 2001
+From: Symphorien Gibol <symphorien+git@xlumurb.eu>
+Date: Mon, 15 Apr 2019 14:38:54 +0200
+Subject: [PATCH 4/5] Revert "pkg-config: detect lua-5.3 and not only lua"
+
+This reverts commit 2f7f5fa4cc2ebc0641653fa88cfde3e34a035b1d.
+---
+ dep/lua/CMakeLists.txt | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/dep/lua/CMakeLists.txt b/dep/lua/CMakeLists.txt
+index e3497f2c..f29ba627 100644
+--- a/dep/lua/CMakeLists.txt
++++ b/dep/lua/CMakeLists.txt
+@@ -1,9 +1,6 @@
+ IF (PKG_CONFIG_FOUND)
+   pkg_check_modules(LUA lua>=5.3)
+ ENDIF()
+-IF (PKG_CONFIG_FOUND AND (NOT LUA_FOUND))
+-  pkg_check_modules(LUA lua-5.3)
+-ENDIF()
+ IF (NOT LUA_FOUND)
+ set(LUA_DIR lua-5.3.4)
+ 
+
+From b0a6705cde6e2ffaa962b031e46015fb8e73f02c Mon Sep 17 00:00:00 2001
+From: Symphorien Gibol <symphorien+git@xlumurb.eu>
+Date: Mon, 15 Apr 2019 14:40:56 +0200
+Subject: [PATCH 5/5] pkg-config: look for any of lua, lua5.3, lua-5.3
+
+---
+ dep/lua/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dep/lua/CMakeLists.txt b/dep/lua/CMakeLists.txt
+index f29ba627..a51cba73 100644
+--- a/dep/lua/CMakeLists.txt
++++ b/dep/lua/CMakeLists.txt
+@@ -1,5 +1,5 @@
+ IF (PKG_CONFIG_FOUND)
+-  pkg_check_modules(LUA lua>=5.3)
++  pkg_search_module(LUA lua-5.3 lua5.3 lua>=5.3)
+ ENDIF()
+ IF (NOT LUA_FOUND)
+ set(LUA_DIR lua-5.3.4)

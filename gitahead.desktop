@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=GitAhead
+GenericName=Graphical Git client
+Comment=Understand your Git history!
+Exec=GitAhead %f
+Icon=gitahead
+Terminal=false
+StartupNotify=true
+Categories=Qt;Development;
+MimeType=inode/directory;

@@ -1,0 +1,331 @@
+From 6ab7a48f64d47f137e66ffd6fc539fa6b3d70950 Mon Sep 17 00:00:00 2001
+From: Symphorien Gibol <symphorien+git@xlumurb.eu>
+Date: Sun, 31 Mar 2019 22:25:49 +0200
+Subject: [PATCH 1/2] cmake: Be more FHS compliant when installing
+
+We do not install qt.conf anymore because we install plugins in `plugins` which is the default path according to https://doc.qt.io/qt-5/qt-conf.html
+---
+ CMakeLists.txt             |  2 ++
+ dep/git/CMakeLists.txt     |  2 +-
+ pack/CMakeLists.txt        | 17 +++++------------
+ src/app/CMakeLists.txt     | 15 ++++++++-------
+ src/conf/CMakeLists.txt    |  5 +++--
+ src/conf/Settings.cpp      |  8 +++++++-
+ src/conf/Settings.h        |  1 +
+ src/cred/GitCredential.cpp |  3 ++-
+ src/index/CMakeLists.txt   |  2 +-
+ src/ui/RepoView.cpp        |  2 +-
+ src/update/CMakeLists.txt  |  4 ++--
+ src/update/Updater.cpp     |  1 +
+ 12 files changed, 34 insertions(+), 28 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 2c24044c..12f8b63d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -10,6 +10,8 @@ set(GITAHEAD_VERSION
+   "${GITAHEAD_VERSION_MAJOR}.${GITAHEAD_VERSION_MINOR}.${GITAHEAD_VERSION_PATCH}"
+ )
+ 
++include(GNUInstallDirs)
++
+ # Generate build date.
+ string(TIMESTAMP GITAHEAD_BUILD_DATE)
+ 
+diff --git a/dep/git/CMakeLists.txt b/dep/git/CMakeLists.txt
+index 3fd9909e..9d760488 100644
+--- a/dep/git/CMakeLists.txt
++++ b/dep/git/CMakeLists.txt
+@@ -13,7 +13,7 @@ macro(add_helper NAME)
+ 
+   if(NOT APPLE)
+     install(TARGETS ${TARGET}
+-      DESTINATION .
++      DESTINATION ${CMAKE_INSTALL_LIBEXECDIR}
+       COMPONENT ${GITAHEAD_NAME}
+     )
+   endif()
+diff --git a/pack/CMakeLists.txt b/pack/CMakeLists.txt
+index f1ee3354..66cad06f 100644
+--- a/pack/CMakeLists.txt
++++ b/pack/CMakeLists.txt
+@@ -38,7 +38,7 @@ foreach(QT_PLUGIN ${QT_PLUGINS})
+   set(PLUGIN_PATH Plugins/${DIR_NAME}/${FILE_NAME})
+ 
+   install(FILES ${PLUGIN}
+-    DESTINATION $<${MAC}:${CONTENTS_DIR}/>Plugins/${DIR_NAME}
++    DESTINATION $<${MAC}:${CONTENTS_DIR}/>plugins/${DIR_NAME}
+     PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
+       GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+     COMPONENT ${GITAHEAD_NAME}
+@@ -111,7 +111,7 @@ foreach(QT_MODULE ${QT_MODULES})
+     endif()
+ 
+     install(FILES ${QT_LIBRARY}
+-      DESTINATION .
++      DESTINATION ${CMAKE_INSTALL_LIBDIR}
+       PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
+         GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+       COMPONENT ${GITAHEAD_NAME}
+@@ -138,7 +138,7 @@ if(UNIX AND NOT APPLE)
+   get_filename_component(LIB_EXT ${QT_CORE_LIBRARY} EXT)
+ 
+   install(FILES "${LIB_PATH}/${LIB_NAME}${LIB_EXT}"
+-    DESTINATION .
++    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+     PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
+       GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+     COMPONENT ${GITAHEAD_NAME}
+@@ -170,7 +170,7 @@ if(NOT APPLE)
+     endif()
+ 
+     install(FILES ${SSL_LIB}
+-      DESTINATION .
++      DESTINATION ${CMAKE_INSTALL_LIBDIR}
+       PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
+         GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+       COMPONENT ${GITAHEAD_NAME}
+@@ -178,17 +178,10 @@ if(NOT APPLE)
+   endforeach()
+ endif()
+ 
+-# Install config files.
+-set(QT_CONF ${CONF_DIR}/qt.conf)
+-install(FILES ${QT_CONF}
+-  DESTINATION $<${MAC}:${CONTENTS_DIR}/Resources/>.
+-  COMPONENT ${GITAHEAD_NAME}
+-)
+-
+ if(NOT APPLE)
+   if(UNIX)
+     install(DIRECTORY ${RSRC_DIR}/GitAhead.iconset
+-      DESTINATION Resources
++      DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pixmaps
+       COMPONENT ${GITAHEAD_NAME}
+     )
+   endif()
+diff --git a/src/app/CMakeLists.txt b/src/app/CMakeLists.txt
+index f474df5a..f661ffd2 100644
+--- a/src/app/CMakeLists.txt
++++ b/src/app/CMakeLists.txt
+@@ -133,10 +133,11 @@ add_dependencies(gitahead indexer relauncher)
+ 
+ # Install application.
+ install(TARGETS gitahead
+-  DESTINATION .
++  DESTINATION ${CMAKE_INSTALL_BINDIR}
+   COMPONENT ${GITAHEAD_NAME}
+ )
+ 
++set(PRIVATE_DATADIR ${CMAKE_INSTALL_DATADIR}/gitahead)
+ if(APPLE)
+   get_target_property(QT_LIBRARY Qt5::Core LOCATION)
+   get_filename_component(QT_FRAMEWORK ${QT_LIBRARY} DIRECTORY)
+@@ -181,36 +182,36 @@ else()
+   # Install config files.
+   if(CHANGELOG_HTML AND ACKNOWLEDGMENTS_HTML AND PRIVACY_HTML AND PLUGIN_HTML)
+     install(FILES ${CHANGELOG_HTML} ${ACKNOWLEDGMENTS_HTML} ${PRIVACY_HTML} ${PLUGIN_HTML}
+-      DESTINATION Resources
++      DESTINATION ${PRIVATE_DATADIR}
+       COMPONENT ${GITAHEAD_NAME}
+     )
+   endif()
+ 
+   install(FILES ${EMOJI} ${MERGETOOLS}
+-    DESTINATION Resources
++    DESTINATION ${PRIVATE_DATADIR}
+     COMPONENT ${GITAHEAD_NAME}
+   )
+ 
+   foreach(CONFIG_FILE ${CONFIG_FILES})
+     install(FILES ${CONFIG_FILE}
+-      DESTINATION Resources
++      DESTINATION ${PRIVATE_DATADIR}
+       COMPONENT ${GITAHEAD_NAME}
+     )
+   endforeach()
+ 
+   install(FILES ${THEMES}
+-    DESTINATION Resources/themes
++    DESTINATION ${PRIVATE_DATADIR}/themes
+     COMPONENT ${GITAHEAD_NAME}
+   )
+ 
+   install(FILES ${LUA_PLUGINS}
+-    DESTINATION Resources/plugins
++    DESTINATION ${PRIVATE_DATADIR}/plugins
+     COMPONENT ${GITAHEAD_NAME}
+   )
+ 
+   foreach(SCINTILLUA_LEXER ${SCINTILLUA_LEXERS})
+     install(FILES ${SCINTILLUA_LEXER}
+-      DESTINATION Resources/lexers
++      DESTINATION ${PRIVATE_DATADIR}/lexers
+       COMPONENT ${GITAHEAD_NAME}
+     )
+   endforeach()
+diff --git a/src/conf/CMakeLists.txt b/src/conf/CMakeLists.txt
+index bb485b64..bb749243 100644
+--- a/src/conf/CMakeLists.txt
++++ b/src/conf/CMakeLists.txt
+@@ -11,8 +11,9 @@ target_link_libraries(conf
+ )
+ 
+ target_compile_definitions(conf PRIVATE
+-  CONF_DIR="${CMAKE_SOURCE_DIR}/conf"
+-  SCINTILLUA_LEXERS_DIR="${SCINTILLUA_LEXERS_DIR}"
++  CONF_DIR="${CMAKE_INSTALL_FULL_DATADIR}/gitahead"
++  SCINTILLUA_LEXERS_DIR="${CMAKE_INSTALL_FULL_DATADIR}/gitahead/lexers"
++  HELPERS_DIR="${CMAKE_INSTALL_FULL_LIBEXECDIR}"
+ )
+ 
+ set_target_properties(conf PROPERTIES
+diff --git a/src/conf/Settings.cpp b/src/conf/Settings.cpp
+index 9d1a57cc..de57d576 100644
+--- a/src/conf/Settings.cpp
++++ b/src/conf/Settings.cpp
+@@ -227,7 +227,7 @@ QDir Settings::confDir()
+   dir.cdUp(); // Contents
+ #endif
+ 
+-  if (!dir.cd("Resources"))
++  if (!dir.cd("share") || !dir.cd("gitahead"))
+     dir = QDir(CONF_DIR);
+   return dir;
+ }
+@@ -254,6 +254,12 @@ QDir Settings::pluginsDir()
+   return dir;
+ }
+ 
++QDir Settings::helpersDir()
++{
++  QDir dir = QDir(HELPERS_DIR);
++  return dir;
++}
++
+ QDir Settings::userDir()
+ {
+   return QStandardPaths::writableLocation(kUserLocation);
+diff --git a/src/conf/Settings.h b/src/conf/Settings.h
+index da9b1ef4..89e2323c 100644
+--- a/src/conf/Settings.h
++++ b/src/conf/Settings.h
+@@ -50,6 +50,7 @@ class Settings : public QObject
+   static QDir lexerDir();
+   static QDir themesDir();
+   static QDir pluginsDir();
++  static QDir helpersDir();
+ 
+   static QDir userDir();
+   static QString locate(const QString &file);
+diff --git a/src/cred/GitCredential.cpp b/src/cred/GitCredential.cpp
+index 759c877f..065ecc08 100644
+--- a/src/cred/GitCredential.cpp
++++ b/src/cred/GitCredential.cpp
+@@ -8,6 +8,7 @@
+ //
+ 
+ #include "GitCredential.h"
++#include "conf/Settings.h"
+ #include <QCoreApplication>
+ #include <QDir>
+ #include <QProcess>
+@@ -103,6 +104,6 @@ bool GitCredential::store(
+ 
+ QString GitCredential::command() const
+ {
+-  QDir dir(QCoreApplication::applicationDirPath());
++  QDir dir(Settings::helpersDir());
+   return dir.filePath(QString("git-credential-%1").arg(mName));
+ }
+diff --git a/src/index/CMakeLists.txt b/src/index/CMakeLists.txt
+index 9abb4cb6..e48d667e 100644
+--- a/src/index/CMakeLists.txt
++++ b/src/index/CMakeLists.txt
+@@ -48,7 +48,7 @@ else()
+   endif()
+ 
+   install(TARGETS indexer
+-    DESTINATION .
++    DESTINATION ${CMAKE_INSTALL_LIBEXECDIR}
+     COMPONENT ${GITAHEAD_NAME}
+   )
+ endif()
+diff --git a/src/ui/RepoView.cpp b/src/ui/RepoView.cpp
+index 0497350f..37e57cf1 100644
+--- a/src/ui/RepoView.cpp
++++ b/src/ui/RepoView.cpp
+@@ -823,7 +823,7 @@ void RepoView::startIndexing()
+   if (Index::isLoggingEnabled())
+     args.prepend("--log");
+ 
+-  QDir dir(QCoreApplication::applicationDirPath());
++  QDir dir(Settings::helpersDir());
+   mIndexer.start(dir.filePath("indexer"), args);
+ }
+ 
+diff --git a/src/update/CMakeLists.txt b/src/update/CMakeLists.txt
+index 552f8afb..591c7361 100644
+--- a/src/update/CMakeLists.txt
++++ b/src/update/CMakeLists.txt
+@@ -38,11 +38,11 @@ if(APPLE)
+   )
+ elseif(UNIX)
+   set_target_properties(relauncher PROPERTIES
+-    INSTALL_RPATH "$ORIGIN"
++    INSTALL_RPATH "${CMAKE_INSTALL_LIBDIR}"
+   )
+ 
+   install(TARGETS relauncher
+-    DESTINATION .
++    DESTINATION ${CMAKE_INSTALL_LIBEXECDIR}
+     COMPONENT ${GITAHEAD_NAME}
+   )
+ endif()
+diff --git a/src/update/Updater.cpp b/src/update/Updater.cpp
+index d6365501..320777cd 100644
+--- a/src/update/Updater.cpp
++++ b/src/update/Updater.cpp
+@@ -269,6 +269,7 @@ bool Updater::install(const DownloadRef &download, QString &error)
+ 
+   // Start the relaunch helper.
+   QString app = QCoreApplication::applicationFilePath();
++  QDir helpers = Settings::helpersDir();
+   QString pid = QString::number(QCoreApplication::applicationPid());
+   if (!QProcess::startDetached(dir.filePath("relauncher"), {app, pid})) {
+     error = tr("Helper application failed to start");
+
+From 6c807d6ac8d2261fe83013e789722bbda4c5d8e2 Mon Sep 17 00:00:00 2001
+From: Symphorien Gibol <symphorien+git@xlumurb.eu>
+Date: Sun, 31 Mar 2019 23:23:53 +0200
+Subject: [PATCH 2/2] cmake: install icons in
+ share/icons/pixmaps/$size/apps/gitahead.png
+
+---
+ pack/CMakeLists.txt | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/pack/CMakeLists.txt b/pack/CMakeLists.txt
+index 66cad06f..f570be59 100644
+--- a/pack/CMakeLists.txt
++++ b/pack/CMakeLists.txt
+@@ -180,10 +180,15 @@ endif()
+ 
+ if(NOT APPLE)
+   if(UNIX)
+-    install(DIRECTORY ${RSRC_DIR}/GitAhead.iconset
+-      DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pixmaps
+-      COMPONENT ${GITAHEAD_NAME}
+-    )
++    # install icons
++    foreach(SIZE 16 32 64 128 256 512)
++      set(SQUARE "${SIZE}x${SIZE}")
++      install(FILES ${RSRC_DIR}/GitAhead.iconset/icon_${SQUARE}.png
++        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/${SQUARE}/apps
++        COMPONENT ${GITAHEAD_NAME}
++        RENAME gitahead.png
++      )
++    endforeach()
+   endif()
+ endif()
+ 

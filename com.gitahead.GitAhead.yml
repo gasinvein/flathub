@@ -1,0 +1,47 @@
+id: com.gitahead.GitAhead
+sdk: org.kde.Sdk
+runtime: org.kde.Platform
+runtime-version: "5.12"
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --socket=wayland
+  - --device=dri
+  - --share=network
+  - --socket=ssh-auth
+  - --talk-name=ca.desrt.dconf
+  - --filesystem=~/.gitconfig
+  - --filesystem=~/.ssh/known_hosts:ro
+command: GitAhead
+rename-icon: gitahead
+rename-desktop-file: gitahead.desktop
+cleanup:
+  - "*.a"
+  - "*.la"
+  - /include
+  - /lib/pkgconfig
+  - /lib/cmake
+  - /share/man
+modules:
+  - name: gitahead
+    buildsystem: cmake-ninja
+    builddir: true
+    cleanup:
+      - /lib/libQt*
+      - /plugins
+    sources:
+      - type: git
+        url: "https://github.com/gitahead/gitahead.git"
+        tag: v2.5.8
+      - type: patch
+        paths:
+          - patches/187.patch
+          - patches/192.patch
+
+  - name: desktop-data
+    buildsystem: simple
+    build-commands:
+      - install -Dm644 -t /app/share/applications gitahead.desktop
+    sources:
+      - type: file
+        path: gitahead.desktop
