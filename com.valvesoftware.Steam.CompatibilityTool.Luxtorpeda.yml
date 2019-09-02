@@ -29,5 +29,5 @@ modules:
     sources:
       - type: git
         url: "https://github.com/dreamer/luxtorpeda.git"
-        commit: e8f7d8ba386fdd0437b2ea4a1ba03c03c3e4808a
+        commit: b050b6f67b0628399c58ef6ba537c3557d93844f
       - generated-sources.json
