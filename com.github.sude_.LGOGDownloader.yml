@@ -1,0 +1,92 @@
+id: com.github.sude_.LGOGDownloader
+sdk: org.kde.Sdk
+runtime: org.kde.Platform
+runtime-version: "5.12"
+finish-args:
+  - --share=ipc
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --device=dri
+  - --share=network
+  - --filesystem=xdg-download
+command: lgogdownloader
+cleanup:
+  - "*.a"
+  - "*.la"
+  - /include
+  - /lib/pkgconfig
+  - /lib/cmake
+  - /share/man
+modules:
+
+  - name: lgogdownloader
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DBUILD_SHARED_LIBS=ON
+      - -DUSE_QT_GUI=ON
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+    sources:
+      - type: archive
+        url: "https://github.com/Sude-/lgogdownloader/archive/v3.5.tar.gz"
+        sha256: a7493f89e80796a4870d8fbc7996ff836b614a81af1471fc67025a4b194f28be
+    modules:
+
+      - name: boost
+        buildsystem: simple
+        build-commands:
+          - ./bootstrap.sh --prefix=${FLATPAK_DEST} --with-libraries=system,filesystem,regex,program_options,date_time,iostreams
+          - ./b2 install variant=release link=shared runtime-link=shared -j ${FLATPAK_BUILDER_N_JOBS}
+        sources:
+          - type: archive
+            url: "https://dl.bintray.com/boostorg/release/1.69.0/source/boost_1_69_0.tar.bz2"
+            sha256: 8f32d4617390d1c2d16f26a27ab60d97807b35440d45891fa340fc2648b04406
+
+      - name: liboauth
+        config-opts:
+          - --enable-nss
+        sources:
+          - type: archive
+            url: "https://downloads.sourceforge.net/liboauth/liboauth-1.0.3.tar.gz"
+            sha256: 0df60157b052f0e774ade8a8bac59d6e8d4b464058cc55f9208d72e41156811f
+
+      - name: jsoncpp
+        buildsystem: cmake-ninja
+        config-opts:
+          - -DBUILD_SHARED_LIBS=ON
+          - -DBUILD_STATIC_LIBS=OFF
+          - -DJSONCPP_WITH_TESTS=OFF
+        sources:
+          - type: archive
+            url: "https://github.com/open-source-parsers/jsoncpp/archive/1.8.4.tar.gz"
+            sha256: c49deac9e0933bcb7044f08516861a2d560988540b23de2ac1ad443b219afdb6
+
+      - name: htmlcxx
+        build-options:
+          ldflags: -Wl,--no-as-needed
+        sources:
+          - type: archive
+            url: "https://downloads.sourceforge.net/htmlcxx/htmlcxx-0.87.tar.gz"
+            sha256: 5d38f938cf4df9a298a5346af27195fffabfef9f460fc2a02233cbcfa8fc75c8
+        cleanup:
+          - /bin
+
+      - name: tinyxml2
+        buildsystem: cmake-ninja
+        config-opts:
+          - -DBUILD_SHARED_LIBS=ON
+          - -DBUILD_STATIC_LIBS=OFF
+        sources:
+          - type: archive
+            url: "https://github.com/leethomason/tinyxml2/archive/7.1.0.tar.gz"
+            sha256: 68ebd396a4220d5a9b5a621c6e9c66349c5cfdf5efaea3f16e3bb92e45f4e2a3
+
+      - name: rhash
+        post-install:
+          - make -C librhash install-so-link install-lib-headers
+        sources:
+          - type: archive
+            url: "https://github.com/rhash/RHash/archive/v1.3.8.tar.gz"
+            sha256: be536a56acfefc87dbc8b1db30fc639020e41edf05518185ea98630e3df7c04c
+        cleanup:
+          - /bin
