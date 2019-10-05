@@ -16,6 +16,12 @@ build-options:
   prepend-path: /usr/lib/sdk/freepascal/bin
   env:
     PPC_CONFIG_PATH: /usr/lib/sdk/freepascal/etc
+cleanup:
+  - /include
+  - /lib/*.a
+  - /lib/*.la
+  - /share/man
+  - /share/doc
 modules:
 
   - name: peazip
@@ -101,6 +107,9 @@ modules:
       - name: ucl
         build-options:
           cflags: -std=gnu90
+        config-opts:
+          - --enable-shared
+          - --disable-static
         sources:
           - type: archive
             url: "https://www.oberhumer.com/opensource/ucl/download/ucl-1.03.tar.gz"
