@@ -78,6 +78,13 @@ modules:
     make-install-args:
       - PREFIX=/usr/lib/sdk/freepascal
       - LCL_PLATFORM=nogui
+    post-install:
+      - mkdir -p ${FLATPAK_DEST}/etc/lazarus
+      - sed
+        -e "s|__LAZARUSDIR__|${FLATPAK_DEST}/share/lazarus|"
+        -e "s|__FPCSRCDIR__|${FLATPAK_DEST}/lib/fpc/src|"
+        ${FLATPAK_DEST}/share/lazarus/tools/install/linux/environmentoptions.xml
+        > ${FLATPAK_DEST}/etc/lazarus/environmentoptions.xml
     sources:
       - type: archive
         url: "https://downloads.sourceforge.net/lazarus/lazarus-2.0.4.tar.gz"
