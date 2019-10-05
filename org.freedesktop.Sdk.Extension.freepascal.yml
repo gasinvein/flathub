@@ -1,0 +1,80 @@
+id: org.freedesktop.Sdk.Extension.freepascal
+branch: "19.08"
+runtime: org.freedesktop.Sdk
+build-extension: true
+sdk: org.freedesktop.Sdk
+runtime-version: "19.08"
+sdk-extensions: []
+build-options:
+  strip: true
+  prefix: /usr/lib/sdk/freepascal
+  append-path: /usr/lib/sdk/freepascal/bin
+  env:
+    FPC_VERSION: "3.0.4"
+  arch:
+    x86_64:
+      env:
+        PPC_BIN: ppcx64
+        FPC_ARCH: x86_64
+cleanup:
+  - /lib/*.a
+  - /lib/*.la
+  - /share/man
+  - /man
+  - /share/doc
+modules:
+  - name: fpc-bootstrap
+    buildsystem: simple
+    build-commands:
+      - mkdir -p dist ${FLATPAK_DEST}/bootstrap
+      - tar -xf binary.${FPC_ARCH}-linux.tar -C dist
+      - for a in dist/*.${FPC_ARCH}-linux.tar.gz; do tar -xf $a -C ${FLATPAK_DEST}/bootstrap;
+        done
+      - ln -sf ${FLATPAK_DEST}/bootstrap/lib/fpc/${FPC_VERSION}/${PPC_BIN} ${FLATPAK_DEST}/bootstrap/bin/${PPC_BIN}
+    sources:
+      - type: archive
+        only-arches:
+          - x86_64
+        url: "https://downloads.sourceforge.net/freepascal/fpc-3.0.4.x86_64-linux.tar"
+        sha256: 7e965baf13c9822a0ff39e7bbfa040bd5599e94d0f3338f1ac4efa989081fd77
+    cleanup:
+      - "*"
+
+  - name: fpc
+    build-options:
+      append-path: /usr/lib/sdk/freepascal/bootstrap/bin
+    no-autogen: true
+    no-parallel-make: true
+    make-args:
+      - build
+      - NOGDB=1
+    make-install-args:
+      - PREFIX=/usr/lib/sdk/freepascal
+      - NOGDB=1
+    post-install:
+      - ln -sr ${FLATPAK_DEST}/lib/fpc/${FPC_VERSION}/${PPC_BIN} ${FLATPAK_DEST}/bin/${PPC_BIN}
+      - mkdir -p ${FLATPAK_DEST}/etc
+      - ${FLATPAK_DEST}/lib/fpc/${FPC_VERSION}/samplecfg ${FLATPAK_DEST}/lib/fpc/${FPC_VERSION} ${FLATPAK_DEST}/etc
+      - cp -a fpcsrc ${FLATPAK_DEST}/lib/fpc/src
+    sources:
+      - type: archive
+        url: "ftp://ftp.freepascal.org/pub/fpc/dist/3.0.4/source/fpcbuild-3.0.4.tar.gz"
+        sha256: f66514e6f2c2e4e1bccccb4d554c24b77682ed61c87811ae5dd210f421855e76
+
+  - name: lazarus
+    build-options:
+      env:
+        PPC_CONFIG_PATH: /usr/lib/sdk/freepascal/etc
+    no-autogen: true
+    no-parallel-make: true
+    make-args:
+      - clean
+      - all
+      - LCL_PLATFORM=nogui
+    make-install-args:
+      - PREFIX=/usr/lib/sdk/freepascal
+      - LCL_PLATFORM=nogui
+    sources:
+      - type: archive
+        url: "https://downloads.sourceforge.net/lazarus/lazarus-2.0.4.tar.gz"
+        sha256: e01d10c1b08fdb9b98fa8f740536add804383e4f39f092059c5e4ac7516c147b
