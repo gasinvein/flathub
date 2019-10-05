@@ -89,3 +89,5 @@ modules:
       - type: archive
         url: "https://downloads.sourceforge.net/lazarus/lazarus-2.0.4.tar.gz"
         sha256: e01d10c1b08fdb9b98fa8f740536add804383e4f39f092059c5e4ac7516c147b
+      - type: patch
+        path: lazarus-SecondaryConfigPath.patch

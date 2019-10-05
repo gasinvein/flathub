@@ -1,0 +1,11 @@
+--- a/ide/include/unix/lazbaseconf.inc
++++ b/ide/include/unix/lazbaseconf.inc
+@@ -148,7 +148,7 @@
+   AllowDirectorySeparators:=['/'];
+ 
+   PrimaryConfigPath:=ExpandFileNameUTF8('~/.lazarus');
+-  SecondaryConfigPath:='/etc/lazarus';
++  SecondaryConfigPath:='/usr/lib/sdk/freepascal/etc/lazarus';
+ end;
+ 
+ 
