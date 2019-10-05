@@ -1,0 +1,43 @@
+id: org.peazip.PeaZip
+sdk: org.freedesktop.Sdk
+runtime: org.freedesktop.Platform
+runtime-version: "19.08"
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --socket=wayland
+  - --device=dri
+command: peazip
+rename-icon: peazip
+rename-desktop-file: peazip.desktop
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.freepascal
+build-options:
+  prepend-path: /usr/lib/sdk/freepascal/bin
+  env:
+    PPC_CONFIG_PATH: /usr/lib/sdk/freepascal/etc
+modules:
+
+  - name: peazip
+    buildsystem: simple
+    build-commands:
+      - lazbuild --widgetset=gtk2 --build-all project_pea.lpi project_peach.lpi
+      - |
+        peadir=/app/lib/peazip
+        mkdir -p ${peadir}
+        cp -a res ${peadir}/
+        install -Dm755 peazip -t ${peadir}/
+        install -Dm755 pea -t ${peadir}/res/
+        mkdir -p ${FLATPAK_DEST}/bin
+        ln -sr ${peadir}/peazip ${FLATPAK_DEST}/bin/peazip
+        ln -sr ${peadir}/res/pea ${FLATPAK_DEST}/bin/pea
+      - |
+        cd FreeDesktop_integration
+        install -Dm644 peazip.png -t /app/share/icons/hicolor/256x256/apps/
+        install -Dm644 "peazip-alt(multilingual).desktop" /app/share/applications/peazip.desktop
+    sources:
+      - type: archive
+        url: "https://downloads.sourceforge.net/peazip/peazip-6.9.2.src.zip"
+        sha256: 67fd27bce4ea8c1b2e374d6a68d4cd82f56dc776df025075faa5581842770077
+    modules:
+      - shared-modules/gtk2/gtk2.json
