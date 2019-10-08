@@ -45,6 +45,7 @@ modules:
         cd FreeDesktop_integration
         install -Dm644 peazip.png -t /app/share/icons/hicolor/256x256/apps/
         install -Dm644 "peazip-alt(multilingual).desktop" /app/share/applications/peazip.desktop
+      - desktop-file-edit --set-key=Exec --set-value="peazip %F" /app/share/applications/peazip.desktop
     sources:
       - type: archive
         url: "https://downloads.sourceforge.net/peazip/peazip-6.9.2.src.zip"
