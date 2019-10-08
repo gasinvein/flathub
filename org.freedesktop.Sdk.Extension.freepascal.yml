@@ -27,9 +27,11 @@ modules:
     buildsystem: simple
     build-commands:
       - mkdir -p dist ${FLATPAK_DEST}/bootstrap
-      - tar -xf binary.${FPC_ARCH}-linux.tar -C dist
-      - for a in dist/*.${FPC_ARCH}-linux.tar.gz; do
-          tar -xf $a -C ${FLATPAK_DEST}/bootstrap;
+      - |
+        basearc="binary.${FPC_ARCH}-linux.tar"
+        tar -tf "$basearc" | while read -r a; do
+          echo "Extracting $a"
+          tar -xOf "$basearc" "$a" | tar -xzf - -C ${FLATPAK_DEST}/bootstrap;
         done
       - ln -sf ${FLATPAK_DEST}/bootstrap/lib/fpc/${FPC_VERSION}/${PPC_BIN} ${FLATPAK_DEST}/bootstrap/bin/${PPC_BIN}
     sources:
