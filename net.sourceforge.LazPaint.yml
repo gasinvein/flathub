@@ -1,0 +1,68 @@
+id: net.sourceforge.LazPaint
+sdk: org.freedesktop.Sdk
+runtime: org.freedesktop.Platform
+runtime-version: "19.08"
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --socket=wayland
+  - --device=dri
+  - --filesystem=xdg-pictures
+command: lazpaint
+rename-icon: lazpaint
+rename-desktop-file: lazpaint.desktop
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.freepascal
+build-options:
+  prepend-path: /usr/lib/sdk/freepascal/bin
+  env:
+    PPC_CONFIG_PATH: /usr/lib/sdk/freepascal/etc
+cleanup:
+  - /include
+  - /lib/*.a
+  - /lib/*.la
+  - /share/man
+  - /share/doc
+modules:
+
+  - name: lazpaint
+    buildsystem: simple
+    build-commands:
+      - mkdir -p $(pwd)/config
+      - |
+        for proj in \
+            bgrabitmap/bgrabitmap/bgrabitmappack.lpk \
+            bgracontrols/bgracontrols.lpk \
+            lazpaintcontrols/lazpaintcontrols.lpk \
+            lazpaint/lazpaint.lpi \
+          ; do
+          lazbuild --widgetset=gtk2 --build-all $proj --primary-config-path=$(pwd)/config --build-mode=Release
+        done
+      - cp -av lazpaint/release/bin /app/lib/lazpaint
+      - install -Dm755 lazpaint.sh /app/bin/lazpaint
+      - |
+        for s in 512; do
+          install -Dm644 resources/icon/lazpaint_icon_rendered_${s}.png /app/share/icons/hicolor/${s}x${s}/apps/lazpaint.png
+        done
+      - install -Dm644 lazpaint.desktop -t /app/share/applications/
+    sources:
+      - type: archive
+        url: "https://github.com/bgrabitmap/lazpaint/archive/v7.0.6.tar.gz"
+        sha256: 681db04036e395787b9a438bc14f273c059dc7e16429de289a2651bfbc9ce3be
+      - type: archive
+        dest: bgrabitmap
+        url: "https://github.com/bgrabitmap/bgrabitmap/archive/v10.6.2.tar.gz"
+        sha256: 3c766c255bdb108ee80da28b5e5a8bc6cc597f83e11780f9905aae0df34f24cd
+      - type: archive
+        dest: bgracontrols
+        url: "https://github.com/bgrabitmap/bgracontrols/archive/v6.5.tar.gz"
+        sha256: eaeedbeb3e4ea26101d4fc43ca941b14b6aa2c0d904a935b6e9478fb08a9a8bc
+      - type: file
+        path: lazpaint.desktop
+      - type: script
+        dest-filename: lazpaint.sh
+        commands:
+          - cd /app/lib/lazpaint
+          - exec ./lazpaint "$@"
+    modules:
+      - shared-modules/gtk2/gtk2.json
