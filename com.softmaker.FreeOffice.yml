@@ -1,7 +1,7 @@
 id: com.softmaker.FreeOffice
 sdk: org.freedesktop.Sdk
 runtime: org.freedesktop.Platform
-runtime-version: "18.08"
+runtime-version: "19.08"
 command: textmaker
 finish-args:
   - --socket=x11
@@ -46,14 +46,14 @@ modules:
         filename: freeoffice.tgz
         only-arches:
           - "x86_64"
-        url: "https://www.softmaker.net/down/softmaker-freeoffice-944-amd64.tgz"
-        size: 127452424
-        sha256: 6838233c9e965ad879581befc27b54f25de989b8df98b274de43eadbba2f9349
+        url: "https://www.softmaker.net/down/softmaker-freeoffice-971-amd64.tgz"
+        size: 127026189
+        sha256: 8e10f946f92ec24aa3fa649c24bc0a778a2e03e479b1810667c4c77597bc66c0
 
       - type: extra-data
         filename: freeoffice.tgz
         only-arches:
           - "i386"
-        url: "https://www.softmaker.net/down/softmaker-freeoffice-944-i386.tgz"
-        size: 124416076
-        sha256: 71a26efcf4054fee67fad5a6a8cb4bc820f872d0ba406d83954c068c6b96e48d
+        url: "https://www.softmaker.net/down/softmaker-freeoffice-971-i386.tgz"
+        size: 125369110
+        sha256: f91ff989ba445e5952e73016406a8ee5e2f6781e3d730628190c000dfd5e019e
