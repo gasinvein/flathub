@@ -5,5 +5,7 @@
   <project_license>ZPL-2.1 and GPL-3.0-or-later and LGPL-3.0-or-later and GPL-2.0-or-later and LGPL-2.0-or-later and LicenseRef-Public-Domain</project_license>
   <name>MinGW-w64</name>
   <summary>Development environment targeting Windows</summary>
-  <url type="homepage">http://mingw-w64.sourceforge.net/</url>
+  <summary xml:lang="pt_BR">Ambiente de desenvolvimento visando o Windows</summary>
+  <summary xml:lang="es">Entorno de desarrollo dirigido a Windows</summary>
+  <url type="homepage">http://mingw-w64.sourceforge.net</url>
 </component>
