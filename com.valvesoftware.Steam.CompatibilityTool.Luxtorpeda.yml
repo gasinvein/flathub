@@ -25,6 +25,8 @@ modules:
       env:
         CARGO_HOME: cargo
     no-autogen: true
+    make-args:
+      - release
     make-install-args:
       - install_dir=${FLATPAK_DEST}
       - STRIP=/bin/true
