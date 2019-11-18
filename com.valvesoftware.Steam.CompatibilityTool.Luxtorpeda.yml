@@ -1,5 +1,7 @@
 id: com.valvesoftware.Steam.CompatibilityTool.Luxtorpeda
+branch: stable
 runtime: com.valvesoftware.Steam
+runtime-version: stable
 sdk: org.freedesktop.Sdk//19.08
 build-extension: true
 appstream-compose: false
@@ -29,5 +31,5 @@ modules:
     sources:
       - type: git
         url: "https://github.com/dreamer/luxtorpeda.git"
-        commit: b050b6f67b0628399c58ef6ba537c3557d93844f
+        commit: e770a4fe38577668b23ccbaadbcb54978fdd1026
       - generated-sources.json
