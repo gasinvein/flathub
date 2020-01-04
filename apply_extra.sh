@@ -19,7 +19,7 @@ sed "s|Icon=.*|Icon=${FLATPAK_ID}|g" -i "export/share/applications/${FLATPAK_ID}
 
 sed \
     -e "s|TAR_NI|TAR_IN|g" \
-    -e "s|/opt/teamviewer/|/app/extra/teamviewer/|g" \
+    -e "s|/opt/teamviewer|/app/extra/teamviewer|g" \
     -e "s|.config/|.var/app/${FLATPAK_ID}/config/|g" \
     -e "s|.local/share/|.var/app/${FLATPAK_ID}/data/|g" \
     -i teamviewer/tv_bin/script/tvw_config
