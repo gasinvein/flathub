@@ -9,9 +9,9 @@ done
 
 # for some obscure reason, TV 15 stopped to repect paths set in tvw_main
 mkdir -p $HOME/.config
-ln -sr {$XDG_CONFIG_HOME,$HOME/.config}/teamviewer
+ln -srfT {$XDG_CONFIG_HOME,$HOME/.config}/teamviewer
 mkdir -p $HOME/.local/share
-ln -sr {$XDG_DATA_HOME,$HOME/.local/share}/teamviewer${TV_MAJOR}
+ln -srfT {$XDG_DATA_HOME,$HOME/.local/share}/teamviewer${TV_MAJOR}
 
 # for some other obscure reason, in TV 15 the desktop client looks
 # for teamviewerd.ipc in /var/run, while teamviewerd stores it in
