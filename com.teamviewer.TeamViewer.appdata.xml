@@ -20,4 +20,7 @@
             <image>https://tv-static.net/c3613269c72c44b18f3c68b43fc13018/resources/images/screenshots/win-mainwindow-meeting.png</image>
         </screenshot>
     </screenshots>
+  <releases>
+    <release version="15.1.3937" date="2019-12-17"/>
+  </releases>
 </component>

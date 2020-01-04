@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 FLATPAK_ID=com.teamviewer.TeamViewer
-TV_VER_MAJOR=14
+TV_VER_MAJOR=15
 
 mkdir -p teamviewer export/share/{dbus-1/services,polkit-1/actions,applications}
 tar -xf teamviewer.tar.xz -C teamviewer --strip-components=1

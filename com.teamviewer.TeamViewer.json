@@ -93,11 +93,13 @@
                 },
                 {
                     "type": "extra-data",
-                    "only-arches": [ "x86_64" ],
-                    "url": "https://dl.tvcdn.de/download/linux/version_14x/teamviewer_14.0.12762_amd64.tar.xz",
+                    "only-arches": [
+                        "x86_64"
+                    ],
+                    "url": "https://dl.teamviewer.com/download/linux/version_15x/teamviewer_15.1.3937_amd64.tar.xz",
                     "filename": "teamviewer.tar.xz",
-                    "sha256": "5162430ef7b91234312654c8c7271a41e62d2f11c32e6137cfe3be42b36c3aa8",
-                    "size": 19449912,
+                    "sha256": "e08d57c0f3530aa0c3c6e2c7c39f3465361f57cbb5ac1283751d39860fb0599a",
+                    "size": 12898448,
                     "x-checker-data": {
                         "type": "rotating-url",
                         "url": "https://download.teamviewer.com/download/linux/teamviewer_amd64.tar.xz",
@@ -106,11 +108,13 @@
                 },
                 {
                     "type": "extra-data",
-                    "only-arches": [ "i386" ],
-                    "url": "https://dl.tvcdn.de/download/linux/version_14x/teamviewer_14.0.12762_i386.tar.xz",
+                    "only-arches": [
+                        "i386"
+                    ],
+                    "url": "https://dl.teamviewer.com/download/linux/version_15x/teamviewer_15.1.3937_i386.tar.xz",
                     "filename": "teamviewer.tar.xz",
-                    "sha256": "8e704f1527ac26b4a80893764c1b8a6f4180801769ed4c2f0bf3220b123537d2",
-                    "size": 19462964,
+                    "sha256": "958b600b1a0b53f96dcb7904f11bd0a19b15d940c957d193aea746d931c7228a",
+                    "size": 13443796,
                     "x-checker-data": {
                         "type": "rotating-url",
                         "url": "https://download.teamviewer.com/download/linux/teamviewer_i386.tar.xz",
