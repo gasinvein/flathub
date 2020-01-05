@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Raven Reader
+Comment=Simple Desktop RSS Reader made using VueJS
+Exec=raven-reader
+Icon=raven-reader
+StartupWMClass=Raven Reader
+Terminal=false
+Categories=News;

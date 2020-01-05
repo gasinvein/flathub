@@ -1,0 +1,87 @@
+id: app.ravenreader.Raven
+sdk: org.freedesktop.Sdk
+runtime: org.freedesktop.Platform
+runtime-version: "19.08"
+base: org.electronjs.Electron2.BaseApp
+base-version: "19.08"
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.node10
+build-options:
+  prepend-path: /usr/lib/sdk/node10/bin
+  env:
+    npm_config_nodedir: /usr/lib/sdk/node10
+command: raven-reader
+rename-icon: raven-reader
+rename-desktop-file: raven-reader.desktop
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --socket=pulseaudio
+  - --device=dri
+  - --share=network
+modules:
+
+  - name: yarn
+    buildsystem: simple
+    build-commands:
+      - mkdir -p /app/share/yarn/
+      - cp -a * /app/share/yarn/
+      - ln -s /app/share/yarn/bin/yarn /app/bin/yarn
+      - ln -s /app/share/yarn/bin/yarnpkg /app/bin/yarnpkg
+    cleanup:
+      - "*"
+    sources:
+      - type: archive
+        url: "https://github.com/yarnpkg/yarn/releases/download/v1.21.1/yarn-v1.21.1.tar.gz"
+        sha256: d1d9f4a0f16f5ed484e814afeb98f39b82d4728c6c8beaafb5abc99c02db6674
+
+  - name: raven-reader
+    build-options:
+      env:
+        ELECTRON_CACHE: /run/build/raven-reader/flatpak-node/electron-cache
+        electron_config_cache: /run/build/raven-reader/flatpak-node/electron-cache
+        CHROMEDRIVER_SKIP_DOWNLOAD: 'true'
+        JOBS: max
+      arch:
+        arm: { env: { earch: armv7l, suffix: "-armv7l" } }
+        aarch64: { env: { earch: arm64, suffix: "-arm64" } }
+        i386: { env: { earch: ia32, suffix: "-ia32" } }
+        x86_64: { env: { earch: x64, suffix: "" } }
+    buildsystem: simple
+    build-commands:
+      - cp main/src/renderer/config{.example,}.js
+      - yarn --cwd main --offline --pure-lockfile
+      - yarn --cwd main --offline run build --linux --${earch} --dir
+      - mkdir -p /app/{bin,lib}
+      - cp -a main/build/linux${suffix}-unpacked /app/lib/raven
+      - ln -sr /app/lib/raven/raven-reader /app/bin/raven-reader
+    post-install:
+      - install -Dm644 main/build/icons/256x256.png /app/share/icons/hicolor/256x256/apps/raven-reader.png
+      - install -Dm644 raven-reader.desktop -t /app/share/applications/
+    sources:
+      - type: archive
+        url: "https://github.com/hello-efficiency-inc/raven-reader/archive/v0.6.6.tar.gz"
+        sha256: 7db0d0762d8dd19dc3a10bc134af9d5d587fe152e10588161bc4dc0e2cb4aa0e
+        dest: main
+
+      - generated-sources.json
+
+      - type: file
+        path: yarnrc
+        dest-filename: .yarnrc
+        dest: main
+
+      - type: file
+        url: "https://github.com/electron/electron/releases/download/v6.0.0/SHASUMS256.txt"
+        sha256: 17d020ea60d4a54ac05dcd01c8e24975f0582bfab3d756d45ef1dcbf0d6d63d9
+        dest-filename: SHASUMS256.txt-6.0.0
+        dest: flatpak-node/electron-cache
+
+      - type: file
+        only-arches: ["x86_64"]
+        url: "https://github.com/electron/electron/releases/download/v6.0.0/chromedriver-v6.0.0-linux-x64.zip"
+        sha256: 3e833130314098b4766e4b63a63ac0ac3b94a453c266c5dfb5c93288508c4d0b
+        dest: flatpak-node/electron-cache
+
+      - type: file
+        path: raven-reader.desktop
