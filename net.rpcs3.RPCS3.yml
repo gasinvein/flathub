@@ -1,7 +1,7 @@
 app-id: net.rpcs3.RPCS3
 runtime: org.kde.Platform
 sdk: org.kde.Sdk
-runtime-version: "5.12"
+runtime-version: "5.13"
 command: rpcs3
 rename-desktop-file: rpcs3.desktop
 rename-appdata-file: rpcs3.appdata.xml
@@ -20,9 +20,8 @@ cleanup:
   - /lib/cmake
   - /share/man
 modules:
-  - shared-modules/glu/glu-9.0.0.json
+  - shared-modules/glu/glu-9.json
   - shared-modules/glew/glew.json
-  - shared-modules/udev/udev-175.json
 
   - name: evdev
     config-opts:
@@ -48,8 +47,6 @@ modules:
     sources:
       - type: git
         url: "https://github.com/RPCS3/rpcs3.git"
-      - type: patch
-        path: git-describe.patch
     cleanup:
       - /include/llvm
       - /include/llvm-c
