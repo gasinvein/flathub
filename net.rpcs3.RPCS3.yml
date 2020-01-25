@@ -54,6 +54,8 @@ modules:
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
       - -DUSE_ALSA=OFF
       - -DUSE_SYSTEM_LIBPNG=ON
+    post-install:
+      - appstream-util modify /app/share/metainfo/rpcs3.appdata.xml id ${FLATPAK_ID}
     sources:
       - type: git
         url: "https://github.com/RPCS3/rpcs3.git"
