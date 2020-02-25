@@ -31,6 +31,7 @@ modules:
           mkdir -p ${icondir}/${s}x${s}/apps
           rsvg-convert -w ${s} -a -o ${icondir}/{${s}x${s},scalable}/apps/sc-controller.svg
         done
+      - mv /app/share/mime/packages/{scc-mime-types,${FLATPAK_ID}}.xml
     sources:
       - type: git
         url: "https://github.com/kozec/sc-controller.git"
