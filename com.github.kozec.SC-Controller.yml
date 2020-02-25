@@ -1,7 +1,7 @@
 id: com.github.kozec.SC-Controller
 sdk: org.freedesktop.Sdk
 runtime: org.freedesktop.Platform
-runtime-version: "18.08"
+runtime-version: "19.08"
 finish-args:
   - --share=ipc
   - --socket=fallback-x11
@@ -78,19 +78,6 @@ modules:
           - type: archive
             url: "https://github.com//libusb/libusb/releases/download/v1.0.22/libusb-1.0.22.tar.bz2"
             sha256: 75aeb9d59a4fdb800d329a545c2e6799f732362193b465ea198f2aa275518157
-        modules:
-
-          - name: eudev
-            cleanup:
-              - /bin
-              - /sbin
-              - /lib*/udev
-            post-install:
-              - udevadm hwdb --update
-            sources:
-              - type: archive
-                url: "https://github.com/gentoo/eudev/archive/v3.2.7.tar.gz"
-                sha256: ce2fda4dea129bbcf824c947aab23504bcd26911481b47dbaf10646f723083a4
 
   - name: kernel-headers
     buildsystem: simple
