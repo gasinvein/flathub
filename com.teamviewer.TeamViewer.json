@@ -96,10 +96,10 @@
                     "only-arches": [
                         "x86_64"
                     ],
-                    "url": "https://dl.teamviewer.com/download/linux/version_15x/teamviewer_15.2.2756_amd64.tar.xz",
+                    "url": "https://dl.teamviewer.com/download/linux/version_15x/teamviewer_15.3.2682_amd64.tar.xz",
                     "filename": "teamviewer.tar.xz",
-                    "sha256": "a81a5f3a9e26e2a185e1b8317d96a7955f59f7bdec7b8eb6c5dce1698b9d403c",
-                    "size": 12925536,
+                    "sha256": "114cf671833e7df390206c068b27fecd8b5d1a6e7216d6dc772ee1e44ee1a71c",
+                    "size": 13066268,
                     "x-checker-data": {
                         "type": "rotating-url",
                         "url": "https://download.teamviewer.com/download/linux/teamviewer_amd64.tar.xz",
@@ -111,10 +111,10 @@
                     "only-arches": [
                         "i386"
                     ],
-                    "url": "https://dl.teamviewer.com/download/linux/version_15x/teamviewer_15.2.2756_i386.tar.xz",
+                    "url": "https://dl.teamviewer.com/download/linux/version_15x/teamviewer_15.3.2682_i386.tar.xz",
                     "filename": "teamviewer.tar.xz",
-                    "sha256": "915f8ecaa59747ab1c7d76b059bc729bc1f7c247356141f505840aa7ad116add",
-                    "size": 13456056,
+                    "sha256": "449a2453bdee81c09681be63693c1acd2980047405dd685d25bcfcb76fd89028",
+                    "size": 13602852,
                     "x-checker-data": {
                         "type": "rotating-url",
                         "url": "https://download.teamviewer.com/download/linux/teamviewer_i386.tar.xz",
