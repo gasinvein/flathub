@@ -97,7 +97,7 @@ modules:
           - export PATH=$PATH:/usr/lib/sdk/rpm/bin
           - |
             rpm_sdk_python=/usr/lib/sdk/rpm/lib/python3.7/site-packages
-            if [ -z "PYTHONPATH" ]; then
+            if [ -z "$PYTHONPATH" ]; then
               export PYTHONPATH=$rpm_sdk_python
             else
               export PYTHONPATH=$PYTHONPATH:$rpm_sdk_python
