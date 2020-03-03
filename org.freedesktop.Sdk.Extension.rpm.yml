@@ -1,0 +1,106 @@
+id: org.freedesktop.Sdk.Extension.rpm
+branch: "19.08"
+build-extension: true
+sdk: org.freedesktop.Sdk
+runtime: org.freedesktop.Sdk
+runtime-version: "19.08"
+separate-locales: false
+appstream-compose: false
+build-options:
+  prefix: /usr/lib/sdk/rpm
+  env:
+    C_INCLUDE_PATH: /usr/lib/sdk/rpm/include
+    CPLUS_INCLUDE_PATH: /usr/lib/sdk/rpm/include
+  prepend-path: /usr/lib/sdk/rpm/bin
+  prepend-ld-library-path: /usr/lib/sdk/rpm/lib
+  prepend-pkg-config-path: /usr/lib/sdk/rpm/lib/pkgconfig
+  ldflags: -L/usr/lib/sdk/rpm/lib
+  ldflags-override: true
+  strip: true
+cleanup:
+  - "*.a"
+  - "*.la"
+  - /share/man
+modules:
+
+  - name: rpm
+    config-opts:
+      - --enable-rpath
+      - --enable-python
+      - --with-crypto=openssl
+      - --sysconfdir=/var/config
+      - --localstatedir=/var/data
+      - --sharedstatedir=/var/data/lib
+    sources:
+      - type: archive
+        url: "http://ftp.rpm.org/releases/rpm-4.15.x/rpm-4.15.0.tar.bz2"
+        sha256: 1e06723b13591e57c99ebe2006fb8daddc4cf72efb366a64a34673ba5f61c201
+    modules:
+
+      - name: libdb
+        subdir: build_unix
+        sources:
+          - type: archive
+            url: "http://download.oracle.com/berkeley-db/db-5.3.28.tar.gz"
+            sha256: e0a992d740709892e81f9d93f06daf305cf73fb81b545afe72478043172c3628
+          - type: script
+            dest: build_unix
+            dest-filename: configure
+            commands:
+              - exec ../dist/configure "$@"
+        cleanup:
+          - /docs
+
+      - shared-modules/lua5.3/lua-5.3.5.json
+
+  - name: rpmdevtools
+    build-options:
+      env:
+        PYTHONPATH: /usr/lib/sdk/rpm/lib/python3.7/site-packages
+    sources:
+      - type: archive
+        url: "https://releases.pagure.org/rpmdevtools/rpmdevtools-8.10.tar.xz"
+        sha256: dddf6649f2bcbe0204bd59316a387a59bb9056aaa14593e1b4dcdfe8c05dafcc
+      - type: patch
+        paths:
+          - patches/rpmdevtools/0001-bumpspec-checksig-Avoid-python-3.6-regex-related-dep.patch
+          - patches/rpmdevtools/0001-Limit-newVersion-s-re.sub-to-a-single-replacement.patch
+      - type: shell
+        commands:
+          - grep -lF "/usr/bin/python " * | xargs sed -i -e "s|/usr/bin/python |/usr/bin/python3 |"
+
+  - name: rpmlint
+    no-autogen: true
+    make-install-args:
+      - PYTHON=/usr/bin/python3
+      - BINDIR=$(FLATPAK_DEST)/bin
+      - LIBDIR=$(FLATPAK_DEST)/share/rpmlint
+      - ETCDIR=$(FLATPAK_DEST)/etc
+      - MANDIR=$(FLATPAK_DEST)/share/man
+    post-install:
+      - sed "s|/usr/share/rpmlint|${FLATPAK_DEST}/share/rpmlint|g" -i ${FLATPAK_DEST}/bin/rpmlint
+    sources:
+      - type: archive
+        url: "https://github.com/rpm-software-management/rpmlint/archive/rpmlint-1.11.tar.gz"
+        sha256: 2ea1f4726382bcf24652ea710b4e98fdfd7f83a7c44a7ee2f5eaf5b201be9ac3
+
+  - name: bundle-setup
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 enable.sh -t ${FLATPAK_DEST}/
+      - install -Dm644 ${FLATPAK_ID}.metainfo.xml -t ${FLATPAK_DEST}/share/metainfo
+      - appstream-compose --basename=${FLATPAK_ID} --prefix=${FLATPAK_DEST} --origin=flatpak ${FLATPAK_ID}
+    sources:
+      - type: script
+        dest-filename: enable.sh
+        commands:
+          - export PATH=$PATH:/usr/lib/sdk/rpm/bin
+          - |
+            rpm_sdk_python=/usr/lib/sdk/rpm/lib/python3.7/site-packages
+            if [ -z "PYTHONPATH" ]; then
+              export PYTHONPATH=$rpm_sdk_python
+            else
+              export PYTHONPATH=$PYTHONPATH:$rpm_sdk_python
+            fi
+      - type: file
+        path: org.freedesktop.Sdk.Extension.rpm.metainfo.xml
