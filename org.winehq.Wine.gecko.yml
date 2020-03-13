@@ -15,11 +15,11 @@ modules:
         only-arches:
           - "i386"
           - "x86_64"
-        url: "https://dl.winehq.org/wine/wine-gecko/2.47/wine_gecko-2.47-x86.msi"
-        sha256: 3b8a361f5d63952d21caafd74e849a774994822fb96c5922b01d554f1677643a
+        url: "https://dl.winehq.org/wine/wine-gecko/2.47.1/wine-gecko-2.47.1-x86.msi"
+        sha256: f00b0e2892404827e8ce6811dedfc25ae699a09955bb3df1bbb31753e51da051
 
       - type: file
         only-arches:
           - "x86_64"
-        url: "https://dl.winehq.org/wine/wine-gecko/2.47/wine_gecko-2.47-x86_64.msi"
-        sha256: c565ea25e50ea953937d4ab01299e4306da4a556946327d253ea9b28357e4a7d
+        url: "https://dl.winehq.org/wine/wine-gecko/2.47.1/wine-gecko-2.47.1-x86_64.msi"
+        sha256: 69312e79a988da3e7d292382005e92bc4d4b2a52a23c34440ae3007feb57474a
