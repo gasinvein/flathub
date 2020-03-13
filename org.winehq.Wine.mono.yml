@@ -12,5 +12,5 @@ modules:
       - install -v -Dm755 *.msi -t ${FLATPAK_DEST}/
     sources:
       - type: file
-        url: "https://dl.winehq.org/wine/wine-mono/4.8.3/wine-mono-4.8.3.msi"
-        sha256: d6fa1f019bfa3c572438e4a2473ce25af1e937ed4cdcbe46554164ce25db0a76
+        url: "https://dl.winehq.org/wine/wine-mono/4.9.4/wine-mono-4.9.4.msi"
+        sha256: 51a6ff38323fcda71d70ead90c252b5eaeacec542ba737dbd1d676787b210fdd
