@@ -4,6 +4,8 @@ runtime: org.freedesktop.Sdk
 build-extension: true
 sdk: org.freedesktop.Sdk
 runtime-version: "19.08"
+separate-locales: false
+appstream-compose: false
 sdk-extensions: []
 build-options:
   strip: true
@@ -102,3 +104,12 @@ modules:
         commands:
           - fpcmake -Tall
           - cd components; fpcmake -Tall
+
+  - name: bundle-setup
+    buildsystem: simple
+    build-commands:
+      - install -Dm644 ${FLATPAK_ID}.metainfo.xml -t ${FLATPAK_DEST}/share/metainfo
+      - appstream-compose --basename=${FLATPAK_ID} --prefix=${FLATPAK_DEST} --origin=flatpak ${FLATPAK_ID}
+    sources:
+      - type: file
+        path: org.freedesktop.Sdk.Extension.freepascal.metainfo.xml
