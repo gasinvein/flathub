@@ -84,19 +84,20 @@ modules:
       - LCL_PLATFORM=nogui
     post-install:
       - mkdir -p ${FLATPAK_DEST}/etc/lazarus
-      - sed
-        -e "s|__LAZARUSDIR__|${FLATPAK_DEST}/lib/lazarus|"
-        -e "s|__FPCSRCDIR__|${FLATPAK_DEST}/lib/fpc/src|"
-        ${FLATPAK_DEST}/lib/lazarus/tools/install/linux/environmentoptions.xml
+      - |
+        sed \
+        -e "s|__LAZARUSDIR__|${FLATPAK_DEST}/lib/lazarus|" \
+        -e "s|__FPCSRCDIR__|${FLATPAK_DEST}/lib/fpc/src|" \
+        ${FLATPAK_DEST}/lib/lazarus/tools/install/linux/environmentoptions.xml \
         > ${FLATPAK_DEST}/etc/lazarus/environmentoptions.xml
     sources:
       - type: archive
         url: "https://downloads.sourceforge.net/lazarus/lazarus-2.0.4.tar.gz"
         sha256: e01d10c1b08fdb9b98fa8f740536add804383e4f39f092059c5e4ac7516c147b
       - type: patch
-        path: lazarus-Makefile.patch
-      - type: patch
-        path: lazarus-SecondaryConfigPath.patch
+        paths:
+          - lazarus-Makefile.patch
+          - lazarus-SecondaryConfigPath.patch
       - type: shell
         commands:
           - fpcmake -Tall
