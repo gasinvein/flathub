@@ -92,8 +92,8 @@ modules:
         > ${FLATPAK_DEST}/etc/lazarus/environmentoptions.xml
     sources:
       - type: archive
-        url: "https://downloads.sourceforge.net/lazarus/lazarus-2.0.4.tar.gz"
-        sha256: e01d10c1b08fdb9b98fa8f740536add804383e4f39f092059c5e4ac7516c147b
+        url: "https://downloads.sourceforge.net/lazarus/lazarus-2.0.6.tar.gz"
+        sha256: 82cdafb0f0c05cf1ebb8e52b58bf980a08a866b6df1003f55ca2da3480e92a6c
       - type: patch
         paths:
           - lazarus-Makefile.patch
