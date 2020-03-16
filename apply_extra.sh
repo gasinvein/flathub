@@ -26,6 +26,12 @@ icon_files=(
     [${FLATPAK_ID}-Panels]="DV_Panels"
 )
 
+declare -A wm_classes
+wm_classes=(
+    [${FLATPAK_ID}.rawplayer]="BlackmagicRAWPlayer"
+    [${FLATPAK_ID}.rawspeedtest]="BlackmagicRAWSpeedTest"
+)
+
 for dsk in "${!desktop_names[@]}"; do
     # Install icons
     case "${desktop_names[$dsk]}" in
@@ -52,6 +58,12 @@ for dsk in "${!desktop_names[@]}"; do
         "--remove-key=Path"
         "--set-key=X-Flatpak-RenamedFrom" "--set-value=${desktop_names[$dsk]}.desktop;"
     )
+    wm_class="${wm_classes[$dsk]}"
+    if [ -n "$wm_class" ]; then
+        edit_args+=(
+            "--set-key=StartupWMClass" "--set-value=$wm_class"
+        )
+    fi
     if [ "${dsk}" != "${FLATPAK_ID}-CaptureLogs" ]; then
         edit_args+=(
             "--set-key=Icon" "--set-value=${dsk}"
