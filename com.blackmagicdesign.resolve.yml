@@ -7,6 +7,10 @@ finish-args:
   - --socket=x11
   - --device=dri
   - --socket=pulseaudio
+  - --filesystem=xdg-documents
+  - --filesystem=xdg-videos
+  - --filesystem=xdg-pictures
+  - --filesystem=xdg-download
 command: resolve
 cleanup:
   - "*.a"
