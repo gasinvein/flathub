@@ -1,0 +1,67 @@
+id: com.blackmagicdesign.resolve
+sdk: org.freedesktop.Sdk
+runtime: org.freedesktop.Platform
+runtime-version: "19.08"
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --device=dri
+  - --socket=pulseaudio
+command: resolve
+cleanup:
+  - "*.a"
+  - "*.la"
+  - /include
+  - /lib/pkgconfig
+modules:
+
+  - name: davinci-resolve
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 apply_extra.sh /app/bin/apply_extra
+      - install -Dm755 resolve.sh /app/bin/resolve
+      - install -Dm755 /usr/bin/desktop-file-edit -t /app/bin/
+    sources:
+      - type: extra-data
+        filename: DaVinci_Resolve_16.2_Linux.zip
+        url: "http://localhost:8000/DaVinci_Resolve_16.2_Linux.zip"
+        sha256: 2a3147b58e0b64da802cb04da9d1a1c42bc30558d7a57782e3bdc1a4b4c2cae0
+        size: 1281869618
+      - type: file
+        path: apply_extra.sh
+      - type: file
+        path: resolve.sh
+    modules:
+
+      - shared-modules/glu/glu-9.json
+
+      - name: openssl-1.0
+        config-opts:
+          - --openssldir=/app/etc/ssl
+          - no-asm
+          - shared
+        build-options:
+          arch:
+            x86_64:
+              config-opts:
+                - linux-elf
+            i386:
+              config-opts:
+                - linux-elf
+            arm:
+              config-opts:
+                - linux-armv4
+            aarch64:
+              config-opts:
+                - linux-aarch64
+        install-rule: install_sw
+        post-install:
+          - chmod -v 755 /app/lib/{lib{crypto,ssl},engines/}*
+          - rmdir /app/etc/ssl/certs && ln -sr /etc/ssl/certs /app/etc/ssl/certs
+        sources:
+          - type: archive
+            url: "https://www.openssl.org/source/openssl-1.0.2u.tar.gz"
+            sha256: ecd0c6ffb493dd06707d38b14bb4d8c2288bb7033735606569d8f90f89669d16
+          - type: shell
+            commands:
+              - ln -s Configure configure
