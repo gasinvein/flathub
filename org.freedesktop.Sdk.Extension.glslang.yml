@@ -13,8 +13,20 @@ modules:
   - name: glslang
     buildsystem: cmake-ninja
     config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
       - -DBUILD_SHARED_LIBS=ON
+      - -DCMAKE_SKIP_BUILD_RPATH=OFF
+      - -DCMAKE_INSTALL_RPATH=$ORIGIN:$ORIGIN/../lib
+      - -DENABLE_OPT=ON
     sources:
       - type: archive
-        url: "https://github.com/KhronosGroup/glslang/archive/7.12.3352.tar.gz"
-        sha256: 4ecce011b73dd7196a5114f66776d5a4c4c3674fc9bc6f39ad3c1ee15a8abbe1
+        url: "https://github.com/KhronosGroup/glslang/archive/8.13.3559.tar.gz"
+        sha256: c58fdcf7e00943ba10f9ae565b2725ec9d5be7dab7c8e82cac72fcaa83c652ca
+      - type: archive
+        dest: External/spirv-tools
+        url: "https://github.com/KhronosGroup/SPIRV-Tools/archive/v2019.5.tar.gz"
+        sha256: c1560aa1ffc7526f580b56d08225f3f61acdfb037db4939f4c90fee21f08f49b
+      - type: archive
+        dest: External/spirv-tools/external/SPIRV-Headers
+        url: "https://github.com/KhronosGroup/SPIRV-Headers/archive/1.5.1.corrected.tar.gz"
+        sha256: 2b6a0ce1c02b9fe7b9ef727369168fe579e5256f1ea013993acdb8d8f06b7e89
