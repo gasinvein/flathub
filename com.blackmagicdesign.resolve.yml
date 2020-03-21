@@ -25,6 +25,8 @@ modules:
       - install -Dm755 apply_extra.sh /app/bin/apply_extra
       - install -Dm755 resolve.sh /app/bin/resolve
       - install -Dm755 /usr/bin/desktop-file-edit -t /app/bin/
+    post-install:
+      - install -Dm644 ${FLATPAK_ID}.appdata.xml -t /app/share/appdata
     sources:
       - type: extra-data
         filename: DaVinci_Resolve_16.2_Linux.zip
@@ -35,6 +37,8 @@ modules:
         path: apply_extra.sh
       - type: file
         path: resolve.sh
+      - type: file
+        path: com.blackmagicdesign.resolve.appdata.xml
     modules:
 
       - shared-modules/glu/glu-9.json

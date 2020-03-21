@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.blackmagicdesign.resolve</id>
+  
+  <name>DaVinci Resolve</name>
+  <summary>Professional A/V post-production software suite from Blackmagic Design</summary>
+  
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>LicenseRef-proprietary</project_license>
+  
+  <description>
+    <p>
+      DaVinci Resolve 16 is the world’s only solution that combines professional 8K editing, color correction, visual effects and audio post production all in one software tool! You can instantly move between editing, color, effects, and audio with a single click. DaVinci Resolve Studio is also the only solution designed for multi user collaboration so editors, assistants, colorists, VFX artists and sound designers can all work live on the same project at the same time! Whether you’re an individual artist, or part of a large collaborative team, it’s easy to see why DaVinci Resolve is the standard for high end post production and finishing on more Hollywood feature films, television shows and commercials than any other software.
+    </p>
+  </description>
+  
+  <launchable type="desktop-id">com.blackmagicdesign.resolve.desktop</launchable>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://images.blackmagicdesign.com/images/products/davinciresolve/edit/responsive/responsive-md.jpg</image>
+    </screenshot>
+    <screenshot>
+      <image>https://images.blackmagicdesign.com/images/products/davinciresolve/cut/fast/fast-md.jpg</image>
+    </screenshot>
+  </screenshots>
+
+  <content_rating type="oars-1.1">
+    <content_attribute id="social-chat">intense</content_attribute>
+    <content_attribute id="social-audio">intense</content_attribute>
+    <content_attribute id="social-info">moderate</content_attribute>
+    <content_attribute id="money-purchasing">mild</content_attribute>
+  </content_rating>
+
+  <releases>
+    <release version="16.2" date="2020-03-05"/>
+  </releases>
+</component>
