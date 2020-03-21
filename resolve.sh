@@ -19,19 +19,5 @@ case "$this_cmd" in
     ;;
 esac
 
-temp_libdir="$XDG_RUNTIME_DIR/app/$FLATPAK_ID/libs"
-test -d "$temp_libdir" || mkdir -p "$temp_libdir"
-
-cuda_lib=(/usr/lib/*/GL/*/lib/libcuda.so.1)
-if [ -f "${cuda_lib[0]}" ] && [ ! -f "$temp_libdir/libcuda.so" ]; then
-    ln -s "$(readlink -f "${cuda_lib[0]}")" "$temp_libdir/libcuda.so"
-fi
-
-if [ -z "$LD_LIBRARY_PATH" ]; then
-    export LD_LIBRARY_PATH="$temp_libdir"
-else
-    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$temp_libdir"
-fi
-
 cd "/app/extra/davinci-resolve"
 exec "$(pwd)/$subdir/$this_cmd" "$@"
