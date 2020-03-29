@@ -1,9 +1,9 @@
 id: io.itch.itch
 sdk: org.freedesktop.Sdk
 runtime: org.freedesktop.Platform
-runtime-version: '18.08'
-base: io.atom.electron.BaseApp
-base-version: '18.08'
+runtime-version: '19.08'
+base: org.flathub.GameLauncherBaseApp
+base-version: '19.08'
 command: itch
 finish-args:
   - --share=ipc
@@ -17,28 +17,14 @@ finish-args:
   - --talk-name=org.freedesktop.Notifications
   - --talk-name=org.kde.StatusNotifierWatcher
   - --persist=.
-add-extensions:
-  org.freedesktop.Platform.Compat.i386:
-    directory: lib/i386-linux-gnu
-    version: '18.08'
-  org.freedesktop.Platform.Compat.i386.Debug:
-    directory: lib/debug/lib/i386-linux-gnu
-    version: '18.08'
-    no-autodownload: true
-  org.freedesktop.Platform.GL32:
-    directory: lib/i386-linux-gnu/GL
-    version: '1.4'
-    versions: 18.08;1.4
-    subdirectories: true
-    no-autodownload: true
-    autodelete: false
-    add-ld-path: lib
-    merge-dirs: vulkan/icd.d;glvnd/egl_vendor.d
-    download-if: active-gl-driver
-    enable-if: active-gl-driver
+inherit-extensions:
+  - org.freedesktop.Platform.Compat.i386
+  - org.freedesktop.Platform.Compat.i386.Debug
+  - org.freedesktop.Platform.GL32
 modules:
 
-  - shared-modules/glu/glu-9.0.0.json
+  - shared-modules/dbus-glib/dbus-glib-0.110.json
+  - shared-modules/libappindicator/libappindicator-gtk3-12.10.json
 
   - name: itch
     buildsystem: simple
@@ -51,8 +37,6 @@ modules:
         for s in 16 32 48 64 128 256 512; do
           install -Dm644 icon${s}.png /app/share/icons/hicolor/${s}x${s}/apps/${FLATPAK_ID}.png
         done
-    post-install:
-      - mkdir -p /app/lib/i386-linux-gnu /app/lib/debug/lib/i386-linux-gnu
     sources:
       - type: script
         dest-filename: itch.sh
