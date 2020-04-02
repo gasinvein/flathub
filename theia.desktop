@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Theia
+Comment=Cloud & desktop IDE framework
+GenericName=Text Editor
+Exec=theia-electron %F
+Icon=theia
+StartupWMClass=theia
+Categories=TextEditor;Development;IDE;
+MimeType=text/plain;inode/directory;
+Keywords=theia;vscode;

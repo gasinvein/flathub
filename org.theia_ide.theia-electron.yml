@@ -10,7 +10,9 @@ finish-args:
   - --device=dri
   - --allow=devel
   - --share=network
-command: /app/main/theia-electron
+command: theia-electron
+rename-desktop-file: theia.desktop
+rename-icon: theia
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.node10
 build-options:
@@ -83,3 +85,25 @@ modules:
           - x86_64
         url: "https://github.com/microsoft/ripgrep-prebuilt/releases/download/v11.0.1-2/ripgrep-v11.0.1-2-x86_64-unknown-linux-musl.tar.gz"
         sha256: 0fa6e71818712b4874009426993654edc9b4e1be460eb6d16978e2e5b3d139cc
+
+  - name: bundle-setup
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 theia-electron.sh /app/bin/theia-electron
+      - install -Dm644 theia.desktop -t /app/share/applications/
+      - install -Dm644 theia.svg /app/share/icons/hicolor/scalable/apps/theia.svg
+      - |
+        for s in 64 128 256 512; do
+          mkdir -p /app/share/icons/hicolor/${s}x${s}/apps
+          rsvg-convert -a -h ${s} -o /app/share/icons/hicolor/{${s}x${s}/apps/theia.png,scalable/apps/theia.svg}
+        done
+    sources:
+      - type: file
+        url: "https://github.com/eclipse-theia/theia/raw/v1.0.0/logo/theia.svg"
+        sha256: 25f7748c49f29bd35a28b1f9509357367f2c83c5a275162a969e3c2210432d54
+      - type: file
+        path: theia.desktop
+      - type: script
+        dest-filename: theia-electron.sh
+        commands:
+          - exec /app/main/theia-electron "$@"
