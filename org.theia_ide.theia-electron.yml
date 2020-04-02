@@ -1,0 +1,85 @@
+id: org.theia_ide.theia-electron
+sdk: org.freedesktop.Sdk
+runtime: org.freedesktop.Sdk
+runtime-version: "19.08"
+base: org.electronjs.Electron2.BaseApp
+base-version: "19.08"
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --device=dri
+  - --allow=devel
+  - --share=network
+command: /app/main/theia-electron
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.node10
+build-options:
+  append-path: /usr/lib/sdk/node10/bin
+modules:
+
+  - name: yarn
+    buildsystem: simple
+    build-commands:
+      - mkdir -p /app/share/yarn/
+      - cp -a * /app/share/yarn/
+      - ln -s /app/share/yarn/bin/yarn /app/bin/yarn
+      - ln -s /app/share/yarn/bin/yarnpkg /app/bin/yarnpkg
+    cleanup:
+      - "*"
+    sources:
+      - type: archive
+        url: "https://github.com/yarnpkg/yarn/releases/download/v1.22.4/yarn-v1.22.4.tar.gz"
+        sha256: bc5316aa110b2f564a71a3d6e235be55b98714660870c5b6b2d2d3f12587fb58
+
+  - name: theia-electron
+    build-options:
+      no-debuginfo: true
+      strip: false
+      env:
+        TMPDIR: /run/build/theia-electron/tmp
+        ELECTRON_CACHE: /run/build/theia-electron/flatpak-node/electron-cache
+        electron_config_cache: /run/build/theia-electron/flatpak-node/electron-cache
+        npm_config_nodedir: /run/build/theia-electron/node-gyp/4.2.12
+        PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
+        DEBUG: electron-rebuild,electron-builder
+      arch:
+        arm: { env: { earch: armv7l, suffix: "-armv7l" } }
+        aarch64: { env: { earch: arm64, suffix: "-arm64" } }
+        i386: { env: { earch: ia32, suffix: "-ia32" } }
+        x86_64: { env: { earch: x64, suffix: "" } }
+    buildsystem: simple
+    build-commands:
+      - yarn
+      - yarn run electron-builder --linux --${earch} --dir
+      - cp -a dist/linux${suffix}-unpacked /app/main
+    subdir: main/theia-electron
+    sources:
+      - type: git
+        dest: main
+        url: "https://github.com/theia-ide/theia-apps.git"
+        commit: 0cc6a3dc2a6dec1b2b4f9572e9d878a67dc81ff5
+
+      - type: file
+        path: yarnrc
+        dest-filename: .yarnrc
+        dest: main/theia-electron
+
+      - type: file
+        path: yarn.lock
+        dest: main/theia-electron
+
+      - generated-sources.json
+
+      - generated-extra-sources.json
+
+      - type: archive
+        dest: node-gyp/4.2.12
+        url: "https://www.electronjs.org/headers/v4.2.12/node-v4.2.12-headers.tar.gz"
+        sha256: 4fac67bf8985d087508f0a65612a301baec77c2934d47fe74545938304e38324
+
+      - type: file
+        dest: tmp/vscode-ripgrep-cache-1.5.8
+        only-arches:
+          - x86_64
+        url: "https://github.com/microsoft/ripgrep-prebuilt/releases/download/v11.0.1-2/ripgrep-v11.0.1-2-x86_64-unknown-linux-musl.tar.gz"
+        sha256: 0fa6e71818712b4874009426993654edc9b4e1be460eb6d16978e2e5b3d139cc
