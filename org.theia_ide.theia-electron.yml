@@ -10,6 +10,7 @@ finish-args:
   - --device=dri
   - --allow=devel
   - --share=network
+  - --persist=.theia
 command: theia-electron
 rename-desktop-file: theia.desktop
 rename-icon: theia
