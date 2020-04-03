@@ -19,5 +19,5 @@ case "$this_cmd" in
     ;;
 esac
 
-cd "/app/extra/davinci-resolve"
+cd "/app/extra/resolve"
 exec "$(pwd)/$subdir/$this_cmd" "$@"

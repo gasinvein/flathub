@@ -4,8 +4,11 @@ FLATPAK_ID="com.blackmagicdesign.resolve"
 VERSION="16.2"
 DIST_BASENAME="DaVinci_Resolve_${VERSION}_Linux"
 
-mkdir -p davinci-resolve export/share
-unzip -p "${DIST_BASENAME}.zip" "${DIST_BASENAME}.run" | bsdtar -x -f - -C davinci-resolve
+APPDIR=/app/extra/resolve
+DATADIR=/app/extra/export/share
+
+mkdir -p "${APPDIR}" "${DATADIR}"
+unzip -p "${DIST_BASENAME}.zip" "${DIST_BASENAME}.run" | bsdtar -x -f - -C "${APPDIR}"
 
 # Install .desktop files
 
@@ -37,23 +40,23 @@ for dsk in "${!desktop_names[@]}"; do
     case "${desktop_names[$dsk]}" in
         blackmagicraw-*)
             for s in 48 256; do
-                install -Dm644 "davinci-resolve/graphics/${desktop_names[$dsk]}_${s}x${s}_apps.png" \
-                               "export/share/icons/hicolor/${s}x${s}/apps/${dsk}.png"
+                install -Dm644 "${APPDIR}/graphics/${desktop_names[$dsk]}_${s}x${s}_apps.png" \
+                               "${DATADIR}/icons/hicolor/${s}x${s}/apps/${dsk}.png"
             done
         ;;
         DaVinciResolve*)
             if [ -n "${icon_files[$dsk]}" ]; then
-                install -Dm644 "davinci-resolve/graphics/${icon_files[$dsk]}.png" \
-                               "export/share/icons/hicolor/128x128/apps/${dsk}.png"
+                install -Dm644 "${APPDIR}/graphics/${icon_files[$dsk]}.png" \
+                               "${DATADIR}/icons/hicolor/128x128/apps/${dsk}.png"
             fi
         ;;
     esac
 
     # Install .desktop file
-    install -Dm644 "davinci-resolve/share/${desktop_names[$dsk]}.desktop" \
-                   "export/share/applications/${dsk}.desktop"
-    sed 's|RESOLVE_INSTALL_LOCATION|/app/extra/davinci-resolve|g' \
-        -i "export/share/applications/${dsk}.desktop"
+    install -Dm644 "${APPDIR}/share/${desktop_names[$dsk]}.desktop" \
+                   "${DATADIR}/applications/${dsk}.desktop"
+    sed "s|RESOLVE_INSTALL_LOCATION|${APPDIR}|g" \
+        -i "${DATADIR}/applications/${dsk}.desktop"
     edit_args=(
         "--remove-key=Path"
         "--set-key=X-Flatpak-RenamedFrom" "--set-value=${desktop_names[$dsk]}.desktop;"
@@ -70,50 +73,50 @@ for dsk in "${!desktop_names[@]}"; do
         )
     fi
     desktop-file-edit "${edit_args[@]}" \
-        "export/share/applications/${dsk}.desktop"
+        "${DATADIR}/applications/${dsk}.desktop"
 done
 
 # Install Resolve mime
 
-install -Dm644 "davinci-resolve/share/resolve.xml" \
-               "export/share/mime/packages/${FLATPAK_ID}.xml"
+install -Dm644 "${APPDIR}/share/resolve.xml" \
+               "${DATADIR}/mime/packages/${FLATPAK_ID}.xml"
 
-install -Dm644 "davinci-resolve/graphics/DV_ResolveProj.png" \
-               "export/share/icons/hicolor/128x128/mimetypes/${FLATPAK_ID}.x-resolveproj.png"
+install -Dm644 "${APPDIR}/graphics/DV_ResolveProj.png" \
+               "${DATADIR}/icons/hicolor/128x128/mimetypes/${FLATPAK_ID}.x-resolveproj.png"
 
 sed "s|\\(<mime-type type=\"application/x-resolveproj\">\\)|\\1\\n<icon name=\"${FLATPAK_ID}.x-resolveproj\"/>|g" \
-     -i "export/share/mime/packages/${FLATPAK_ID}.xml"
+     -i "${DATADIR}/mime/packages/${FLATPAK_ID}.xml"
 
 # Install Blackmagic RAW mime
 
-install -Dm644 "davinci-resolve/share/blackmagicraw.xml" \
-               "export/share/mime/packages/${FLATPAK_ID}.raw.xml"
+install -Dm644 "${APPDIR}/share/blackmagicraw.xml" \
+               "${DATADIR}/mime/packages/${FLATPAK_ID}.raw.xml"
 
 for m in x-braw-sidecar x-braw-clip; do
     for s in 48 256; do
-        install -Dm644 "davinci-resolve/graphics/application-${m}_${s}x${s}_mimetypes.png" \
-                       "export/share/icons/hicolor/${s}x${s}/mimetypes/${FLATPAK_ID}.${m}.png"
+        install -Dm644 "${APPDIR}/graphics/application-${m}_${s}x${s}_mimetypes.png" \
+                       "${DATADIR}/icons/hicolor/${s}x${s}/mimetypes/${FLATPAK_ID}.${m}.png"
     done
     sed "s|\\(<mime-type type=\"application/${m}\">\\)|\\1\\n<icon name=\"${FLATPAK_ID}.${m}\"/>|g" \
-        -i "export/share/mime/packages/${FLATPAK_ID}.raw.xml"
+        -i "${DATADIR}/mime/packages/${FLATPAK_ID}.raw.xml"
 done
 
 # Install desktop directory
 
-install -Dm644 "davinci-resolve/share/DaVinciResolve.directory" \
-               "export/share/desktop-directories/${FLATPAK_ID}.directory"
+install -Dm644 "${APPDIR}/share/DaVinciResolve.directory" \
+               "${DATADIR}/desktop-directories/${FLATPAK_ID}.directory"
 
-sed 's|RESOLVE_INSTALL_LOCATION|/app/extra/davinci-resolve|g' \
-    -i "export/share/desktop-directories/${FLATPAK_ID}.directory"
+sed "s|RESOLVE_INSTALL_LOCATION|${APPDIR}|g" \
+    -i "${DATADIR}/desktop-directories/${FLATPAK_ID}.directory"
 
 # Hook scripts
 
 desktop-file-edit \
     --set-key="Exec" --set-value="resolve %f" \
-    "export/share/applications/${dsk}.desktop"
+    "${DATADIR}/applications/${dsk}.desktop"
 
 # Cleanup
 
-rm davinci-resolve/libs/lib{ssl,crypto}.so*
+rm ${APPDIR}/libs/lib{ssl,crypto}.so*
 
 rm "${DIST_BASENAME}.zip"
