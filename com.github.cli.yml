@@ -1,0 +1,31 @@
+id: com.github.cli
+sdk: org.freedesktop.Sdk
+runtime: org.freedesktop.Platform
+runtime-version: "19.08"
+finish-args:
+  - --filesystem=host
+  - --share=network
+build-options:
+  append-path: /usr/lib/sdk/golang/bin
+  env:
+    GOROOT: /usr/lib/sdk/golang
+    GOFLAGS: -mod=vendor -v
+modules:
+
+  - name: github-cli
+    build-options:
+      ldflags: ""
+      ldflags-override: true
+    buildsystem: simple
+    build-commands:
+      - make bin/gh
+      - install -Dm755 bin/gh -t /app/bin/
+    post-install:
+      - install -Dm644 ${FLATPAK_ID}.metainfo.xml -t /app/share/metainfo/
+    sources:
+      - type: git
+        url: "https://github.com/cli/cli.git"
+        tag: v0.6.4
+      - generated-sources.json
+      - type: file
+        path: com.github.cli.metainfo.xml

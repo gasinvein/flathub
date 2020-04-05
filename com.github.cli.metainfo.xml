@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="console-application">
+  <id>com.github.cli</id>
+  <name>GitHub CLI</name>
+  <summary>GitHub’s official command line tool</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+  <description>
+    <p>
+      gh is GitHub on the command line, and it&apos;s now available in beta. It brings pull requests, issues, and other GitHub concepts to the terminal next to where you are already working with git and your code.
+    </p>
+  </description>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://www.wps.com/images/wps4linux/Women_in_Dance_SpellCheck.png</image>
+    </screenshot>
+  </screenshots>
+  <icon type="remote" width="256" height="256">https://cli.github.com/assets/images/icon-cli.svg</icon>
+  <categories>
+    <category>Development</category>
+  </categories>
+  <provides>
+    <binary>gh</binary>
+  </provides>
+  <releases>
+    <release version="0.6.4" date="2020-04-01"/>
+  </releases>
+</component>
