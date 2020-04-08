@@ -42,7 +42,7 @@ modules:
         TMPDIR: /run/build/theia-electron/tmp
         ELECTRON_CACHE: /run/build/theia-electron/flatpak-node/electron-cache
         electron_config_cache: /run/build/theia-electron/flatpak-node/electron-cache
-        npm_config_nodedir: /run/build/theia-electron/node-gyp/4.2.12
+        npm_config_nodedir: /run/build/theia-electron/flatpak-node/node-gyp/electron-current
         PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
         DEBUG: electron-rebuild,electron-builder
       arch:
@@ -74,11 +74,6 @@ modules:
       - generated-sources.json
 
       - generated-extra-sources.json
-
-      - type: archive
-        dest: node-gyp/4.2.12
-        url: "https://www.electronjs.org/headers/v4.2.12/node-v4.2.12-headers.tar.gz"
-        sha256: 4fac67bf8985d087508f0a65612a301baec77c2934d47fe74545938304e38324
 
       - type: file
         dest: tmp/vscode-ripgrep-cache-1.5.8

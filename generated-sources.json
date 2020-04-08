@@ -1,5 +1,12 @@
 [
     {
+        "type": "archive",
+        "url": "https://www.electronjs.org/headers/v4.2.12/node-v4.2.12-headers.tar.gz",
+        "strip-components": 1,
+        "sha256": "4fac67bf8985d087508f0a65612a301baec77c2934d47fe74545938304e38324",
+        "dest": "flatpak-node/node-gyp/electron-current"
+    },
+    {
         "type": "file",
         "url": "https://github.com/electron/electron/releases/download/v4.2.12/SHASUMS256.txt",
         "sha256": "c96b56e4680a6053ed9d1340d99fec2fa99c63bd868b682c7350fe2c9c2f1653",
