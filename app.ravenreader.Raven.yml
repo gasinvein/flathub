@@ -19,6 +19,7 @@ finish-args:
   - --socket=pulseaudio
   - --device=dri
   - --share=network
+  - --talk-name=org.kde.StatusNotifierWatcher
 modules:
 
   - name: yarn
@@ -49,15 +50,15 @@ modules:
         x86_64: { env: { earch: x64, suffix: "" } }
     buildsystem: simple
     build-commands:
-      - cp main/src/renderer/config{.example,}.js
-      - yarn --cwd main --offline --pure-lockfile
-      - yarn --cwd main --offline run build --linux --${earch} --dir
-      - mkdir -p /app/{bin,lib}
-      - cp -a main/build/linux${suffix}-unpacked /app/lib/raven
-      - ln -sr /app/lib/raven/raven-reader /app/bin/raven-reader
+      - cp src/renderer/config{.example,}.js
+      - yarn
+      - yarn run build --linux --${earch} --dir
+      - cp -a build/linux${suffix}-unpacked /app/main
     post-install:
-      - install -Dm644 main/build/icons/256x256.png /app/share/icons/hicolor/256x256/apps/raven-reader.png
-      - install -Dm644 raven-reader.desktop -t /app/share/applications/
+      - install -Dm755 ../raven-reader.sh /app/bin/raven-reader
+      - install -Dm644 build/icons/256x256.png /app/share/icons/hicolor/256x256/apps/raven-reader.png
+      - install -Dm644 ../raven-reader.desktop -t /app/share/applications/
+    subdir: main
     sources:
       - type: archive
         url: "https://github.com/hello-efficiency-inc/raven-reader/archive/v0.6.6.tar.gz"
@@ -82,6 +83,11 @@ modules:
         url: "https://github.com/electron/electron/releases/download/v6.0.0/chromedriver-v6.0.0-linux-x64.zip"
         sha256: 3e833130314098b4766e4b63a63ac0ac3b94a453c266c5dfb5c93288508c4d0b
         dest: flatpak-node/electron-cache
+
+      - type: script
+        dest-filename: raven-reader.sh
+        commands:
+          - exec zypak-wrapper /app/main/raven-reader "$@"
 
       - type: file
         path: raven-reader.desktop
