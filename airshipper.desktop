@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Airshipper
+GenericName=A cross-platform Veloren launcher
+Exec=airshipper
+Icon=veloren
+Categories=Game
+Keywords=veloren;sandbox;world;blocks;nodes;multiplayer;roleplaying;
+Terminal=false
