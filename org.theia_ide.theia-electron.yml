@@ -36,8 +36,6 @@ modules:
 
   - name: theia-electron
     build-options:
-      no-debuginfo: true
-      strip: false
       env:
         TMPDIR: /run/build/theia-electron/tmp
         ELECTRON_CACHE: /run/build/theia-electron/flatpak-node/electron-cache
