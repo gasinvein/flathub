@@ -95,6 +95,46 @@
     },
     {
         "type": "file",
+        "url": "https://github.com/microsoft/ripgrep-prebuilt/releases/download/v11.0.1-2/ripgrep-v11.0.1-2-aarch64-unknown-linux-gnu.tar.gz",
+        "sha256": "de15e06916096586a621e643f21f526431799a19006711fefbf50b9fd48f7714",
+        "dest-filename": "ripgrep-v11.0.1-2-aarch64-unknown-linux-gnu.tar.gz",
+        "dest": "flatpak-node/tmp/vscode-ripgrep-cache-1.5.8",
+        "only-arches": [
+            "aarch64"
+        ]
+    },
+    {
+        "type": "file",
+        "url": "https://github.com/microsoft/ripgrep-prebuilt/releases/download/v11.0.1-2/ripgrep-v11.0.1-2-arm-unknown-linux-gnueabihf.tar.gz",
+        "sha256": "f87328265beebfa10b3d91991f5cb7887ecdb00b0a53394168fe0755aee454e9",
+        "dest-filename": "ripgrep-v11.0.1-2-arm-unknown-linux-gnueabihf.tar.gz",
+        "dest": "flatpak-node/tmp/vscode-ripgrep-cache-1.5.8",
+        "only-arches": [
+            "arm"
+        ]
+    },
+    {
+        "type": "file",
+        "url": "https://github.com/microsoft/ripgrep-prebuilt/releases/download/v11.0.1-2/ripgrep-v11.0.1-2-i686-unknown-linux-musl.tar.gz",
+        "sha256": "78044497585d12dca35e33501d9a384dce6ea23d561452cde0221b012677bf9a",
+        "dest-filename": "ripgrep-v11.0.1-2-i686-unknown-linux-musl.tar.gz",
+        "dest": "flatpak-node/tmp/vscode-ripgrep-cache-1.5.8",
+        "only-arches": [
+            "i386"
+        ]
+    },
+    {
+        "type": "file",
+        "url": "https://github.com/microsoft/ripgrep-prebuilt/releases/download/v11.0.1-2/ripgrep-v11.0.1-2-x86_64-unknown-linux-musl.tar.gz",
+        "sha256": "0fa6e71818712b4874009426993654edc9b4e1be460eb6d16978e2e5b3d139cc",
+        "dest-filename": "ripgrep-v11.0.1-2-x86_64-unknown-linux-musl.tar.gz",
+        "dest": "flatpak-node/tmp/vscode-ripgrep-cache-1.5.8",
+        "only-arches": [
+            "x86_64"
+        ]
+    },
+    {
+        "type": "file",
         "url": "https://registry.yarnpkg.com/7zip-bin/-/7zip-bin-5.0.3.tgz#bc5b5532ecafd923a61f2fb097e3b108c0106a3f",
         "sha512": "18bc9620505b1afa4a3c6a39e49c91640a389556e70620f9d9c2a5c3fd15b7ec2798abd6264a59bec8d5a1a2289720570de01029289c46da8534f7a6f70d1660",
         "dest-filename": "7zip-bin-5.0.3.tgz",

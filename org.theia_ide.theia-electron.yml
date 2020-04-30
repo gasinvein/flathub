@@ -37,7 +37,7 @@ modules:
   - name: theia-electron
     build-options:
       env:
-        TMPDIR: /run/build/theia-electron/tmp
+        TMPDIR: /run/build/theia-electron/flatpak-node/tmp
         ELECTRON_CACHE: /run/build/theia-electron/flatpak-node/electron-cache
         electron_config_cache: /run/build/theia-electron/flatpak-node/electron-cache
         npm_config_nodedir: /run/build/theia-electron/flatpak-node/node-gyp/electron-current
@@ -72,13 +72,6 @@ modules:
       - generated-sources.json
 
       - generated-extra-sources.json
-
-      - type: file
-        dest: tmp/vscode-ripgrep-cache-1.5.8
-        only-arches:
-          - x86_64
-        url: "https://github.com/microsoft/ripgrep-prebuilt/releases/download/v11.0.1-2/ripgrep-v11.0.1-2-x86_64-unknown-linux-musl.tar.gz"
-        sha256: 0fa6e71818712b4874009426993654edc9b4e1be460eb6d16978e2e5b3d139cc
 
   - name: bundle-setup
     buildsystem: simple
