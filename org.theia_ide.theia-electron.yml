@@ -1,4 +1,5 @@
 id: org.theia_ide.theia-electron
+default-branch: next
 sdk: org.freedesktop.Sdk
 runtime: org.freedesktop.Sdk
 runtime-version: "19.08"
@@ -18,6 +19,8 @@ sdk-extensions:
   - org.freedesktop.Sdk.Extension.node10
 build-options:
   append-path: /usr/lib/sdk/node10/bin
+  build-args:
+    - --share=network
 modules:
 
   - name: yarn
@@ -37,11 +40,6 @@ modules:
   - name: theia-electron
     build-options:
       env:
-        TMPDIR: /run/build/theia-electron/flatpak-node/tmp
-        ELECTRON_CACHE: /run/build/theia-electron/flatpak-node/electron-cache
-        electron_config_cache: /run/build/theia-electron/flatpak-node/electron-cache
-        npm_config_nodedir: /run/build/theia-electron/flatpak-node/node-gyp/electron-current
-        PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
         DEBUG: electron-rebuild,electron-builder
       arch:
         arm: { env: { earch: armv7l, suffix: "-armv7l" } }
@@ -58,20 +56,6 @@ modules:
       - type: git
         dest: main
         url: "https://github.com/theia-ide/theia-apps.git"
-        commit: 0cc6a3dc2a6dec1b2b4f9572e9d878a67dc81ff5
-
-      - type: file
-        path: yarnrc
-        dest-filename: .yarnrc
-        dest: main/theia-electron
-
-      - type: file
-        path: yarn.lock
-        dest: main/theia-electron
-
-      - generated-sources.json
-
-      - generated-extra-sources.json
 
   - name: bundle-setup
     buildsystem: simple

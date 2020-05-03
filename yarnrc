@@ -1,3 +1,0 @@
-yarn-offline-mirror /run/build/theia-electron/flatpak-node/yarn-mirror
---install.offline true
---run.offline true
