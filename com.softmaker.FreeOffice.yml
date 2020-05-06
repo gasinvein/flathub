@@ -46,9 +46,9 @@ modules:
         filename: freeoffice.tgz
         only-arches:
           - x86_64
-        url: https://www.softmaker.net/down/softmaker-freeoffice-974-amd64.tgz
-        size: 127457919
-        sha256: e26659679c7eca0fd81f4ad354e01170f2f3cbda9f9f0a6faa617b5c7118e17c
+        url: https://www.softmaker.net/down/softmaker-freeoffice-976-amd64.tgz
+        size: 127486819
+        sha256: 74eabf718d7cdc8a0b6a0ec7938cdaeef2577c8d886f9489c36d4d853d25d08f
         x-checker-data:
           type: html
           url: https://www.freeoffice.com/en/download/applications
@@ -59,9 +59,9 @@ modules:
         filename: freeoffice.tgz
         only-arches:
           - i386
-        url: https://www.softmaker.net/down/softmaker-freeoffice-974-i386.tgz
-        size: 125942366
-        sha256: b04ee3abc7a457a9bf84c445ffec27a2c6fdd6e29bb0e94166e061f13451507e
+        url: https://www.softmaker.net/down/softmaker-freeoffice-976-i386.tgz
+        size: 125964829
+        sha256: 2b9b7d3541f050deb532e9e94454c166b5900cc39ad28bdb09cbc8e7d35eb9ca
         x-checker-data:
           type: html
           url: https://www.freeoffice.com/en/download/applications

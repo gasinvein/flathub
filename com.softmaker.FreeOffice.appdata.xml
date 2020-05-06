@@ -27,6 +27,7 @@
         </screenshot>
     </screenshots>
     <releases>
+        <release version="976" date="2020-03-14"/>
         <release version="974" date="2020-02-07"/>
         <release version="971" date="2019-09-19"/>
         <release version="944" date="2018-12-12"/>
