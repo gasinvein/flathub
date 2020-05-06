@@ -58,7 +58,7 @@ modules:
       - type: git
         dest: main
         url: "https://github.com/theia-ide/theia-apps.git"
-        commit: 0cc6a3dc2a6dec1b2b4f9572e9d878a67dc81ff5
+        commit: fec2f3d3297e27eb117bdd7afbc24c745fd506b5
 
       - type: file
         path: yarnrc
