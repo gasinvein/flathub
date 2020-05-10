@@ -1,0 +1,114 @@
+id: com.github.shiftkey.GitHubDesktop
+sdk: org.freedesktop.Sdk
+runtime: org.freedesktop.Sdk
+runtime-version: "19.08"
+base: org.electronjs.Electron2.BaseApp
+base-version: "19.08"
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --device=dri
+  - --allow=devel
+  - --share=network
+  - --filesystem=~/GitHub:create
+  - --filesystem=~/.gitconfig
+  - --filesystem=~/.ssh/known_hosts:ro
+  - --socket=ssh-auth
+command: github-desktop
+rename-desktop-file: github-desktop.desktop
+rename-icon: github-desktop
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.node10
+build-options:
+  append-path: /usr/lib/sdk/node10/bin
+cleanup:
+  - "*.a"
+  - "*.la"
+  - /include
+  - /lib/pkgconfig
+  - /share/gtk-doc
+modules:
+
+  - shared-modules/libsecret/libsecret.json
+
+  - name: yarn
+    buildsystem: simple
+    build-commands:
+      - mkdir -p /app/share/yarn/
+      - cp -a * /app/share/yarn/
+      - ln -s /app/share/yarn/bin/yarn /app/bin/yarn
+      - ln -s /app/share/yarn/bin/yarnpkg /app/bin/yarnpkg
+    cleanup:
+      - "*"
+    sources:
+      - type: archive
+        url: "https://github.com/yarnpkg/yarn/releases/download/v1.22.4/yarn-v1.22.4.tar.gz"
+        sha256: bc5316aa110b2f564a71a3d6e235be55b98714660870c5b6b2d2d3f12587fb58
+
+  - name: github-desktop
+    build-options:
+      env:
+        TMPDIR: /run/build/github-desktop/flatpak-node/tmp
+        ELECTRON_CACHE: /run/build/github-desktop/flatpak-node/electron-cache
+        electron_config_cache: /run/build/github-desktop/flatpak-node/electron-cache
+        npm_config_nodedir: /run/build/github-desktop/flatpak-node/node-gyp/electron-current
+        npm_config_build_from_source: "true"
+        # env-paths, used by electron-get, used by electron-chromedriver, wants this
+        XDG_CACHE_HOME: /run/build/github-desktop/cache
+        # Super-ugly trick to make electron-download resolve cache path
+        # to where we have pre-downloaded electron
+        ELECTRON_MIRROR: '/'
+        ELECTRON_CUSTOM_DIR: 'cache-'
+        DEBUG: electron-rebuild,electron-packager,electron-get,electron-download
+        JOBS: max
+      arch:
+        arm: { env: { earch: armv7l, suffix: "-armv7l" } }
+        aarch64: { env: { earch: arm64, suffix: "-arm64" } }
+        i386: { env: { earch: ia32, suffix: "-ia32" } }
+        x86_64: { env: { earch: x64, suffix: "" } }
+    buildsystem: simple
+    build-commands:
+      - yarn install --force
+      - env npm_config_nodedir=/usr/lib/sdk/node10 npm rebuild node-sass
+      - yarn build:prod
+      - cp -a dist/github-desktop-linux-${earch} /app/main
+    post-install:
+      - install -Dm755 ../github-desktop.sh /app/bin/github-desktop
+      - install -Dm644 ../github-desktop.desktop -t /app/share/applications/
+      - |
+        for s in 256 512; do
+          install -Dm644 app/static/logos/${s}x${s}.png /app/share/icons/hicolor/${s}x${s}/apps/github-desktop.png
+        done
+    subdir: main
+    sources:
+      - type: git
+        dest: main
+        url: "https://github.com/shiftkey/desktop.git"
+        tag: release-2.4.1-linux2
+
+      - type: file
+        dest: main
+        path: yarnrc
+        dest-filename: .yarnrc
+      
+      - generated-sources.json
+
+      - type: shell
+        commands:
+          # electron-download will look for electron at path like this:
+          # $XDG_CACHE_HOME/electron/cache-electron-v7.1.8-linux-x64.zip/electron-v7.1.8-linux-x64.zip
+          - mkdir cache
+          - ln -sr flatpak-node/electron-cache cache/electron
+          - |
+            for f in cache/electron/electron-*-linux-*.zip; do
+              ln -sv . $(dirname $f)/cache-$(basename $f);
+            done
+
+      - type: file
+        path: github-desktop.desktop
+
+      - type: script
+        dest-filename: github-desktop.sh
+        commands:
+          - export TMPDIR="$XDG_RUNTIME_DIR/app/$FLATPAK_ID"
+          - exec zypak-wrapper /app/main/github-desktop "$@"
