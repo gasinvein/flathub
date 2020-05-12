@@ -35,39 +35,9 @@
     "modules": [
         {
             "name": "util-linux",
-            "config-opts": [
-                "--sbindir=/app/bin",
-                "--without-systemd",
-                "--disable-bash-completion",
-                "--disable-agetty",
-                "--disable-wall",
-                "--disable-losetup",
-                "--disable-fsck",
-                "--disable-partx",
-                "--disable-unshare",
-                "--disable-nsenter",
-                "--disable-setpriv",
-                "--disable-zramctl",
-                "--disable-libblkid",
-                "--disable-libmount",
-                "--disable-cramfs",
-                "--disable-bfs",
-                "--disable-switch_root",
-                "--disable-pivot_root",
-                "--disable-login",
-                "--disable-su",
-                "--disable-nologin",
-                "--disable-sulogin"
-            ],
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.32/util-linux-2.32.tar.xz",
-                    "sha256": "6c7397abc764e32e8159c2e96042874a190303e77adceb4ac5bd502a272a4734"
-                }
-            ],
-            "cleanup": [
-                "/sbin"
+            "buildsystem": "simple",
+            "build-commands": [
+                "for u in flock; do install -Dvm755 /usr/bin/$u /app/bin/$u; done"
             ]
         },
         {
