@@ -1,42 +1,49 @@
 #!/usr/bin/env python3
 
 import json
-import urllib.request
 import urllib.parse
 import hashlib
 import logging
 import argparse
+import asyncio
+import aiohttp
 
 THEIA_ELECTRON_DIR = "main/theia-electron"
 
-def get_remote_sha256(url):
-    logging.info(f"Calculating sha256 of {url}")
-    response = urllib.request.urlopen(url)
+async def get_remote_sha256(url):
+    logging.info(f"started sha256({url})")
     sha256 = hashlib.sha256()
-    while True:
-        data = response.read(4096)
-        if not data:
-            break
-        sha256.update(data)
+    async with aiohttp.ClientSession() as http_session:
+        async with http_session.get(url) as response:
+            async for data in response.content.iter_chunked(4096):
+                sha256.update(data)
+    logging.info(f"done sha256({url})")
     return sha256.hexdigest()
 
-def generate_sources(package_json):
+async def get_plugin_sources(dest, plugin_name, plugin_url):
+    sources = [{
+        "type": "file",
+        "url": plugin_url,
+        "sha256": await get_remote_sha256(plugin_url),
+        "dest": dest,
+        "dest-filename": f"{plugin_name}.zip"
+    }]
+    commands = [
+        f"unzip {plugin_name}.zip -d {plugin_name}",
+        f"rm {plugin_name}.zip"
+    ]
+    return sources, commands
+
+async def generate_sources(package_json):
     sources = []
     commands = []
     plugins_dir = package_json["theiaPluginsDir"]
     plugins = package_json["theiaPlugins"]
-    for plugin_name, plugin_url in plugins.items():
-        sources += [{
-            "type": "file",
-            "url": plugin_url,
-            "sha256": get_remote_sha256(plugin_url),
-            "dest": f"{THEIA_ELECTRON_DIR}/{plugins_dir}",
-            "dest-filename": f"{plugin_name}.zip"
-        }]
-        commands += [
-            f"unzip {plugin_name}.zip -d {plugin_name}",
-            f"rm {plugin_name}.zip"
-        ]
+    dest = f"{THEIA_ELECTRON_DIR}/{plugins_dir}"
+    coros = [get_plugin_sources(dest, n, u) for n, u in plugins.items()]
+    for plugin_sources, plugin_commands in await asyncio.gather(*coros):
+        sources += plugin_sources
+        commands += plugin_commands
     sources += [{
         "type": "shell",
         "dest": f"{THEIA_ELECTRON_DIR}/{plugins_dir}",
@@ -44,7 +51,7 @@ def generate_sources(package_json):
     }]
     return sources
 
-def main():
+async def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("package_json")
     parser.add_argument("-o", "--output", required=False)
@@ -55,10 +62,10 @@ def main():
         outfile = "generated-extra-sources.json"
     with open(args.package_json, "r") as package_json_file:
         package_json = json.load(package_json_file)
-    generated_sources = generate_sources(package_json)
+    generated_sources = await generate_sources(package_json)
     with open(outfile, "w") as out:
         json.dump(generated_sources, out, indent=4, sort_keys=False)
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
-    main()
+    asyncio.run(main())
