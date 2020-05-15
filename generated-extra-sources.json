@@ -1,575 +1,448 @@
 [
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/bat-1.39.1-prel.vsix",
         "sha256": "6ec01164c55e9ef10940065fd4f18645300cee697a4017641a705c366124ed15",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-bat.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-bat"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/clojure-1.39.1-prel.vsix",
         "sha256": "55e36a789d700a75839f408e5f9f007ca18bc63063e3155f44eef0163c8559e7",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-clojure.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-clojure"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/coffeescript-1.39.1-prel.vsix",
         "sha256": "e7e41ec0baa0e06cf10caa5422e217729e4f71a968e4291a16963fab89024dda",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-coffeescript.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-coffeescript"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/configuration-editing-1.39.1-prel.vsix",
         "sha256": "3c4dc327e4d9b7823965a77589f5f80d5e2d2f18a04a11cf8f61bea1f6812e8c",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-configuration-editing.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-configuration-editing"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/cpp-1.39.1-prel.vsix",
         "sha256": "3968b448ec1f374270bb5273b8815184fe355e3cf4d24908964bac6aa57fafd5",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-cpp.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-cpp"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/csharp-1.39.1-prel.vsix",
         "sha256": "fdafc1f3edfaa7ca98ddfb357339ac75b1f9e73d66dace1e420e60ac13737685",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-csharp.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-csharp"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/css-1.39.1-prel.vsix",
         "sha256": "7d700439fcfe147f68f2e66b05e7f98c667fddb5cc5d8f6db33752a16f4233ca",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-css.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-css"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/debug-auto-launch-1.39.1-prel.vsix",
         "sha256": "ad31ccd36b8cf1354510ebcb6b0559d074a902837c7ff2cc71c4353c663dbe13",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-debug-auto-launch.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-debug-auto-launch"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/docker-1.39.1-prel.vsix",
         "sha256": "f9ad27a84940c532b5cbff60b0e7af5d2da4ec39f2e41fbd84641597a8eacd15",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-docker.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-docker"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/emmet-1.39.1-prel.vsix",
         "sha256": "f17aebf9a437ea1de2c134114b957c367ff2c458af0227f46f123ef88d8cbddf",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-emmet.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-emmet"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/fsharp-1.39.1-prel.vsix",
         "sha256": "31758422c2121336fafc93575730beed9c7eeeeda342a4ffc83f902c1c9af453",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-fsharp.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-fsharp"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/go-1.39.1-prel.vsix",
         "sha256": "a9dca7e4ba17b5c834f4e3e1f85dba4c7e63c9a58236724f97b7633edf108cca",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-go.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-go"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/groovy-1.39.1-prel.vsix",
         "sha256": "0be4f1dde1ce5944a4d6853a4af06484ce7e44af58007fca5fb5ee386aa6f709",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-groovy.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-groovy"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/grunt-1.39.1-prel.vsix",
         "sha256": "ef97424b5df29e95c71e229a351814017a60ac885ec434d25e8d5f73c3378ece",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-grunt.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-grunt"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/gulp-1.39.1-prel.vsix",
         "sha256": "b8c91fcd5aac3e63a64a17e48db8e56b55fd7c610253ccb8a8be52d94f833d16",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-gulp.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-gulp"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/handlebars-1.39.1-prel.vsix",
         "sha256": "2164352883bac197c0fb107cc283399e7c990e65ce623fd7b581f71549378ee4",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-handlebars.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-handlebars"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/hlsl-1.39.1-prel.vsix",
         "sha256": "0fefba0c16b9583f954b3823c1d6797e3cb75e0636324d0d640b8171a632be65",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-hlsl.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-hlsl"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/html-1.39.1-prel.vsix",
         "sha256": "11ddaffeefc730f1f09e2031c35592ec9a312abd985c1c60435b431d11ff21e6",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-html.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-html"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/ini-1.39.1-prel.vsix",
         "sha256": "2d9b77544cb389c973d93fec6b6730d175fb6793f98a197670f45ffd93b2b7e3",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-ini.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-ini"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/jake-1.39.1-prel.vsix",
         "sha256": "9106e807903902fe81233aedf32c5ab21c612bb148bc190fcb3dc00b2a2bd819",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-jake.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-jake"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/java-1.39.1-prel.vsix",
         "sha256": "16c4b01193f455ea8c6c5d53241f13b271f69b000e65e0cfb526080144e225ea",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-java.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-java"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/javascript-1.39.1-prel.vsix",
         "sha256": "d52774d1f723d73344a6e1b4ab14fb03ee376b569ed5e4b15b80296dc7489948",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-javascript.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-javascript"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/json-1.39.1-prel.vsix",
         "sha256": "8d71a22ddb3e68590e5cb6a0c8f1018cacf4d0e72a334227b8b7731dc64b8f0c",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-json.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-json"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/less-1.39.1-prel.vsix",
         "sha256": "592fffe6d8bd92576928d53cc657ffd627fd546858323b3be8359be2c763dfc8",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-less.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-less"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/log-1.39.1-prel.vsix",
         "sha256": "803837b4ae4fe29f6c00cb9dff656438a1c7223f921f481afa196041f0768fe9",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-log.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-log"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/lua-1.39.1-prel.vsix",
         "sha256": "25f5a494f3b0b755852496e35ad7b49a022ca9a3325289adaa7f7a62afd769c3",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-lua.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-lua"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/make-1.39.1-prel.vsix",
         "sha256": "332e7d343ca5fe4b393bcff07e4147da8d31700fbd75b0a6693b4e2cb2f42f41",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-make.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-make"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/markdown-1.39.1-prel.vsix",
         "sha256": "b3cbe46b9ae725881931d218d8abb3922ca9b560ffb80ed5179db01fa292e265",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-markdown.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-markdown"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/merge-conflict-1.39.1-prel.vsix",
         "sha256": "fee6e29c8369a80af7ddc340fa2e225a4c5eb2d66d033911ddef074948920a29",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-merge-conflicts.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-merge-conflicts"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/npm-1.39.1-prel.vsix",
         "sha256": "1e466d7acd7427dc3e0992f63820d9bdf88248bf19d898e9b7ea1305e25d294b",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-npm.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-npm"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-node-debug/releases/download/v1.35.3/node-debug-1.35.3.vsix",
         "sha256": "7a3d4574545ded29681cf4571f477713be743229fba8fa5d29fb92309c73b320",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-node-debug.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-node-debug"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-node-debug2/releases/download/v1.33.0/node-debug2-1.33.0.vsix",
         "sha256": "bbbf8852c67e69d549f6cfa944871fb864e143c11e6508d0965ccdc44d3d819a",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-node-debug2.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-node-debug2"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/objective-c-1.39.1-prel.vsix",
         "sha256": "9314b31c52136b16ff6bc19311a7dbeb34df03ec28485c06856d9b7565124dca",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-objective-c.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-objective-c"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/perl-1.39.1-prel.vsix",
         "sha256": "e954b0e08c4c48f9da7c806f54785bf4fc2f12026693f87544a16566c6451309",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-perl.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-perl"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/powershell-1.39.1-prel.vsix",
         "sha256": "bdfe4297e9ec4206a6017581b57c35dbd28e23304df66cbb9e8e15e66e2050b5",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-powershell.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-powershell"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/pug-1.39.1-prel.vsix",
         "sha256": "1680dca5f5b1c20ccf0b298687784a1daf7494b15d5e5c42d620154ef9b59abb",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-pug.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-pug"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/python-1.39.1-prel.vsix",
         "sha256": "71ebe4dde61597e055946023286c1fcfe3651484577ffffd50d906673af39dac",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-python.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-python"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/r-1.39.1-prel.vsix",
         "sha256": "9e59d194996dfe9062670fc958c744a4765109cbb849854a349387ef8acacd28",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-r.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-r"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/razor-1.39.1-prel.vsix",
         "sha256": "fa288792ad87306ff9f68ec1d45a44e1916d2aec88fbea09c9caddfb7ff1f467",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-razor.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-razor"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/ruby-1.39.1-prel.vsix",
         "sha256": "f5d9b12461ffa110e646cfe0187beacf3f7dead2bc70305bd971a684e0184021",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-ruby.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-ruby"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/rust-1.39.1-prel.vsix",
         "sha256": "a1c794848ee61d5c49408c7a2e4d52f1486488f8155eec5641a4deb57efd70a0",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-rust.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-rust"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/scss-1.39.1-prel.vsix",
         "sha256": "f6ef41250e22caedd54dccd941dffe7972ee14a167708b4494d5f1f8d705892d",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-scss.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-scss"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/shaderlab-1.39.1-prel.vsix",
         "sha256": "ff61cb48dfc2a9e8525355f5265d5eae06891e1133de9ee1c2a35430c37aafad",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-shaderlab.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-shaderlab"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/shellscript-1.39.1-prel.vsix",
         "sha256": "c021e1acbb027810bfd570dedb6907274b8d8daf1a628e7421d8c12b92fb8112",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-shellscript.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-shellscript"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/sql-1.39.1-prel.vsix",
         "sha256": "2d4b56fc5eec0d73520bd2f80ee1a69660938a651b085d926e04a873a95835f2",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-sql.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-sql"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/swift-1.39.1-prel.vsix",
         "sha256": "427ce99fef31b8947968b4cac63ea2dbf0972603705e7b8e09f341843b68d0a8",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-swift.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-swift"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/theme-abyss-1.39.1-prel.vsix",
         "sha256": "d953becdc64858d317753cd6a2a330c199bbffef59247a28f9211815b26e46e3",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-theme-abyss.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-theme-abyss"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/theme-defaults-1.39.1-prel.vsix",
         "sha256": "a72887169a2911657414b31b0823012559447e7d22932f014a93a68a5e2b493c",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-theme-defaults.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-theme-defaults"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/theme-kimbie-dark-1.39.1-prel.vsix",
         "sha256": "159653db6984808ece37728e17bb2f71f8295017248dadd2ada3a772daaa077e",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-theme-kimbie-dark.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-theme-kimbie-dark"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/theme-monokai-1.39.1-prel.vsix",
         "sha256": "03acf4b3f65a6331948dc31873f9f50e2304af6247a2b32e052c8bc51552c561",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-theme-monokai.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-theme-monokai"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/theme-monokai-dimmed-1.39.1-prel.vsix",
         "sha256": "618a59761db8252d93125bbcd76143ebba7431e326f34f845164017a0be4dd6a",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-theme-dimmed.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-theme-dimmed"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/theme-quietlight-1.39.1-prel.vsix",
         "sha256": "c1dfbb8cd53cf20227612956f5cc89c9c084bb8394ec4cb9a79df5979ee39016",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-theme-quietlight.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-theme-quietlight"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/theme-red-1.39.1-prel.vsix",
         "sha256": "ea1ae3c90a631bd72732cff0a6ed70c73ff5af2827403fb4588148d4a156963a",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-theme-red.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-theme-red"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/theme-solarized-dark-1.39.1-prel.vsix",
         "sha256": "10472f300055d4b6949b6f9e64d896dfde0deb7fb96cb527f5aad462e657e8a8",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-theme-solarized-dark.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-theme-solarized-dark"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/theme-tomorrow-night-blue-1.39.1-prel.vsix",
         "sha256": "b051c79a6bb5e0a773e6f6db75227ce8684e91f59861de8d677a4feac4b3ea63",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-theme-tomorrow-night-blue.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-theme-tomorrow-night-blue"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/typescript-1.39.1-prel.vsix",
         "sha256": "eb5e95f5508ba1e084f5341e8b292e285eb193bdfe4db69aeb4628f8e05e7982",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-typescript.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-typescript"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/typescript-language-features-1.39.1-prel.vsix",
         "sha256": "de756fe7f9b7ca607d176cd40a4a699967b99aa330566680563648a755345d86",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-typescript-language-features.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-typescript-language-features"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/vb-1.39.1-prel.vsix",
         "sha256": "502992a0cfd912110e6c7248f4ef8e069aa8e65c19ef8a132f52d66223aa62ba",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-vb.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-vb"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/vscode-theme-seti-1.39.1-prel.vsix",
         "sha256": "78e9713f86f7d1b679bcc8e1d0ecf05792bf10c9f4b6b1d319bf7217f3a99c62",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-icon-theme-seti.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-icon-theme-seti"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/xml-1.39.1-prel.vsix",
         "sha256": "a259ae23cf86dbcb59635c148caad7592327f0787f986998ff43e83257055785",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-xml.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-xml"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-builtin-extensions/releases/download/v1.39.1-prel/yaml-1.39.1-prel.vsix",
         "sha256": "7b3995e95de7df5442513412f2a29b8577708cb6c4f8766d9bb6a2c7986bf633",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-builtin-yaml.zip"
+        "dest": "main/theia-electron/plugins/vscode-builtin-yaml"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/editorconfig-vscode/releases/download/v0.14.4/EditorConfig-0.14.4.vsix",
         "sha256": "f7af55ce14a310d9598ee3f1ec26c717ab6b19377fb13156e4e20ed7e89d9a53",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-editorconfig.zip"
+        "dest": "main/theia-electron/plugins/vscode-editorconfig"
     },
     {
-        "type": "file",
+        "type": "archive",
+        "archive-type": "zip",
         "url": "https://github.com/theia-ide/vscode-eslint/releases/download/release%2F2.0.15/vscode-eslint-2.0.15.vsix",
         "sha256": "7880e76f66b2d3247d7b6e663155f4d3bc6fff7a485bd287f46a11c3b4ced611",
-        "dest": "main/theia-electron/plugins",
-        "dest-filename": "vscode-eslint.zip"
+        "dest": "main/theia-electron/plugins/vscode-eslint"
     },
     {
         "type": "shell",
         "dest": "main/theia-electron/plugins",
-        "commands": [
-            "unzip vscode-builtin-bat.zip -d vscode-builtin-bat",
-            "rm vscode-builtin-bat.zip",
-            "unzip vscode-builtin-clojure.zip -d vscode-builtin-clojure",
-            "rm vscode-builtin-clojure.zip",
-            "unzip vscode-builtin-coffeescript.zip -d vscode-builtin-coffeescript",
-            "rm vscode-builtin-coffeescript.zip",
-            "unzip vscode-builtin-configuration-editing.zip -d vscode-builtin-configuration-editing",
-            "rm vscode-builtin-configuration-editing.zip",
-            "unzip vscode-builtin-cpp.zip -d vscode-builtin-cpp",
-            "rm vscode-builtin-cpp.zip",
-            "unzip vscode-builtin-csharp.zip -d vscode-builtin-csharp",
-            "rm vscode-builtin-csharp.zip",
-            "unzip vscode-builtin-css.zip -d vscode-builtin-css",
-            "rm vscode-builtin-css.zip",
-            "unzip vscode-builtin-debug-auto-launch.zip -d vscode-builtin-debug-auto-launch",
-            "rm vscode-builtin-debug-auto-launch.zip",
-            "unzip vscode-builtin-docker.zip -d vscode-builtin-docker",
-            "rm vscode-builtin-docker.zip",
-            "unzip vscode-builtin-emmet.zip -d vscode-builtin-emmet",
-            "rm vscode-builtin-emmet.zip",
-            "unzip vscode-builtin-fsharp.zip -d vscode-builtin-fsharp",
-            "rm vscode-builtin-fsharp.zip",
-            "unzip vscode-builtin-go.zip -d vscode-builtin-go",
-            "rm vscode-builtin-go.zip",
-            "unzip vscode-builtin-groovy.zip -d vscode-builtin-groovy",
-            "rm vscode-builtin-groovy.zip",
-            "unzip vscode-builtin-grunt.zip -d vscode-builtin-grunt",
-            "rm vscode-builtin-grunt.zip",
-            "unzip vscode-builtin-gulp.zip -d vscode-builtin-gulp",
-            "rm vscode-builtin-gulp.zip",
-            "unzip vscode-builtin-handlebars.zip -d vscode-builtin-handlebars",
-            "rm vscode-builtin-handlebars.zip",
-            "unzip vscode-builtin-hlsl.zip -d vscode-builtin-hlsl",
-            "rm vscode-builtin-hlsl.zip",
-            "unzip vscode-builtin-html.zip -d vscode-builtin-html",
-            "rm vscode-builtin-html.zip",
-            "unzip vscode-builtin-ini.zip -d vscode-builtin-ini",
-            "rm vscode-builtin-ini.zip",
-            "unzip vscode-builtin-jake.zip -d vscode-builtin-jake",
-            "rm vscode-builtin-jake.zip",
-            "unzip vscode-builtin-java.zip -d vscode-builtin-java",
-            "rm vscode-builtin-java.zip",
-            "unzip vscode-builtin-javascript.zip -d vscode-builtin-javascript",
-            "rm vscode-builtin-javascript.zip",
-            "unzip vscode-builtin-json.zip -d vscode-builtin-json",
-            "rm vscode-builtin-json.zip",
-            "unzip vscode-builtin-less.zip -d vscode-builtin-less",
-            "rm vscode-builtin-less.zip",
-            "unzip vscode-builtin-log.zip -d vscode-builtin-log",
-            "rm vscode-builtin-log.zip",
-            "unzip vscode-builtin-lua.zip -d vscode-builtin-lua",
-            "rm vscode-builtin-lua.zip",
-            "unzip vscode-builtin-make.zip -d vscode-builtin-make",
-            "rm vscode-builtin-make.zip",
-            "unzip vscode-builtin-markdown.zip -d vscode-builtin-markdown",
-            "rm vscode-builtin-markdown.zip",
-            "unzip vscode-builtin-merge-conflicts.zip -d vscode-builtin-merge-conflicts",
-            "rm vscode-builtin-merge-conflicts.zip",
-            "unzip vscode-builtin-npm.zip -d vscode-builtin-npm",
-            "rm vscode-builtin-npm.zip",
-            "unzip vscode-builtin-node-debug.zip -d vscode-builtin-node-debug",
-            "rm vscode-builtin-node-debug.zip",
-            "unzip vscode-builtin-node-debug2.zip -d vscode-builtin-node-debug2",
-            "rm vscode-builtin-node-debug2.zip",
-            "unzip vscode-builtin-objective-c.zip -d vscode-builtin-objective-c",
-            "rm vscode-builtin-objective-c.zip",
-            "unzip vscode-builtin-perl.zip -d vscode-builtin-perl",
-            "rm vscode-builtin-perl.zip",
-            "unzip vscode-builtin-powershell.zip -d vscode-builtin-powershell",
-            "rm vscode-builtin-powershell.zip",
-            "unzip vscode-builtin-pug.zip -d vscode-builtin-pug",
-            "rm vscode-builtin-pug.zip",
-            "unzip vscode-builtin-python.zip -d vscode-builtin-python",
-            "rm vscode-builtin-python.zip",
-            "unzip vscode-builtin-r.zip -d vscode-builtin-r",
-            "rm vscode-builtin-r.zip",
-            "unzip vscode-builtin-razor.zip -d vscode-builtin-razor",
-            "rm vscode-builtin-razor.zip",
-            "unzip vscode-builtin-ruby.zip -d vscode-builtin-ruby",
-            "rm vscode-builtin-ruby.zip",
-            "unzip vscode-builtin-rust.zip -d vscode-builtin-rust",
-            "rm vscode-builtin-rust.zip",
-            "unzip vscode-builtin-scss.zip -d vscode-builtin-scss",
-            "rm vscode-builtin-scss.zip",
-            "unzip vscode-builtin-shaderlab.zip -d vscode-builtin-shaderlab",
-            "rm vscode-builtin-shaderlab.zip",
-            "unzip vscode-builtin-shellscript.zip -d vscode-builtin-shellscript",
-            "rm vscode-builtin-shellscript.zip",
-            "unzip vscode-builtin-sql.zip -d vscode-builtin-sql",
-            "rm vscode-builtin-sql.zip",
-            "unzip vscode-builtin-swift.zip -d vscode-builtin-swift",
-            "rm vscode-builtin-swift.zip",
-            "unzip vscode-builtin-theme-abyss.zip -d vscode-builtin-theme-abyss",
-            "rm vscode-builtin-theme-abyss.zip",
-            "unzip vscode-builtin-theme-defaults.zip -d vscode-builtin-theme-defaults",
-            "rm vscode-builtin-theme-defaults.zip",
-            "unzip vscode-builtin-theme-kimbie-dark.zip -d vscode-builtin-theme-kimbie-dark",
-            "rm vscode-builtin-theme-kimbie-dark.zip",
-            "unzip vscode-builtin-theme-monokai.zip -d vscode-builtin-theme-monokai",
-            "rm vscode-builtin-theme-monokai.zip",
-            "unzip vscode-builtin-theme-dimmed.zip -d vscode-builtin-theme-dimmed",
-            "rm vscode-builtin-theme-dimmed.zip",
-            "unzip vscode-builtin-theme-quietlight.zip -d vscode-builtin-theme-quietlight",
-            "rm vscode-builtin-theme-quietlight.zip",
-            "unzip vscode-builtin-theme-red.zip -d vscode-builtin-theme-red",
-            "rm vscode-builtin-theme-red.zip",
-            "unzip vscode-builtin-theme-solarized-dark.zip -d vscode-builtin-theme-solarized-dark",
-            "rm vscode-builtin-theme-solarized-dark.zip",
-            "unzip vscode-builtin-theme-tomorrow-night-blue.zip -d vscode-builtin-theme-tomorrow-night-blue",
-            "rm vscode-builtin-theme-tomorrow-night-blue.zip",
-            "unzip vscode-builtin-typescript.zip -d vscode-builtin-typescript",
-            "rm vscode-builtin-typescript.zip",
-            "unzip vscode-builtin-typescript-language-features.zip -d vscode-builtin-typescript-language-features",
-            "rm vscode-builtin-typescript-language-features.zip",
-            "unzip vscode-builtin-vb.zip -d vscode-builtin-vb",
-            "rm vscode-builtin-vb.zip",
-            "unzip vscode-builtin-icon-theme-seti.zip -d vscode-builtin-icon-theme-seti",
-            "rm vscode-builtin-icon-theme-seti.zip",
-            "unzip vscode-builtin-xml.zip -d vscode-builtin-xml",
-            "rm vscode-builtin-xml.zip",
-            "unzip vscode-builtin-yaml.zip -d vscode-builtin-yaml",
-            "rm vscode-builtin-yaml.zip",
-            "unzip vscode-editorconfig.zip -d vscode-editorconfig",
-            "rm vscode-editorconfig.zip",
-            "unzip vscode-eslint.zip -d vscode-eslint",
-            "rm vscode-eslint.zip"
-        ]
+        "commands": []
     }
 ]

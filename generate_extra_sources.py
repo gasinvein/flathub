@@ -21,18 +21,13 @@ async def get_remote_sha256(url):
     return sha256.hexdigest()
 
 async def get_plugin_sources(dest, plugin_name, plugin_url):
-    sources = [{
-        "type": "file",
+    return [{
+        "type": "archive",
+        "archive-type": "zip",
         "url": plugin_url,
         "sha256": await get_remote_sha256(plugin_url),
-        "dest": dest,
-        "dest-filename": f"{plugin_name}.zip"
+        "dest": f"{dest}/{plugin_name}"
     }]
-    commands = [
-        f"unzip {plugin_name}.zip -d {plugin_name}",
-        f"rm {plugin_name}.zip"
-    ]
-    return sources, commands
 
 async def generate_sources(package_json):
     sources = []
@@ -41,9 +36,8 @@ async def generate_sources(package_json):
     plugins = package_json["theiaPlugins"]
     dest = f"{THEIA_ELECTRON_DIR}/{plugins_dir}"
     coros = [get_plugin_sources(dest, n, u) for n, u in plugins.items()]
-    for plugin_sources, plugin_commands in await asyncio.gather(*coros):
+    for plugin_sources in await asyncio.gather(*coros):
         sources += plugin_sources
-        commands += plugin_commands
     sources += [{
         "type": "shell",
         "dest": f"{THEIA_ELECTRON_DIR}/{plugins_dir}",
