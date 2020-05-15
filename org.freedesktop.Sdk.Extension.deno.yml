@@ -1,14 +1,18 @@
-id: land.deno.Deno
+id: org.freedesktop.Sdk.Extension.deno
+branch: "19.08"
+build-extension: true
 sdk: org.freedesktop.Sdk
-runtime: org.freedesktop.Platform
+runtime: org.freedesktop.Sdk
 runtime-version: "19.08"
-finish-args:
-  - --share=network
-command: deno
+separate-locales: false
+appstream-compose: false
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.rust-nightly
 build-options:
+  prepend-path: /usr/lib/sdk/deno/bin
   append-path: /usr/lib/sdk/rust-nightly/bin
+  prefix: /usr/lib/sdk/deno
+  strip: true
 modules:
 
   - name: deno
@@ -16,7 +20,7 @@ modules:
       env:
         CARGO_HOME: /run/build/deno/cargo
         V8_FROM_SOURCE: "1"
-        GN: /app/bin/gn
+        GN: gn
         CLANG_BASE_PATH: /usr
         #FIXME Why doesn't FD.o SDK include lld?
         GN_ARGS: cc_wrapper="ccache" no_inline_line_tables=false use_lld=false
@@ -26,11 +30,11 @@ modules:
       - cargo --offline build --release --locked --all-targets
       - cargo run --release --locked --bin deno types > lib.deno.d.ts
     post-install:
-      - mkdir -p /app/bin /app/lib/deno
-      - install -t /app/lib/deno/ -Dm755 target/release/deno
-      - install -t /app/lib/deno/ -Dm755 target/release/libtest_plugin.so
-      - install -t /app/lib/deno/ -Dm644 lib.deno.d.ts
-      - ln -sr /app/lib/deno/deno /app/bin/deno
+      - mkdir -p ${FLATPAK_DEST}/bin ${FLATPAK_DEST}/lib/deno
+      - install -t ${FLATPAK_DEST}/lib/deno/ -Dm755 target/release/deno
+      - install -t ${FLATPAK_DEST}/lib/deno/ -Dm755 target/release/libtest_plugin.so
+      - install -t ${FLATPAK_DEST}/lib/deno/ -Dm644 lib.deno.d.ts
+      - ln -sr ${FLATPAK_DEST}/lib/deno/deno ${FLATPAK_DEST}/bin/deno
     sources:
       - type: git
         url: "https://github.com/denoland/deno.git"
@@ -48,7 +52,7 @@ modules:
         build-commands:
           - python2 build/gen.py
           - ninja -C out -j $FLATPAK_BUILDER_N_JOBS
-          - install -Dm755 out/gn{,_unittests} -t /app/bin/
+          - install -Dm755 out/gn{,_unittests} -t ${FLATPAK_DEST}/bin/
         sources:
           - type: git
             url: "https://gn.googlesource.com/gn"
