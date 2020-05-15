@@ -1,0 +1,58 @@
+id: land.deno.Deno
+sdk: org.freedesktop.Sdk
+runtime: org.freedesktop.Platform
+runtime-version: "19.08"
+finish-args:
+  - --share=network
+command: deno
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.rust-nightly
+build-options:
+  append-path: /usr/lib/sdk/rust-nightly/bin
+modules:
+
+  - name: deno
+    build-options:
+      env:
+        CARGO_HOME: /run/build/deno/cargo
+        V8_FROM_SOURCE: "1"
+        GN: /app/bin/gn
+        CLANG_BASE_PATH: /usr
+        #FIXME Why doesn't FD.o SDK include lld?
+        GN_ARGS: cc_wrapper="ccache" no_inline_line_tables=false use_lld=false
+    buildsystem: simple
+    build-commands:
+      - cargo --offline fetch --verbose --manifest-path Cargo.toml
+      - cargo --offline build --release --locked --all-targets
+      - cargo run --release --locked --bin deno types > lib.deno.d.ts
+    post-install:
+      - mkdir -p /app/bin /app/lib/deno
+      - install -t /app/lib/deno/ -Dm755 target/release/deno
+      - install -t /app/lib/deno/ -Dm755 target/release/libtest_plugin.so
+      - install -t /app/lib/deno/ -Dm644 lib.deno.d.ts
+      - ln -sr /app/lib/deno/deno /app/bin/deno
+    sources:
+      - type: git
+        url: "https://github.com/denoland/deno.git"
+        tag: v1.0.0
+
+      - generated-sources.json
+    modules:
+
+      - name: gn
+        build-options:
+          env:
+            CC: ccache clang
+            CXX: ccache clang++
+        buildsystem: simple
+        build-commands:
+          - python2 build/gen.py
+          - ninja -C out -j $FLATPAK_BUILDER_N_JOBS
+          - install -Dm755 out/gn{,_unittests} -t /app/bin/
+        sources:
+          - type: git
+            url: "https://gn.googlesource.com/gn"
+            disable-shallow-clone: true
+        modules:
+
+          - shared-modules/python2.7/python-2.7.json
