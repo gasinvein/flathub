@@ -19,14 +19,10 @@ modules:
     build-options:
       env:
         CARGO_HOME: /run/build/deno/cargo
-        V8_FROM_SOURCE: "1"
-        GN: gn
-        CLANG_BASE_PATH: /usr
-        #FIXME Why doesn't FD.o SDK include lld?
-        GN_ARGS: cc_wrapper="ccache" no_inline_line_tables=false use_lld=false
     buildsystem: simple
     build-commands:
       - cargo --offline fetch --verbose --manifest-path Cargo.toml
+      - install -D ${FLATPAK_DEST}/lib/librusty_v8.a -t target/release/gn_out/obj/
       - cargo --offline build --release --locked --all-targets
       - cargo run --release --locked --bin deno types > lib.deno.d.ts
     post-install:
@@ -60,3 +56,23 @@ modules:
         modules:
 
           - shared-modules/python2.7/python-2.7.json
+
+      - name: rusty_v8
+        build-options:
+          env:
+            CARGO_HOME: /run/build/rusty_v8/cargo
+            V8_FROM_SOURCE: "1"
+            GN: gn
+            CLANG_BASE_PATH: /usr
+            #FIXME Why doesn't FD.o SDK include lld?
+            GN_ARGS: cc_wrapper="ccache" no_inline_line_tables=false use_lld=false
+        buildsystem: simple
+        build-commands:
+          - cargo --offline fetch --verbose --manifest-path Cargo.toml
+          - cargo --offline build -vv --release --locked --all-targets
+          - install -D target/release/gn_out/obj/librusty_v8.a -t ${FLATPAK_DEST}/lib/
+        sources:
+          - type: git
+            url: https://github.com/denoland/rusty_v8.git
+            tag: v0.4.2
+          - generated-sources-rusty_v8.json
