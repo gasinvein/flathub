@@ -19,10 +19,11 @@ modules:
     build-options:
       env:
         CARGO_HOME: /run/build/deno/cargo
+        DENO_TRYBUILD: do-not-build-v8
+        RUSTFLAGS: -L/usr/lib/sdk/deno/lib
     buildsystem: simple
     build-commands:
       - cargo --offline fetch --verbose --manifest-path Cargo.toml
-      - install -D ${FLATPAK_DEST}/lib/librusty_v8.a -t target/release/gn_out/obj/
       - cargo --offline build --release --locked --all-targets
       - cargo run --release --locked --bin deno types > lib.deno.d.ts
     post-install:
