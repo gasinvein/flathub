@@ -30,6 +30,7 @@ modules:
       - install -t /app/lib/deno/ -Dm755 target/release/deno
       - install -t /app/lib/deno/ -Dm755 target/release/libtest_plugin.so
       - install -t /app/lib/deno/ -Dm644 lib.deno.d.ts
+      - install -D target/release/gn_out/obj/librusty_v8.a -t ${FLATPAK_DEST}/lib/
       - ln -sr /app/lib/deno/deno /app/bin/deno
     sources:
       - type: git
