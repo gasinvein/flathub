@@ -9,6 +9,10 @@ sdk-extensions:
   - org.freedesktop.Sdk.Extension.rust-nightly
 build-options:
   append-path: /usr/lib/sdk/rust-nightly/bin
+cleanup:
+  - /include
+  - /lib/pkgconfig
+  - /lib/cmake
 modules:
 
   - name: deno
@@ -18,8 +22,7 @@ modules:
         V8_FROM_SOURCE: "1"
         GN: /app/bin/gn
         CLANG_BASE_PATH: /usr
-        #FIXME Why doesn't FD.o SDK include lld?
-        GN_ARGS: cc_wrapper="ccache" no_inline_line_tables=false use_lld=false
+        GN_ARGS: cc_wrapper="ccache" no_inline_line_tables=false
     buildsystem: simple
     build-commands:
       - cargo --offline fetch --verbose --manifest-path Cargo.toml
@@ -39,6 +42,17 @@ modules:
 
       - generated-sources.json
     modules:
+
+      - name: lld
+        buildsystem: cmake-ninja
+        builddir: true
+        cleanup:
+          - /lib
+          - /include
+        sources:
+          - type: archive
+            url: "https://github.com/llvm/llvm-project/releases/download/llvmorg-8.0.1/lld-8.0.1.src.tar.xz"
+            sha256: 9fba1e94249bd7913e8a6c3aadcb308b76c8c3d83c5ce36c99c3f34d73873d88
 
       - name: gn
         build-options:
