@@ -1,0 +1,74 @@
+id: com.visualstudio.code.tool.vsls-reqs
+default-branch: stable
+build-extension: true
+sdk: org.freedesktop.Sdk//19.08
+runtime: com.visualstudio.code
+runtime-version: stable
+separate-locales: false
+appstream-compose: false
+build-options:
+  prefix: /app/tools/vsls-reqs
+  strip: true
+cleanup:
+  - "*.a"
+  - "*.la"
+  - /include
+  - /lib/pkgconfig
+  - /share/man
+modules:
+
+  - name: krb5
+    config-opts:
+      - --sbindir=${FLATPAK_DEST}/bin
+      - --enable-shared
+      - --enable-dns-for-realm
+      - --without-tcl
+      - --localstatedir=/var/lib
+    subdir: src
+    sources:
+      - type: archive
+        url: "https://kerberos.org/dist/krb5/1.18/krb5-1.18.2.tar.gz"
+        sha256: c6e4c9ec1a98141c3f5d66ddf1a135549050c9fab4e9a4620ee9b22085873ae0
+
+  - name: xprop
+    sources:
+      - type: archive
+        url: "https://www.x.org/releases/individual/app/xprop-1.2.4.tar.gz"
+        sha256: dddb6e208ffa515e68f001c22077a465f1365a4bcf91d9b37f336a6c0d15400d
+
+  - name: openssl-1.0
+    config-opts:
+      - --openssldir=/app/tools/vsls-reqs/etc/ssl
+      - no-asm
+      - shared
+    build-options:
+      arch:
+        x86_64:
+          config-opts:
+            - linux-elf
+        i386:
+          config-opts:
+            - linux-elf
+        arm:
+          config-opts:
+            - linux-armv4
+        aarch64:
+          config-opts:
+            - linux-aarch64
+    install-rule: install_sw
+    post-install:
+      - chmod -v 755 ${FLATPAK_DEST}/lib/{lib{crypto,ssl},engines/}*
+      - rmdir ${FLATPAK_DEST}/etc/ssl/certs 
+      - ln -s /etc/ssl/certs ${FLATPAK_DEST}/etc/ssl/certs
+    sources:
+      - type: archive
+        url: "https://www.openssl.org/source/openssl-1.0.2u.tar.gz"
+        sha256: ecd0c6ffb493dd06707d38b14bb4d8c2288bb7033735606569d8f90f89669d16
+      - type: patch
+        paths:
+          - patches/openssl-1.0-versioned-symbols.patch
+      - type: shell
+        commands:
+          - ln -s Configure configure
+    cleanup:
+      - /bin
