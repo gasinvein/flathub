@@ -4,7 +4,13 @@
         "url": "https://www.electronjs.org/headers/v7.1.8/node-v7.1.8-headers.tar.gz",
         "strip-components": 1,
         "sha256": "b33f530ce7332ecf09338e4d04f4a1df0b3789a85c89b837cec11a84cd4ebd35",
-        "dest": "flatpak-node/node-gyp/electron-current"
+        "dest": "flatpak-node/cache/node-gyp/7.1.8"
+    },
+    {
+        "type": "file",
+        "url": "data:9",
+        "dest-filename": "installVersion",
+        "dest": "flatpak-node/cache/node-gyp/7.1.8"
     },
     {
         "type": "file",
@@ -21,14 +27,14 @@
         "url": "https://github.com/electron/electron/releases/download/v3.0.0/SHASUMS256.txt",
         "sha256": "6560dd88350be568ff29cdb1cdb05e68304268b821b1d5040f9a5fde901ef670",
         "dest-filename": "SHASUMS256.txt-3.0.0",
-        "dest": "flatpak-node/electron-cache"
+        "dest": "flatpak-node/cache/electron"
     },
     {
         "type": "file",
         "url": "https://github.com/electron/electron/releases/download/v3.0.0/chromedriver-v3.0.0-linux-arm64.zip",
         "sha256": "6eefd2dcc78f830ab8ba12836a5c36a6b286b2eda03a3562cabdaa51c9c8baa1",
         "dest-filename": "chromedriver-v3.0.0-linux-arm64.zip",
-        "dest": "flatpak-node/electron-cache",
+        "dest": "flatpak-node/cache/electron",
         "only-arches": [
             "aarch64"
         ]
@@ -38,7 +44,7 @@
         "url": "https://github.com/electron/electron/releases/download/v3.0.0/chromedriver-v3.0.0-linux-armv7l.zip",
         "sha256": "afa53c2150b2a2e953b803c40e8cec0109392ffbc291fb143304c67777197d87",
         "dest-filename": "chromedriver-v3.0.0-linux-armv7l.zip",
-        "dest": "flatpak-node/electron-cache",
+        "dest": "flatpak-node/cache/electron",
         "only-arches": [
             "arm"
         ]
@@ -48,7 +54,7 @@
         "url": "https://github.com/electron/electron/releases/download/v3.0.0/chromedriver-v3.0.0-linux-ia32.zip",
         "sha256": "5d6f62b534b58efc9682e21a41a3991f109b1a78481b067cb1b3be5a0d0f461c",
         "dest-filename": "chromedriver-v3.0.0-linux-ia32.zip",
-        "dest": "flatpak-node/electron-cache",
+        "dest": "flatpak-node/cache/electron",
         "only-arches": [
             "i386"
         ]
@@ -58,7 +64,7 @@
         "url": "https://github.com/electron/electron/releases/download/v3.0.0/chromedriver-v3.0.0-linux-x64.zip",
         "sha256": "31c59d42d80001721dbdbf2f2c8b3b527bdb8df38c766b020329cb46cf1d3bb4",
         "dest-filename": "chromedriver-v3.0.0-linux-x64.zip",
-        "dest": "flatpak-node/electron-cache",
+        "dest": "flatpak-node/cache/electron",
         "only-arches": [
             "x86_64"
         ]
@@ -68,14 +74,14 @@
         "url": "https://github.com/electron/electron/releases/download/v7.1.8/SHASUMS256.txt",
         "sha256": "2086acfb64a1ca4bc5a51768a326f790132f4b590ea10b14d84ad53b6b8bba65",
         "dest-filename": "SHASUMS256.txt-7.1.8",
-        "dest": "flatpak-node/electron-cache"
+        "dest": "flatpak-node/cache/electron"
     },
     {
         "type": "file",
         "url": "https://github.com/electron/electron/releases/download/v7.1.8/electron-v7.1.8-linux-arm64.zip",
         "sha256": "ad6f2703cda8080e8967e8f42d752a96b5d8b03f7025a0ab1abf69cf02a0fc45",
         "dest-filename": "electron-v7.1.8-linux-arm64.zip",
-        "dest": "flatpak-node/electron-cache",
+        "dest": "flatpak-node/cache/electron",
         "only-arches": [
             "aarch64"
         ]
@@ -85,7 +91,7 @@
         "url": "https://github.com/electron/electron/releases/download/v7.1.8/electron-v7.1.8-linux-armv7l.zip",
         "sha256": "9e034a78790c53f47f3792391ca413ccbfc8bd118b07aab98aeafd313ab044cf",
         "dest-filename": "electron-v7.1.8-linux-armv7l.zip",
-        "dest": "flatpak-node/electron-cache",
+        "dest": "flatpak-node/cache/electron",
         "only-arches": [
             "arm"
         ]
@@ -95,7 +101,7 @@
         "url": "https://github.com/electron/electron/releases/download/v7.1.8/electron-v7.1.8-linux-ia32.zip",
         "sha256": "40d634b4698c151f0d4b2d6e30a01677004050fb10ec803efaa06195858090b2",
         "dest-filename": "electron-v7.1.8-linux-ia32.zip",
-        "dest": "flatpak-node/electron-cache",
+        "dest": "flatpak-node/cache/electron",
         "only-arches": [
             "i386"
         ]
@@ -105,7 +111,7 @@
         "url": "https://github.com/electron/electron/releases/download/v7.1.8/electron-v7.1.8-linux-x64.zip",
         "sha256": "dcb5a414de00c8e120d0bfdc3caa81bba166801009a8a8b0c2aeb68304eb1073",
         "dest-filename": "electron-v7.1.8-linux-x64.zip",
-        "dest": "flatpak-node/electron-cache",
+        "dest": "flatpak-node/cache/electron",
         "only-arches": [
             "x86_64"
         ]
@@ -11757,5 +11763,85 @@
         ],
         "dest-filename": "electron-builder-arch-args.sh",
         "dest": "flatpak-node"
+    },
+    {
+        "type": "shell",
+        "commands": [
+            "ln -s \"../chromedriver-v3.0.0-linux-arm64.zip\" \"chromedriver-v3.0.0-linux-arm64.zip\""
+        ],
+        "dest": "flatpak-node/cache/electron/httpsgithub.comelectronelectronreleasesdownloadv3.0.0chromedriver-v3.0.0-linux-arm64.zip",
+        "only-arches": [
+            "aarch64"
+        ]
+    },
+    {
+        "type": "shell",
+        "commands": [
+            "ln -s \"../chromedriver-v3.0.0-linux-armv7l.zip\" \"chromedriver-v3.0.0-linux-armv7l.zip\""
+        ],
+        "dest": "flatpak-node/cache/electron/httpsgithub.comelectronelectronreleasesdownloadv3.0.0chromedriver-v3.0.0-linux-armv7l.zip",
+        "only-arches": [
+            "arm"
+        ]
+    },
+    {
+        "type": "shell",
+        "commands": [
+            "ln -s \"../chromedriver-v3.0.0-linux-ia32.zip\" \"chromedriver-v3.0.0-linux-ia32.zip\""
+        ],
+        "dest": "flatpak-node/cache/electron/httpsgithub.comelectronelectronreleasesdownloadv3.0.0chromedriver-v3.0.0-linux-ia32.zip",
+        "only-arches": [
+            "i386"
+        ]
+    },
+    {
+        "type": "shell",
+        "commands": [
+            "ln -s \"../chromedriver-v3.0.0-linux-x64.zip\" \"chromedriver-v3.0.0-linux-x64.zip\""
+        ],
+        "dest": "flatpak-node/cache/electron/httpsgithub.comelectronelectronreleasesdownloadv3.0.0chromedriver-v3.0.0-linux-x64.zip",
+        "only-arches": [
+            "x86_64"
+        ]
+    },
+    {
+        "type": "shell",
+        "commands": [
+            "ln -s \"../electron-v7.1.8-linux-arm64.zip\" \"electron-v7.1.8-linux-arm64.zip\""
+        ],
+        "dest": "flatpak-node/cache/electron/httpsgithub.comelectronelectronreleasesdownloadv7.1.8electron-v7.1.8-linux-arm64.zip",
+        "only-arches": [
+            "aarch64"
+        ]
+    },
+    {
+        "type": "shell",
+        "commands": [
+            "ln -s \"../electron-v7.1.8-linux-armv7l.zip\" \"electron-v7.1.8-linux-armv7l.zip\""
+        ],
+        "dest": "flatpak-node/cache/electron/httpsgithub.comelectronelectronreleasesdownloadv7.1.8electron-v7.1.8-linux-armv7l.zip",
+        "only-arches": [
+            "arm"
+        ]
+    },
+    {
+        "type": "shell",
+        "commands": [
+            "ln -s \"../electron-v7.1.8-linux-ia32.zip\" \"electron-v7.1.8-linux-ia32.zip\""
+        ],
+        "dest": "flatpak-node/cache/electron/httpsgithub.comelectronelectronreleasesdownloadv7.1.8electron-v7.1.8-linux-ia32.zip",
+        "only-arches": [
+            "i386"
+        ]
+    },
+    {
+        "type": "shell",
+        "commands": [
+            "ln -s \"../electron-v7.1.8-linux-x64.zip\" \"electron-v7.1.8-linux-x64.zip\""
+        ],
+        "dest": "flatpak-node/cache/electron/httpsgithub.comelectronelectronreleasesdownloadv7.1.8electron-v7.1.8-linux-x64.zip",
+        "only-arches": [
+            "x86_64"
+        ]
     }
 ]

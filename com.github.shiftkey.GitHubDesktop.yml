@@ -49,17 +49,7 @@ modules:
     build-options:
       env:
         TMPDIR: /run/build/github-desktop/flatpak-node/tmp
-        ELECTRON_CACHE: /run/build/github-desktop/flatpak-node/electron-cache
-        electron_config_cache: /run/build/github-desktop/flatpak-node/electron-cache
-        npm_config_nodedir: /run/build/github-desktop/flatpak-node/node-gyp/electron-current
-        npm_config_build_from_source: "true"
-        # env-paths, used by electron-get, used by electron-chromedriver, wants this
-        XDG_CACHE_HOME: /run/build/github-desktop/cache
-        # Super-ugly trick to make electron-download resolve cache path
-        # to where we have pre-downloaded electron
-        # https://github.com/electron/electron/blob/master/docs/tutorial/installation.md#cache
-        ELECTRON_MIRROR: 'http://localhost'
-        ELECTRON_CUSTOM_DIR: '/'
+        XDG_CACHE_HOME: /run/build/github-desktop/flatpak-node/cache
         DEBUG: electron-rebuild,electron-packager,electron-get,electron-download
         JOBS: max
       arch:
@@ -69,9 +59,11 @@ modules:
         x86_64: { env: { earch: x64, suffix: "" } }
     buildsystem: simple
     build-commands:
-      - yarn install --force
-      - env npm_config_nodedir=/usr/lib/sdk/node10 npm rebuild node-sass
-      - yarn build:prod
+      - |
+        set -e
+        ln -s $XDG_CACHE_HOME/node-gyp $HOME/.node-gyp
+        yarn install --force
+        yarn build:prod
       - cp -a dist/github-desktop-linux-${earch} /app/main
     post-install:
       - install -Dm755 ../github-desktop.sh /app/bin/github-desktop
@@ -91,19 +83,19 @@ modules:
         dest: main
         path: yarnrc
         dest-filename: .yarnrc
-      
+
       - generated-sources.json
 
       - type: shell
+        dest: flatpak-node/cache/node-gyp
         commands:
-          # electron-download will look for electron at path like this:
-          # $XDG_CACHE_HOME/electron/cache-electron-v7.1.8-linux-x64.zip/electron-v7.1.8-linux-x64.zip
-          - mkdir cache
-          - ln -sr flatpak-node/electron-cache cache/electron
           - |
-            for f in cache/electron/electron-*-linux-*.zip; do
-              ln -sv . $(dirname $f)/httplocalhost$(basename $f);
-            done
+            set -e
+            version=$(node --version | sed 's/^v//')
+            nodedir=$(dirname $(dirname $(which node)))
+            mkdir -p $version
+            ln -s $nodedir/include $version/include
+            echo 9 > $version/installVersion
 
       - type: file
         path: github-desktop.desktop
