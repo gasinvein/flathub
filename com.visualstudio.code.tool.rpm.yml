@@ -1,20 +1,20 @@
-id: org.freedesktop.Sdk.Extension.rpm
-branch: "19.08"
+id: com.visualstudio.code.tool.rpm
+default-branch: stable
 build-extension: true
-sdk: org.freedesktop.Sdk
-runtime: org.freedesktop.Sdk
-runtime-version: "19.08"
+sdk: org.freedesktop.Sdk//19.08
+runtime: com.visualstudio.code
+runtime-version: stable
 separate-locales: false
 appstream-compose: false
 build-options:
-  prefix: /usr/lib/sdk/rpm
+  prefix: /app/tools/rpm
   env:
-    C_INCLUDE_PATH: /usr/lib/sdk/rpm/include
-    CPLUS_INCLUDE_PATH: /usr/lib/sdk/rpm/include
-  prepend-path: /usr/lib/sdk/rpm/bin
-  prepend-ld-library-path: /usr/lib/sdk/rpm/lib
-  prepend-pkg-config-path: /usr/lib/sdk/rpm/lib/pkgconfig
-  ldflags: -L/usr/lib/sdk/rpm/lib
+    C_INCLUDE_PATH: /app/tools/rpm/include
+    CPLUS_INCLUDE_PATH: /app/tools/rpm/include
+  prepend-path: /app/tools/rpm/bin
+  prepend-ld-library-path: /app/tools/rpm/lib
+  prepend-pkg-config-path: /app/tools/rpm/lib/pkgconfig
+  ldflags: -L/app/tools/rpm/lib
   ldflags-override: true
   strip: true
 cleanup:
@@ -56,7 +56,7 @@ modules:
   - name: rpmdevtools
     build-options:
       env:
-        PYTHONPATH: /usr/lib/sdk/rpm/lib/python3.7/site-packages
+        PYTHONPATH: /app/tools/rpm/lib/python3.7/site-packages
     sources:
       - type: archive
         url: "https://releases.pagure.org/rpmdevtools/rpmdevtools-8.10.tar.xz"
@@ -94,13 +94,13 @@ modules:
       - type: script
         dest-filename: enable.sh
         commands:
-          - export PATH=$PATH:/usr/lib/sdk/rpm/bin
+          - export PATH=$PATH:/app/tools/rpm/bin
           - |
-            rpm_sdk_python=/usr/lib/sdk/rpm/lib/python3.7/site-packages
+            rpm_sdk_python=/app/tools/rpm/lib/python3.7/site-packages
             if [ -z "$PYTHONPATH" ]; then
               export PYTHONPATH=$rpm_sdk_python
             else
               export PYTHONPATH=$PYTHONPATH:$rpm_sdk_python
             fi
       - type: file
-        path: org.freedesktop.Sdk.Extension.rpm.metainfo.xml
+        path: com.visualstudio.code.tool.rpm.metainfo.xml
