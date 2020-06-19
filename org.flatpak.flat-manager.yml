@@ -1,0 +1,102 @@
+id: org.flatpak.flat-manager
+sdk: org.freedesktop.Sdk
+runtime: org.freedesktop.Platform
+runtime-version: "19.08"
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.rust-stable
+finish-args:
+  - --share=network
+  - --filesystem=host
+build-options:
+  append-path: /usr/lib/sdk/rust-stable/bin
+command: flat-manager
+cleanup:
+  - "*.a"
+  - "*.la"
+  - /include
+  - /lib/pkgconfig
+  - /share/gir-1.0
+  - /share/man
+modules:
+
+  - name: flat-manager
+    build-options:
+      env:
+        CARGO_HOME: /run/build/flat-manager/cargo
+        RUSTFLAGS: -L/app/lib
+    buildsystem: simple
+    build-commands:
+      - cargo --offline fetch --manifest-path Cargo.toml --verbose
+      - cargo --offline build --release --all-targets
+      - |
+        for prog in flat-manager delta-generator-client gentoken; do
+          install -Dm755 target/release/$prog -t /app/bin/
+        done
+      - install -Dm755 flat-manager-client -t /app/bin/
+      - install -Dm644 example.env example-config.json -t /app/etc/
+    sources:
+      - type: git
+        url: "https://github.com/flatpak/flat-manager.git"
+        tag: "0.3.7"
+      - generated-sources.json
+    modules:
+
+      - name: postgresql
+        config-opts:
+          - --with-openssl
+          - --with-libxml
+        #make-args:
+        #  - -C
+        #  - src/interfaces/libpq
+        #make-install-args:
+        #  - -C
+        #  - src/interfaces/libpq
+        sources:
+          - type: archive
+            url: "https://ftp.postgresql.org/pub/source/v12.3/postgresql-12.3.tar.gz"
+            sha256: 708fd5b32a97577679d3c13824c633936f886a733fc55ab5a9240b615a105f50
+
+  # Runtime deps
+
+  - name: flatpak
+    config-opts:
+      - --disable-documentation
+      - --disable-seccomp
+      - --disable-sandboxed-triggers
+      - --disable-system-helper
+    sources:
+      - type: archive
+        url: "https://github.com/flatpak/flatpak/releases/download/1.6.3/flatpak-1.6.3.tar.xz"
+        sha256: 5142f0ae48100f6af1fd43695a253a0a32d69b3280aff4d4f1ad93d61bb6489f
+    modules:
+
+      - name: libostree
+        config-opts:
+          - --enable-introspection
+          - --without-libsystemd
+        sources:
+          - type: archive
+            url: "https://github.com/ostreedev/ostree/releases/download/v2020.3/libostree-2020.3.tar.xz"
+            sha256: 5877396ea092f5b6701c17bd20280746cad20f55a94c760dbeba0fa115818c05
+        modules:
+
+          - name: fuse
+            config-opts:
+              - UDEV_RULES_PATH=/app/lib/udev/rules.d
+              - MOUNT_FUSE_PATH=/app/bin
+            sources:
+              - type: archive
+                url: "https://github.com/libfuse/libfuse/releases/download/fuse-2.9.9/fuse-2.9.9.tar.gz"
+                sha256: d0e69d5d608cc22ff4843791ad097f554dd32540ddc9bed7638cc6fea7c1b4b5
+
+  - name: pygobject
+    buildsystem: meson
+    config-opts:
+      - -Dpycairo=false
+    sources:
+      - type: archive
+        url: "https://download.gnome.org/sources/pygobject/3.36/pygobject-3.36.1.tar.xz"
+        sha256: d1bf42802d1cec113b5adaa0e7bf7f3745b44521dc2163588d276d5cd61d718f
+
+  - python3-aiohttp.json
+  - python3-tenacity.json
