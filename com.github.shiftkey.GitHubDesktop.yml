@@ -72,6 +72,15 @@ modules:
         for s in 256 512; do
           install -Dm644 app/static/logos/${s}x${s}.png /app/share/icons/hicolor/${s}x${s}/apps/github-desktop.png
         done
+      - install -Dm644 ../${FLATPAK_ID}.appdata.xml -t /app/share/appdata
+      - |
+        set -o pipefail
+        VERSION=$(git describe --tags | sed 's/^release-\?//')
+        DATE=$(date -d @$(git show -s --format=%ct) +'%Y-%m-%d')
+        sed \
+          -e "s/@VERSION@/${VERSION}/g" \
+          -e "s/@DATE@/${DATE}/g" \
+          -i /app/share/appdata/${FLATPAK_ID}.appdata.xml
     subdir: main
     sources:
       - type: git
@@ -99,6 +108,9 @@ modules:
 
       - type: file
         path: github-desktop.desktop
+
+      - type: file
+        path: com.github.shiftkey.GitHubDesktop.appdata.xml
 
       - type: script
         dest-filename: github-desktop.sh

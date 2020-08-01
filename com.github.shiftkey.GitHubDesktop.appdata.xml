@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.github.shiftkey.GitHubDesktop</id>
+
+  <name>GitHub Desktop</name>
+  <summary>Simple collaboration from your desktop</summary>
+
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+
+  <description>
+    <p>
+      GitHub Desktop is an open source Electron-based GitHub app. It is written in TypeScript and uses React. This is a fork of GitHub Desktop to support various Linux distributions.
+    </p>
+  </description>
+
+  <launchable type="desktop-id">com.github.shiftkey.GitHubDesktop.desktop</launchable>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://cloud.githubusercontent.com/assets/359239/26094502/a1f56d02-3a5d-11e7-8799-23c7ba5e5106.png</image>
+    </screenshot>
+  </screenshots>
+  <releases>
+    <release version="@VERSION@" date="@DATE@"/>
+  </releases>
+</component>
