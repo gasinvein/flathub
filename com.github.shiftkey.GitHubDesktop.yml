@@ -86,7 +86,7 @@ modules:
       - type: git
         dest: main
         url: "https://github.com/shiftkey/desktop.git"
-        tag: release-2.4.1-linux2
+        tag: release-2.5.3-linux1
 
       - type: file
         dest: main
