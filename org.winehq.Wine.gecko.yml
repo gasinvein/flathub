@@ -23,3 +23,12 @@ modules:
           - "x86_64"
         url: "https://dl.winehq.org/wine/wine-gecko/2.47.1/wine-gecko-2.47.1-x86_64.msi"
         sha256: 69312e79a988da3e7d292382005e92bc4d4b2a52a23c34440ae3007feb57474a
+
+  - name: metadata
+    buildsystem: simple
+    build-commands:
+      - install -Dm644 ${FLATPAK_ID}.metainfo.xml -t ${FLATPAK_DEST}/share/metainfo
+      - appstream-compose --basename=${FLATPAK_ID} --prefix=${FLATPAK_DEST} --origin=flatpak ${FLATPAK_ID}
+    sources:
+      - type: file
+        path: org.winehq.Wine.gecko.metainfo.xml
