@@ -14,3 +14,12 @@ modules:
       - type: archive
         url: "https://dl.winehq.org/wine/wine-mono/5.1.0/wine-mono-5.1.0-x86.tar.xz"
         sha256: 7c69355566055121669f7e416e44185a5ccceb4312d0c19587d2303e63b6b63f
+
+  - name: metadata
+    buildsystem: simple
+    build-commands:
+      - install -Dm644 ${FLATPAK_ID}.metainfo.xml -t ${FLATPAK_DEST}/share/metainfo
+      - appstream-compose --basename=${FLATPAK_ID} --prefix=${FLATPAK_DEST} --origin=flatpak ${FLATPAK_ID}
+    sources:
+      - type: file
+        path: org.winehq.Wine.mono.metainfo.xml
