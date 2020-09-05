@@ -22,7 +22,7 @@ finish-args:
   - --filesystem=xdg-music
   - --filesystem=xdg-videos
   - --filesystem=xdg-download
-  - --env=WINEDLLPATH=/app/dxvk/lib32:/app/dxvk/lib:/app/lib32/wine/wined3d:/app/lib/wine/wined3d
+  - --env=WINEDLLPATH=/app/vkd3d/lib32:/app/vkd3d/lib:/app/dxvk/lib32:/app/dxvk/lib:/app/lib32/wine/wined3d:/app/lib/wine/wined3d
   - --env=WINEPREFIX=/var/data/proton_pfx
   - --env=GST_PLUGIN_SYSTEM_PATH=/app/lib32/gstreamer-1.0:/app/lib/gstreamer-1.0:/usr/lib/i386-linux-gnu/gstreamer-1.0:/usr/lib/x86_64-linux-gnu/gstreamer-1.0
 command: wine
@@ -46,6 +46,9 @@ add-extensions:
 
   org.winehq.Wine.dxvk:
     directory: dxvk
+
+  org.winehq.Wine.vkd3d:
+    directory: vkd3d
 
 sdk-extensions:
   - org.freedesktop.Sdk.Compat.i386
@@ -229,6 +232,7 @@ modules:
     build-commands:
       - mkdir -p ${FLATPAK_DEST}/share/wine/{gecko,mono}
       - mkdir -p ${FLATPAK_DEST}/dxvk
+      - mkdir -p ${FLATPAK_DEST}/vkd3d
       - install -Dm644 ${FLATPAK_ID}.appdata.xml -t ${FLATPAK_DEST}/share/appdata
       - |
         icondir=${FLATPAK_DEST}/share/icons/hicolor
