@@ -1,6 +1,8 @@
 id: org.winehq.Wine.dxvk
+default-branch: proton
 build-extension: true
 runtime: org.winehq.Wine
+runtime-version: proton
 sdk: org.freedesktop.Sdk//20.08
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.mingw-w64
@@ -53,9 +55,9 @@ modules:
       - mkdir -p ${FLATPAK_DEST}/bin${SUFFIX}
       - mv -v ${FLATPAK_DEST}/lib${SUFFIX}/*.exe ${FLATPAK_DEST}/bin${SUFFIX}/
     sources: &dxvk-sources
-      - type: archive
-        url: "https://github.com/doitsujin/dxvk/archive/v1.7.1.tar.gz"
-        sha256: 0904d816394b378e21da50a74e1d11f68eaeee1526deae5e54949248c54fafbc
+      - type: git
+        url: "https://github.com/ValveSoftware/dxvk.git"
+        branch: proton_5.0
       - type: file
         path: dxvk-ccache-win32.txt
       - type: file
