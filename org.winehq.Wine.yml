@@ -1,4 +1,5 @@
 id: org.winehq.Wine
+default-branch: proton
 sdk: org.freedesktop.Sdk
 runtime: org.freedesktop.Platform
 runtime-version: "20.08"
@@ -22,7 +23,7 @@ finish-args:
   - --filesystem=xdg-videos
   - --filesystem=xdg-download
   - --env=WINEDLLPATH=/app/dxvk/lib32:/app/dxvk/lib:/app/lib32/wine/wined3d:/app/lib/wine/wined3d
-  - --env=WINEPREFIX=/var/data/wine
+  - --env=WINEPREFIX=/var/data/proton_pfx
   - --env=GST_PLUGIN_SYSTEM_PATH=/app/lib32/gstreamer-1.0:/app/lib/gstreamer-1.0:/usr/lib/i386-linux-gnu/gstreamer-1.0:/usr/lib/x86_64-linux-gnu/gstreamer-1.0
 command: wine
 rename-desktop-file: wine.desktop
@@ -130,16 +131,12 @@ modules:
           done
         done
     sources: &wine-sources
-      - type: archive
-        url: "https://dl.winehq.org/wine/source/5.x/wine-5.16.tar.xz"
-        sha256: 98d9a62f89e20a8f1321aadd4183229aab47ca5b2f12c7e0968cf81634322249
-      - type: archive
-        url: "https://github.com/wine-staging/wine-staging/archive/v5.16.tar.gz"
-        sha256: 241dde851ff04fffa08f9f1c37fd9d30d5ca1e27c1ee31913ff74ac412445dd5
-        dest: staging
-      - type: shell
-        commands:
-          - ./staging/patches/patchinstall.sh DESTDIR="$(pwd)" --all
+      - type: git
+        url: "https://github.com/ValveSoftware/wine.git"
+        branch: proton_5.0
+      - type: patch
+        paths:
+          - patches/wine-gcc10-compat.patch
 
   # 32-bit compatibility build
 
