@@ -1,0 +1,86 @@
+id: org.winehq.Wine.vkd3d
+default-branch: proton
+build-extension: true
+runtime: org.winehq.Wine
+runtime-version: proton
+sdk: org.freedesktop.Sdk//20.08
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.mingw-w64
+build-options:
+  prefix: /app/vkd3d
+  prepend-path: /app/vkd3d/bin
+  append-path: /usr/lib/sdk/mingw-w64/bin
+  #FIXME -fstack-clash-protection causes ICE
+  # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90458
+  cflags: -O2 -g -pipe
+  cflags-override: true
+  cxxflags: -O2 -g -pipe
+  cxxflags-override: true
+appstream-compose: false
+cleanup:
+  - "*.a"
+  - "*.la"
+  - /include
+  - /lib/pkgconfig
+  - /lib32/pkgconfig
+  - /lib/cmake
+  - /lib32/cmake
+  - /share/man
+modules:
+
+  - name: vkd3d
+    buildsystem: meson
+    build-options:
+      config-opts:
+        - --cross-file=../build-win64.txt
+        - --cross-file=../dxvk-ccache-win64.txt
+        - --libdir=lib
+        - --bindir=lib
+      env:
+        SUFFIX: ""
+    config-opts: &vkd3d-config-opts
+      - --buildtype=release
+      - --strip
+      - -Denable_standalone_d3d12=true
+      - -Denable_tests=true
+    post-install: &vkd3d-post-install
+      - |
+        set -e
+        for lib in d3d12; do
+          winebuild --builtin ${FLATPAK_DEST}/lib${SUFFIX}/$lib.dll
+        done
+      - mkdir -p ${FLATPAK_DEST}/bin${SUFFIX}
+      - mv -v ${FLATPAK_DEST}/lib${SUFFIX}/*.exe ${FLATPAK_DEST}/bin${SUFFIX}/
+    sources: &vkd3d-sources
+      - type: git
+        url: "https://github.com/HansKristian-Work/vkd3d-proton.git"
+        branch: master
+      - type: file
+        path: dxvk-ccache-win32.txt
+      - type: file
+        path: dxvk-ccache-win64.txt
+
+  - name: vkd3d-32bit
+    buildsystem: meson
+    build-options:
+      config-opts:
+        - --cross-file=../build-win32.txt
+        - --cross-file=../dxvk-ccache-win32.txt
+        - --libdir=lib32
+        - --bindir=lib32
+      env:
+        SUFFIX: "32"
+    config-opts: *vkd3d-config-opts
+    post-install: *vkd3d-post-install
+    sources: *vkd3d-sources
+
+  # Metadata
+
+  - name: metadata
+    buildsystem: simple
+    build-commands:
+      - install -Dm644 ${FLATPAK_ID}.metainfo.xml -t ${FLATPAK_DEST}/share/metainfo
+      - appstream-compose --basename=${FLATPAK_ID} --prefix=${FLATPAK_DEST} --origin=flatpak ${FLATPAK_ID}
+    sources:
+      - type: file
+        path: org.winehq.Wine.vkd3d.metainfo.xml

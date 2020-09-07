@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="addon">
+  <id>org.winehq.Wine.vkd3d</id>  
+  <extends>org.winehq.Wine</extends>
+  <name>VKD3D-Proton</name>
+  <summary>Fork of VKD3D for Proton's Direct3D 12 implementation</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>LGPL-2.1-only</project_license>
+  <description>
+    <p>
+      VKD3D-Proton is a fork of VKD3D, which aims to implement the full Direct3D 12 API on top of Vulkan.
+      The project serves as the development effort for Direct3D 12 support in Proton.
+    </p>
+  </description>
+</component>
