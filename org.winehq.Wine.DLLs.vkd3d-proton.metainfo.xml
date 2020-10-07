@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="addon">
-  <id>org.winehq.Wine.vkd3d</id>  
+  <id>org.winehq.Wine.DLLs.vkd3d-proton</id>  
   <extends>org.winehq.Wine</extends>
   <name>VKD3D-Proton</name>
   <summary>Fork of VKD3D for Proton's Direct3D 12 implementation</summary>
