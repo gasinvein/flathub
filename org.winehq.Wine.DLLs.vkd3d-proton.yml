@@ -1,6 +1,8 @@
 id: org.winehq.Wine.DLLs.vkd3d-proton
+default-branch: proton
 build-extension: true
 runtime: org.winehq.Wine
+runtime-version: proton
 sdk: org.freedesktop.Sdk//20.08
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.mingw-w64
