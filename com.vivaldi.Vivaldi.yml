@@ -1,27 +1,24 @@
 app-id: com.vivaldi.Vivaldi
 runtime: org.freedesktop.Platform
-runtime-version: '18.08'
-base: org.electronjs.Electron2.BaseApp
-base-version: '18.08'
-branch: stable
+runtime-version: '20.08'
 sdk: org.freedesktop.Sdk
 command: vivaldi
 finish-args:
   - --share=ipc
   - --socket=x11
   - --device=dri
+  - --socket=pulseaudio
   - --share=network
   - --talk-name=org.freedesktop.Notifications
-  - --talk-name=org.gtk.Notifications
-  - --talk-name=org.kde.StatusNotifierWatcher
-  - --filesystem=xdg-run/dconf
-  - --filesystem=xdg-config/dconf:ro
-  - --talk-name=ca.desrt.dconf
+  - --talk-name=org.freedesktop.FileManager1
   - --talk-name=org.freedesktop.secrets
   - --talk-name=org.gnome.SessionManager
+  - --system-talk-name=org.freedesktop.Avahi
   - --system-talk-name=org.freedesktop.UPower
   - --system-talk-name=org.freedesktop.NetworkManager
 modules:
+  - shared-modules/libsecret/libsecret.json
+
   - name: vivaldi
     buildsystem: simple
     build-commands:
