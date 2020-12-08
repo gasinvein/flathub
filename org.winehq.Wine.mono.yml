@@ -10,11 +10,11 @@ modules:
   - name: wine-mono
     buildsystem: simple
     build-commands:
-      - cp -a . ${FLATPAK_DEST}/wine-mono-4.9.4
+      - cp -a . ${FLATPAK_DEST}/wine-mono-5.1.1
     sources:
       - type: archive
-        url: "https://github.com/madewokherd/wine-mono/releases/download/wine-mono-4.9.4/wine-mono-bin-4.9.4.tar.gz"
-        sha256: df97cdb904a583a1f92ce17d9d4793aed063ebc9bb139b6d1989b22a534c7b63
+        url: "https://dl.winehq.org/wine/wine-mono/5.1.1/wine-mono-5.1.1-x86.tar.xz"
+        sha256: b17ac815afbf5eef768c4e8d50800be02af75c8b230d668e239bad99616caa82
 
   - name: metadata
     buildsystem: simple
