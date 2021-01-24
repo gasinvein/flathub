@@ -59,11 +59,8 @@ modules:
         x86_64: { env: { earch: x64, suffix: "" } }
     buildsystem: simple
     build-commands:
-      - |
-        set -e
-        ln -s $XDG_CACHE_HOME/node-gyp $HOME/.node-gyp
-        yarn install --force
-        yarn build:prod
+      - yarn --frozen-lockfile
+      - yarn build:prod
       - cp -a dist/github-desktop-linux-${earch} /app/main
     post-install:
       - install -Dm755 ../github-desktop.sh /app/bin/github-desktop
@@ -86,7 +83,8 @@ modules:
       - type: git
         dest: main
         url: "https://github.com/shiftkey/desktop.git"
-        tag: release-2.5.3-linux1
+        branch: linux
+        commit: ee4bd956e7aeb019b22be05337e7243b13af1830
 
       - type: file
         dest: main
