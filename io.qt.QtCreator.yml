@@ -1,0 +1,75 @@
+id: io.qt.QtCreator
+sdk: org.kde.Sdk
+runtime: org.kde.Sdk
+runtime-version: '5.15'
+base: io.qt.qtwebengine.BaseApp
+base-version: '5.15'
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --socket=wayland
+  - --device=dri
+  - --socket=pulseaudio
+  - --allow=devel
+  - --share=network
+  - --socket=ssh-auth
+  - --filesystem=~/.gitconfig
+  - --filesystem=~/.ssh/known_hosts
+command: qtcreator
+rename-icon: QtProject-qtcreator
+rename-desktop-file: org.qt-project.qtcreator.desktop
+cleanup:
+  - /lib/*.a
+  - /lib/*.la
+cleanup-commands:
+  - |
+    cd /app/lib
+    find /app/lib -maxdepth 1 -type l -name "libQt5*" | while read -r lnk; do
+      ln -sfv "$(realpath --relative-to=/app/lib -s "$(readlink "$lnk")")" "$lnk"
+    done
+modules:
+  - name: llvm
+    buildsystem: cmake-ninja
+    builddir: true
+    build-options:
+      cflags: -g0
+      cxxflags: -g0
+      arch:
+        x86_64:
+          config-opts:
+            - -DLLVM_TARGETS_TO_BUILD=X86
+        aarch64:
+          config-opts:
+            - -DLLVM_TARGETS_TO_BUILD=AArch64
+        arm:
+          config-opts:
+            - -DLLVM_TARGETS_TO_BUILD=ARM
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=MinSizeRel
+      - -DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra;compiler-rt
+      - -DLLVM_LIBDIR_SUFFIX=
+      - -DLLVM_BUILD_LLVM_DYLIB:BOOL=ON
+      - -DLLVM_LINK_LLVM_DYLIB:BOOL=ON
+      - -DLLVM_ENABLE_EH=ON
+      - -DLLVM_ENABLE_RTTI=ON
+      - -DCLANG_LINK_CLANG_DYLIB=ON
+      - -DCLANG_ENABLE_STATIC_ANALYZER:BOOL=ON
+      - -DCLANG_ENABLE_ARCMT:BOOL=ON
+      - -DCLANG_PLUGIN_SUPPORT:BOOL=ON
+    subdir: llvm
+    sources:
+      - type: archive
+        url: https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.1/llvm-project-11.0.1.src.tar.xz
+        sha256: af95d00f833dd67114b21c3cfe72dff2e1cdab627651f977b087a837136d653b
+
+  - name: qtcreator
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DBUILD_PLUGIN_CLANGREFACTORING=ON
+      - -DBUILD_PLUGIN_CLANGPCHMANAGER=ON
+    sources:
+      - type: git
+        url: https://code.qt.io/qt-creator/qt-creator.git
+        tag: v4.14.1
