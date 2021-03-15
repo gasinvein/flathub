@@ -114,7 +114,20 @@ modules:
   - name: q4wine-app-environment
     buildsystem: simple
     build-commands:
-      - ln -s /bin/false /app/bin/mount
-      - ln -s /bin/false /app/bin/umount
-      - ln -s /bin/false /app/bin/sudo
-      - ln -s /bin/false /app/bin/renice
+      - install -Dm755 pkexec.sh /app/bin/pkexec
+      - install -Dm755 sudo.sh /app/bin/sudo
+    sources:
+      - type: script
+        dest-filename: pkexec.sh
+        commands:
+          - |
+            zenity --error --no-wrap \
+                   --title="Command unavailable" \
+                   --text="Running $0 is not possible in flatpak sandbox; command was: $*"
+            exit 1
+      - type: script
+        dest-filename: sudo.sh
+        commands:
+          - |
+            echo "Running sudo is not possible in flatpak sandbox; command was: $*" > /dev/stderr
+            exit 1
