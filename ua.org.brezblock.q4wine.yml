@@ -22,9 +22,7 @@ finish-args:
   - --filesystem=xdg-pictures
   - --filesystem=xdg-music
   - --filesystem=xdg-videos
-  - --persist=.config/q4wine
   - --persist=.wine
-  - --persist=.local/share/wineprefixes
   - --talk-name=org.freedesktop.Notifications
   - --system-talk-name=org.freedesktop.UDisks2
   - --system-talk-name=org.freedesktop.NetworkManager
@@ -56,9 +54,13 @@ modules:
     post-install:
       - install -Dm644 -t /app/share/appdata/ ${FLATPAK_ID}.appdata.xml
     sources:
-      - type: archive
-        url: "https://github.com/brezerk/q4wine/archive/v1.3.11.tar.gz"
-        sha256: 922c1093267269f8ab1972bf419ca46fced8ed8bfd5b92de3bc31703a57e2964
+      - type: git
+        url: https://github.com/brezerk/q4wine.git
+        tag: v1.3.12
+        commit: 99f9bbac372c56e3f1719682c5871b1ca6063ed1
+      - type: patch
+        paths:
+          - patches/q4wine/0001-Unhardcode-all-XDG-standard-paths.patch
       - type: file
         path: ua.org.brezblock.q4wine.appdata.xml
     modules:
