@@ -1,7 +1,9 @@
 id: ua.org.brezblock.q4wine
 runtime: org.kde.Platform
 sdk: org.kde.Sdk
-runtime-version: "5.12"
+runtime-version: "5.15"
+base: org.winehq.Wine
+base-version: stable
 command: q4wine
 rename-icon: q4wine
 rename-desktop-file: q4wine.desktop
@@ -24,44 +26,25 @@ finish-args:
   - --persist=.wine
   - --persist=.local/share/wineprefixes
   - --talk-name=org.freedesktop.Notifications
+  - --system-talk-name=org.freedesktop.UDisks2
+  - --system-talk-name=org.freedesktop.NetworkManager
+  - --env=WINEDLLPATH=/app/dlls/lib32:/app/dlls/lib:/app/lib32/wine/wined3d:/app/lib/wine/wined3d
+  - --env=WINEPREFIX=/var/data/wine
+  - --env=GST_PLUGIN_SYSTEM_PATH=/app/lib32/gstreamer-1.0:/app/lib/gstreamer-1.0:/usr/lib/i386-linux-gnu/gstreamer-1.0:/usr/lib/x86_64-linux-gnu/gstreamer-1.0
 cleanup:
   - "*.a"
   - "*.la"
   - /share/man
   - /share/doc
-add-extensions:
-  org.freedesktop.Platform.Compat.i386:
-    directory: lib/i386-linux-gnu
-    version: "18.08"
-
-  org.freedesktop.Platform.Compat.i386.Debug:
-    directory: lib/debug/lib/i386-linux-gnu
-    version: "18.08"
-    no-autodownload: true
-
-  org.freedesktop.Platform.GL32:
-    directory: lib/i386-linux-gnu/GL
-    version: "1.4"
-    versions: "18.08;1.6;1.4"
-    subdirectories: true
-    no-autodownload: true
-    autodelete: false
-    add-ld-path: lib
-    merge-dirs: vulkan/icd.d;glvnd/egl_vendor.d;OpenCL/vendors;
-    download-if: active-gl-driver
-    enable-if: active-gl-driver
-
-  ua.org.brezblock.q4wine.compat32:
-    directory: lib/compat32
-    add-ld-path: lib
-
-  ua.org.brezblock.q4wine.compat32.Debug:
-    directory: lib/debug/lib/compat32
-    no-autodownload: true
-
-  ua.org.brezblock.q4wine.wine:
-    directory: wine
-    subdirectories: true
+inherit-extensions:
+  - org.freedesktop.Platform.Compat.i386
+  - org.freedesktop.Platform.GL32
+  - org.freedesktop.Platform.VAAPI.Intel.i386
+  - org.freedesktop.Platform.ffmpeg-full
+  - org.freedesktop.Platform.ffmpeg_full.i386
+  - org.winehq.Wine.gecko
+  - org.winehq.Wine.mono
+  - org.winehq.Wine.DLLs
 
 modules:
   - name: q4wine
@@ -126,118 +109,10 @@ modules:
       - /share/kservices5
       - /share/kservicetypes5
 
-  - name: cabextract
-    sources:
-      - type: archive
-        url: "https://www.cabextract.org.uk/cabextract-1.6.tar.gz"
-        sha256: cee661b56555350d26943c5e127fc75dd290b7f75689d5ebc1f04957c4af55fb
-
-  - name: unrar
-    no-autogen: true
-    make-args:
-      - CXXFLAGS=-g
-      - STRIP=/bin/true
-    make-install-args:
-      - DESTDIR=/app
-    sources:
-      - type: archive
-        url: "https://www.rarlab.com/rar/unrarsrc-5.6.4.tar.gz"
-        sha256: 9335d2201870f2034007c04be80e00f1dc23932cb88b329d55c76134e6ba49fe
-
-  - name: p7zip
-    no-autogen: true
-    make-args:
-      - all2
-      - OPTFLAGS=-O2 -g
-      - DEST_HOME=/app
-      - DEST_BIN=/app/bin
-      - DEST_SHARE=/app/share/p7zip
-      - DEST_MAN=/app/share/man
-    make-install-args:
-      - DEST_HOME=/app
-      - DEST_BIN=/app/bin
-      - DEST_SHARE=/app/share/p7zip
-      - DEST_MAN=/app/share/man
-    sources:
-      - type: archive
-        url: "https://downloads.sourceforge.net/p7zip/p7zip_16.02_src_all.tar.bz2"
-        sha256: 5eb20ac0e2944f6cb9c2d51dd6c4518941c185347d4089ea89087ffdd6e2341f
-      - type: shell
-        only-arches:
-          - "x86_64"
-        commands:
-          - ln -sf makefile.linux_amd64_asm makefile.machine
-      - type: shell
-        only-arches:
-          - "i386"
-        commands:
-          - ln -sf makefile.linux_x86_asm_gcc_4.X makefile.machine
-    modules:
-
-      - name: yasm
-        buildsystem: cmake-ninja
-        sources:
-          - type: archive
-            url: "https://github.com/yasm/yasm/archive/v1.3.0.tar.gz"
-            sha256: f708be0b7b8c59bc1dbe7134153cd2f31faeebaa8eec48676c10f972a1f13df3
-        cleanup:
-          - "*"
-
-  - name: wget
-    sources:
-      - type: archive
-        url: "https://ftp.gnu.org/gnu/wget/wget-1.19.tar.xz"
-        sha256: 0f1157bbf4daae19f3e1ddb70c6ccb2067feb834a6aa23c9d9daa7f048606384
-
-  - name: winetricks
-    no-autogen: true
-    make-install-args:
-      - PREFIX=/app
-    sources:
-      - type: archive
-        url: "https://github.com/Winetricks/winetricks/archive/20180815.tar.gz"
-        sha256: 6dc22357ea1f857b7283250f7c6a68b9dee97e672bbea9a9c45c573d73634200
-    cleanup:
-      - /share/bash-completion
-      - /share/applications
-      - /share/metainfo
-
   - name: q4wine-app-environment
     buildsystem: simple
     build-commands:
-      - mkdir -p /app/lib/i386-linux-gnu
-      - mkdir -p /app/lib/compat32
-      - mkdir -p /app/wine
       - ln -s /bin/false /app/bin/mount
       - ln -s /bin/false /app/bin/umount
       - ln -s /bin/false /app/bin/sudo
       - ln -s /bin/false /app/bin/renice
-
-# ========== wine dependencies ==========
-
-  - name: vkd3d
-    sources:
-      - type: archive
-        url: "https://dl.winehq.org/vkd3d/source/vkd3d-1.1.tar.xz"
-        sha256: 495adc61cc80c65d54b2f5b52092ea05d3797cc2c17a610f0fc98457d2f56ab6
-    modules:
-
-      - name: SPIRV-Headers
-        buildsystem: cmake-ninja
-        sources:
-          - type: git
-            url: "https://github.com/KhronosGroup/SPIRV-Headers.git"
-            commit: 8bea0a266ac9b718aa0818d9e3a47c0b77c2cb23
-
-  - modules/glu-9.0.0.json
- 
-  - modules/udev-175.json
-
-  - name: FAudio
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DFFMPEG=ON
-    sources:
-      - type: archive
-        url: "https://github.com/FNA-XNA/FAudio/archive/19.02.tar.gz"
-        sha256: 514dd03672aa0241a7eee29e207a594e86cc9954940205489a8299cd1395ffaf
