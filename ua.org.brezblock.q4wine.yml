@@ -43,6 +43,15 @@ inherit-extensions:
   - org.winehq.Wine.gecko
   - org.winehq.Wine.mono
   - org.winehq.Wine.DLLs
+add-extensions:
+  com.valvesoftware.Steam.Utility:
+    subdirectories: true
+    directory: utils
+    versions: stable;beta;test;master
+    add-ld-path: lib
+    merge-dirs: share/vulkan/explicit_layer.d;share/vulkan/implicit_layer.d;
+    no-autodownload: true
+    autodelete: false
 
 modules:
   - name: q4wine
@@ -114,6 +123,9 @@ modules:
   - name: q4wine-app-environment
     buildsystem: simple
     build-commands:
+      - mkdir -p /app/utils /app/share/vulkan
+      - ln -srv /app/{utils/,}share/vulkan/explicit_layer.d
+      - ln -srv /app/{utils/,}share/vulkan/implicit_layer.d
       - install -Dm755 pkexec.sh /app/bin/pkexec
       - install -Dm755 sudo.sh /app/bin/sudo
     sources:
