@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Looking Glass Client
+Exec=looking-glass-client
+Icon=io.looking_glass.LookingGlass
+Terminal=false
+Categories=System;
