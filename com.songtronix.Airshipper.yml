@@ -16,12 +16,13 @@ finish-args:
   - --socket=x11
 build-options:
   append-path: /usr/lib/sdk/rust-nightly/bin
-  env:
-    CARGO_HOME: /run/build/Airshipper/cargo
 modules:
 
   - name: Airshipper
     buildsystem: simple
+    build-options:
+      env:
+        CARGO_HOME: /run/build/Airshipper/cargo
     build-commands:
       - cargo --offline fetch --manifest-path Cargo.toml --verbose
       - cargo --offline build --release --bin airshipper
@@ -32,7 +33,8 @@ modules:
     sources:
       - type: git
         url: "https://github.com/Songtronix/Airshipper.git"
-        commit: e8eb1810b5d6ebc385cd87f7919ca658011c09cf
+        tag: "0.4.2"
+        commit: ff875aa4aa41540fe4c34f66ad62b349ca278bdb
       - generated-sources.json
 
   - name: metadata
