@@ -1,7 +1,7 @@
 id: im.trillian.Trillian
 runtime: org.freedesktop.Platform
 sdk: org.freedesktop.Sdk
-runtime-version: "18.08"
+runtime-version: "20.08"
 finish-args:
   - --share=ipc
   - --socket=x11
