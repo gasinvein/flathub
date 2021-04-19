@@ -13,13 +13,7 @@ finish-args:
   - --talk-name=org.freedesktop.Notifications
   - --talk-name=org.gtk.Notifications
   - --talk-name=org.kde.StatusNotifierWatcher
-  - --talk-name=org.gtk.vfs
-  - --talk-name=org.gtk.vfs.*
   - --talk-name=org.gnome.SessionManager
-  - --talk-name=ca.desrt.dconf
-  - --filesystem=xdg-run/dconf
-  - --filesystem=~/.config/dconf:ro
-  - --env=DCONF_USER_CONFIG_DIR=.config/dconf
   - --filesystem=xdg-download
   - --persist=.trillian
 command: trillian
