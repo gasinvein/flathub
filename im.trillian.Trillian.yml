@@ -140,20 +140,12 @@ modules:
       - mkdir -p /app/bin /app/lib
       - cp /usr/bin/ar /app/bin
       - cp /usr/lib/$(gcc -print-multiarch)/libbfd-*.so /app/lib
-      - install -Dm755 apply_extra /app/bin/apply_extra
+      - install -Dm755 /{usr,app}/bin/desktop-file-edit
+      - install -Dm755 apply_extra.sh /app/bin/apply_extra
       - ln -sf ../extra/trillian/trillian /app/bin/trillian
     sources:
-      - type: script
-        dest-filename: apply_extra
-        commands:
-          - ar x trillian.deb
-          - tar -xf data.tar.xz
-          - mv usr/share/trillian trillian
-          - install -Dm644 usr/share/applications/trillian.desktop export/share/applications/im.trillian.Trillian.desktop
-          - install -Dm644 usr/share/icons/hicolor/scalable/apps/trillian.svg export/share/icons/hicolor/scalable/apps/im.trillian.Trillian.png
-          - sed 's|Exec=.*|Exec=trillian|g' -i export/share/applications/im.trillian.Trillian.desktop
-          - sed 's|Icon=.*|Icon=im.trillian.Trillian|g' -i export/share/applications/im.trillian.Trillian.desktop
-          - rm -r usr trillian.deb data.tar.xz control.tar.gz debian-binary
+      - type: file
+        path: apply_extra.sh
       - type: extra-data
         only-arches:
           - x86_64
