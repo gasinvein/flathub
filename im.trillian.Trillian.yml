@@ -33,8 +33,13 @@ modules:
   - name: gtkmm
     sources:
       - type: archive
-        url: "https://download.gnome.org/sources/gtkmm/3.24/gtkmm-3.24.1.tar.xz"
-        sha256: ddfe42ed2458a20a34de252854bcf4b52d3f0c671c045f56b42aa27c7542d2fd
+        url: https://download.gnome.org/sources/gtkmm/3.24/gtkmm-3.24.4.tar.xz
+        sha256: 9beb71c3e90cfcfb790396b51e3f5e7169966751efd4f3ef9697114be3be6743
+        x-checker-data:
+          type: gnome
+          name: gtkmm
+          versions:
+            <: '4.0'
     modules:
 
       - name: libsigc
@@ -42,36 +47,63 @@ modules:
           - type: archive
             url: "https://download.gnome.org/sources/libsigc++/2.10/libsigc++-2.10.2.tar.xz"
             sha256: b1ca0253379596f9c19f070c83d362b12dfd39c0a3ea1dd813e8e21c1a097a98
+            x-checker-data:
+              type: gnome
+              name: libsigc++
+              versions:
+                <: '3.0'
 
       - name: glibmm
         sources:
           - type: archive
             url: "https://download.gnome.org/sources/glibmm/2.58/glibmm-2.58.1.tar.xz"
             sha256: 6e5fe03bdf1e220eeffd543e017fd2fb15bcec9235f0ffd50674aff9362a85f0
+            x-checker-data:
+              type: gnome
+              name: glibmm
+              versions:
+                <: '2.67'
 
       - name: cairomm
         sources:
           - type: archive
             url: "https://download.gnome.org/sources/cairomm/1.12/cairomm-1.12.0.tar.xz"
             sha256: a54ada8394a86182525c0762e6f50db6b9212a2109280d13ec6a0b29bfd1afe6
+            x-checker-data:
+              type: gnome
+              name: cairomm
 
       - name: pangomm
         sources:
           - type: archive
             url: "https://download.gnome.org/sources/pangomm/2.42/pangomm-2.42.0.tar.xz"
             sha256: ca6da067ff93a6445780c0b4b226eb84f484ab104b8391fb744a45cbc7edbf56
+            x-checker-data:
+              type: gnome
+              name: pangomm
+              versions:
+                <: '2.47'
 
       - name: atkmm
         sources:
           - type: archive
             url: "https://download.gnome.org/sources/atkmm/2.28/atkmm-2.28.0.tar.xz"
             sha256: 4c4cfc917fd42d3879ce997b463428d6982affa0fb660cafcc0bc2d9afcedd3a
+            x-checker-data:
+              type: gnome
+              name: atkmm
+              versions:
+                <: '2.29'
 
   - name: libnotify
     sources:
       - type: archive
         url: "https://download.gnome.org/sources/libnotify/0.7/libnotify-0.7.8.tar.xz"
         sha256: 69209e0b663776a00c7b6c0e560302a8dbf66b2551d55616304f240bba66e18c
+        x-checker-data:
+          type: gnome
+          name: libnotify
+          stable-only: false
     modules:
 
       - name: gnome-common
@@ -81,6 +113,9 @@ modules:
           - type: archive
             url: "https://download.gnome.org/sources/gnome-common/3.18/gnome-common-3.18.0.tar.xz"
             sha256: 22569e370ae755e04527b76328befc4c73b62bfd4a572499fde116b8318af8cf
+            x-checker-data:
+              type: gnome
+              name: gnome-common
 
   - shared-modules/dbus-glib/dbus-glib-0.110.json
 
@@ -113,3 +148,9 @@ modules:
         filename: trillian.deb
         size: 7471968
         sha256: 4758bf1a1dea06730dbc2c6952cad22ecd1a2ed722a030a2cd1e6584b9e97d42
+        x-checker-data:
+          type: html
+          url: https://www.trillian.im/get/linux
+          pattern: (/get/linux/([\.\d-]+)/\?deb=64)
+          follow-redirects: true
+          is-main-source: true
