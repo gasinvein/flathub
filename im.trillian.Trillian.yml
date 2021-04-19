@@ -1,7 +1,7 @@
 id: im.trillian.Trillian
 runtime: org.freedesktop.Platform
 sdk: org.freedesktop.Sdk
-runtime-version: "20.08"
+runtime-version: '20.08'
 finish-args:
   - --share=ipc
   - --socket=x11
@@ -45,8 +45,8 @@ modules:
       - name: libsigc
         sources:
           - type: archive
-            url: "https://download.gnome.org/sources/libsigc++/2.10/libsigc++-2.10.2.tar.xz"
-            sha256: b1ca0253379596f9c19f070c83d362b12dfd39c0a3ea1dd813e8e21c1a097a98
+            url: https://download.gnome.org/sources/libsigc++/2.10/libsigc++-2.10.6.tar.xz
+            sha256: dda176dc4681bda9d5a2ac1bc55273bdd381662b7a6d49e918267d13e8774e1b
             x-checker-data:
               type: gnome
               name: libsigc++
@@ -56,8 +56,8 @@ modules:
       - name: glibmm
         sources:
           - type: archive
-            url: "https://download.gnome.org/sources/glibmm/2.58/glibmm-2.58.1.tar.xz"
-            sha256: 6e5fe03bdf1e220eeffd543e017fd2fb15bcec9235f0ffd50674aff9362a85f0
+            url: https://download.gnome.org/sources/glibmm/2.66/glibmm-2.66.0.tar.xz
+            sha256: 9e1db7d43d2e2d4dfa2771354e21a69a6beec7c446b711619cf8c779e13a581e
             x-checker-data:
               type: gnome
               name: glibmm
@@ -67,7 +67,7 @@ modules:
       - name: cairomm
         sources:
           - type: archive
-            url: "https://download.gnome.org/sources/cairomm/1.12/cairomm-1.12.0.tar.xz"
+            url: https://download.gnome.org/sources/cairomm/1.12/cairomm-1.12.0.tar.xz
             sha256: a54ada8394a86182525c0762e6f50db6b9212a2109280d13ec6a0b29bfd1afe6
             x-checker-data:
               type: gnome
@@ -76,8 +76,8 @@ modules:
       - name: pangomm
         sources:
           - type: archive
-            url: "https://download.gnome.org/sources/pangomm/2.42/pangomm-2.42.0.tar.xz"
-            sha256: ca6da067ff93a6445780c0b4b226eb84f484ab104b8391fb744a45cbc7edbf56
+            url: https://download.gnome.org/sources/pangomm/2.46/pangomm-2.46.0.tar.xz
+            sha256: d3787d04d6198b606f3efa357b3b452a7140e2a7dee56f9f9ce516d7d5fcec1b
             x-checker-data:
               type: gnome
               name: pangomm
@@ -87,8 +87,8 @@ modules:
       - name: atkmm
         sources:
           - type: archive
-            url: "https://download.gnome.org/sources/atkmm/2.28/atkmm-2.28.0.tar.xz"
-            sha256: 4c4cfc917fd42d3879ce997b463428d6982affa0fb660cafcc0bc2d9afcedd3a
+            url: https://download.gnome.org/sources/atkmm/2.28/atkmm-2.28.1.tar.xz
+            sha256: 116876604770641a450e39c1f50302884848ce9cc48d43c5dc8e8efc31f31bad
             x-checker-data:
               type: gnome
               name: atkmm
@@ -98,8 +98,8 @@ modules:
   - name: libnotify
     sources:
       - type: archive
-        url: "https://download.gnome.org/sources/libnotify/0.7/libnotify-0.7.8.tar.xz"
-        sha256: 69209e0b663776a00c7b6c0e560302a8dbf66b2551d55616304f240bba66e18c
+        url: https://download.gnome.org/sources/libnotify/0.7/libnotify-0.7.9.tar.xz
+        sha256: 66c0517ed16df7af258e83208faaf5069727dfd66995c4bbc51c16954d674761
         x-checker-data:
           type: gnome
           name: libnotify
@@ -108,10 +108,10 @@ modules:
 
       - name: gnome-common
         cleanup:
-          - "*"
+          - '*'
         sources:
           - type: archive
-            url: "https://download.gnome.org/sources/gnome-common/3.18/gnome-common-3.18.0.tar.xz"
+            url: https://download.gnome.org/sources/gnome-common/3.18/gnome-common-3.18.0.tar.xz
             sha256: 22569e370ae755e04527b76328befc4c73b62bfd4a572499fde116b8318af8cf
             x-checker-data:
               type: gnome
@@ -144,10 +144,10 @@ modules:
       - type: extra-data
         only-arches:
           - x86_64
-        url: https://www.trillian.im/get/linux/6.1/trillian_6.1.0.5_amd64.deb
+        url: https://trillian.im/get/linux/6.3/trillian_6.3.0.1_amd64.deb
         filename: trillian.deb
-        size: 7471968
-        sha256: 4758bf1a1dea06730dbc2c6952cad22ecd1a2ed722a030a2cd1e6584b9e97d42
+        size: 14153966
+        sha256: 42e3466ee236ac2644907059f0961eba3a6ed6b6156afb2c57f54ebe6065ac6f
         x-checker-data:
           type: html
           url: https://www.trillian.im/get/linux
