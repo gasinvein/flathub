@@ -31,6 +31,7 @@ cleanup:
 modules:
 
   - name: gtkmm
+    buildsystem: meson
     sources:
       - type: archive
         url: https://download.gnome.org/sources/gtkmm/3.24/gtkmm-3.24.4.tar.xz
@@ -43,6 +44,7 @@ modules:
     modules:
 
       - name: libsigc
+        buildsystem: meson
         sources:
           - type: archive
             url: https://download.gnome.org/sources/libsigc++/2.10/libsigc++-2.10.6.tar.xz
@@ -54,6 +56,7 @@ modules:
                 <: '3.0'
 
       - name: glibmm
+        buildsystem: meson
         sources:
           - type: archive
             url: https://download.gnome.org/sources/glibmm/2.66/glibmm-2.66.0.tar.xz
@@ -74,6 +77,7 @@ modules:
               name: cairomm
 
       - name: pangomm
+        buildsystem: meson
         sources:
           - type: archive
             url: https://download.gnome.org/sources/pangomm/2.46/pangomm-2.46.0.tar.xz
@@ -85,6 +89,7 @@ modules:
                 <: '2.47'
 
       - name: atkmm
+        buildsystem: meson
         sources:
           - type: archive
             url: https://download.gnome.org/sources/atkmm/2.28/atkmm-2.28.1.tar.xz
@@ -96,6 +101,12 @@ modules:
                 <: '2.29'
 
   - name: libnotify
+    buildsystem: meson
+    config-opts:
+      - -Dtests=false
+      - -Dman=false
+      - -Dgtk_doc=false
+      - -Ddocbook_docs=disabled
     sources:
       - type: archive
         url: https://download.gnome.org/sources/libnotify/0.7/libnotify-0.7.9.tar.xz
@@ -120,6 +131,8 @@ modules:
   - shared-modules/dbus-glib/dbus-glib-0.110.json
 
   - shared-modules/libappindicator/libappindicator-gtk3-introspection-12.10.json
+
+  - shared-modules/libsecret/libsecret.json
 
   - name: trillian
     buildsystem: simple
