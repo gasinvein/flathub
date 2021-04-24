@@ -18,6 +18,10 @@ finish-args:
 command: qtcreator
 rename-icon: QtProject-qtcreator
 rename-desktop-file: org.qt-project.qtcreator.desktop
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.llvm11
+build-options:
+  prepend-path: /usr/lib/sdk/llvm11
 cleanup:
   - /lib/*.a
   - /lib/*.la
@@ -28,40 +32,6 @@ cleanup-commands:
       ln -sfv "$(realpath --relative-to=/app/lib -s "$(readlink "$lnk")")" "$lnk"
     done
 modules:
-  - name: llvm
-    buildsystem: cmake-ninja
-    builddir: true
-    build-options:
-      cflags: -g0
-      cxxflags: -g0
-      arch:
-        x86_64:
-          config-opts:
-            - -DLLVM_TARGETS_TO_BUILD=X86
-        aarch64:
-          config-opts:
-            - -DLLVM_TARGETS_TO_BUILD=AArch64
-        arm:
-          config-opts:
-            - -DLLVM_TARGETS_TO_BUILD=ARM
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=MinSizeRel
-      - -DLLVM_ENABLE_PROJECTS=clang;clang-tools-extra;compiler-rt
-      - -DLLVM_LIBDIR_SUFFIX=
-      - -DLLVM_BUILD_LLVM_DYLIB:BOOL=ON
-      - -DLLVM_LINK_LLVM_DYLIB:BOOL=ON
-      - -DLLVM_ENABLE_EH=ON
-      - -DLLVM_ENABLE_RTTI=ON
-      - -DCLANG_LINK_CLANG_DYLIB=ON
-      - -DCLANG_ENABLE_STATIC_ANALYZER:BOOL=ON
-      - -DCLANG_ENABLE_ARCMT:BOOL=ON
-      - -DCLANG_PLUGIN_SUPPORT:BOOL=ON
-    subdir: llvm
-    sources:
-      - type: archive
-        url: https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.1/llvm-project-11.0.1.src.tar.xz
-        sha256: af95d00f833dd67114b21c3cfe72dff2e1cdab627651f977b087a837136d653b
-
   - name: qtcreator
     buildsystem: cmake-ninja
     builddir: true
@@ -69,6 +39,7 @@ modules:
       - -DCMAKE_BUILD_TYPE=Release
       - -DBUILD_PLUGIN_CLANGREFACTORING=ON
       - -DBUILD_PLUGIN_CLANGPCHMANAGER=ON
+      - -DCMAKE_PREFIX_PATH=/usr/lib/sdk/llvm11
     sources:
       - type: git
         url: https://code.qt.io/qt-creator/qt-creator.git
