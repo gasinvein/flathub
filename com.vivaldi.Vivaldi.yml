@@ -43,9 +43,8 @@ modules:
           - ar p vivaldi.deb data.tar.xz | tar -xJf -
           - mv opt/vivaldi .
           - install -Dm644 usr/share/applications/vivaldi-stable.desktop export/share/applications/$FLATPAK_ID.desktop
-          - for s in 16 22 24 32 48 64 128 256;
-              do install -Dm644 vivaldi/product_logo_$s.png export/share/icons/hicolor/${s}x${s}/apps/$FLATPAK_ID.png;
-            done
+          - for s in 16 22 24 32 48 64 128 256; do install -Dm644 vivaldi/product_logo_$s.png
+            export/share/icons/hicolor/${s}x${s}/apps/$FLATPAK_ID.png; done
           - sed "s|Exec=/usr/bin/vivaldi-stable|Exec=vivaldi|g" -i export/share/applications/$FLATPAK_ID.desktop
           - sed "s|Icon=vivaldi|Icon=$FLATPAK_ID|g" -i export/share/applications/$FLATPAK_ID.desktop
           - rm -r etc usr opt vivaldi.deb
@@ -67,11 +66,11 @@ modules:
 
       - type: extra-data
         only-arches:
-          - "x86_64"
-        url: "https://downloads.vivaldi.com/stable/vivaldi-stable_2.2.1388.37-1_amd64.deb"
+          - x86_64
+        url: http://repo.vivaldi.com/stable/deb/pool/main/vivaldi-stable_3.8.2259.37-1_amd64.deb
         filename: vivaldi.deb
-        size: 58076356
-        sha256: a5ec363b0d3e53a4a6119041f6ec19a6082d60dacd7a4ef39dc54acb3725001f
+        size: 82408824
+        sha256: 47047ff8e2dfec6f3c21ed7fbd84e0a3188b84e670169ee1da5e5053e550f1d2
         x-checker-data: &x-checker-data
           type: debian-repo
           root: http://repo.vivaldi.com/stable/deb/
@@ -81,18 +80,18 @@ modules:
 
       - type: extra-data
         only-arches:
-          - "i386"
-        url: "https://downloads.vivaldi.com/stable/vivaldi-stable_2.2.1388.37-1_i386.deb"
+          - i386
+        url: http://repo.vivaldi.com/stable/deb/pool/main/vivaldi-stable_3.8.2259.37-1_i386.deb
         filename: vivaldi.deb
-        size: 56996270
-        sha256: 347f53a08df6370be0ad80ab9bde97caa7bf8c61ab7f6b3da6e72707b9035a34
+        size: 79531084
+        sha256: 2bc02df168cac09e0ae1d2084395e0236a9b6dd270cd4c4d4079e898a2c58b81
         x-checker-data: *x-checker-data
 
       - type: extra-data
         only-arches:
-          - "arm"
-        url: "https://downloads.vivaldi.com/stable/vivaldi-stable_2.2.1388.37-1_armhf.deb"
+          - arm
+        url: http://repo.vivaldi.com/stable/deb/pool/main/vivaldi-stable_3.8.2259.37-1_armhf.deb
         filename: vivaldi.deb
-        size: 50918454
-        sha256: 2fcef2b1868bc2ee701cfb76ac0c517292d66fad556fa453634cff3e6a96bde4
+        size: 72625208
+        sha256: 28253c6e8c6846bd3b7d8f710e99a8ef67593a323867068db6905e9b6c2a5c46
         x-checker-data: *x-checker-data
