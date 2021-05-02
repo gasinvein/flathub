@@ -72,6 +72,12 @@ modules:
         filename: vivaldi.deb
         size: 58076356
         sha256: a5ec363b0d3e53a4a6119041f6ec19a6082d60dacd7a4ef39dc54acb3725001f
+        x-checker-data: &x-checker-data
+          type: debian-repo
+          root: http://repo.vivaldi.com/stable/deb/
+          dist: stable
+          component: main
+          package-name: vivaldi-stable
 
       - type: extra-data
         only-arches:
@@ -80,6 +86,7 @@ modules:
         filename: vivaldi.deb
         size: 56996270
         sha256: 347f53a08df6370be0ad80ab9bde97caa7bf8c61ab7f6b3da6e72707b9035a34
+        x-checker-data: *x-checker-data
 
       - type: extra-data
         only-arches:
@@ -88,3 +95,4 @@ modules:
         filename: vivaldi.deb
         size: 50918454
         sha256: 2fcef2b1868bc2ee701cfb76ac0c517292d66fad556fa453634cff3e6a96bde4
+        x-checker-data: *x-checker-data
