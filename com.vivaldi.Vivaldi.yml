@@ -19,14 +19,21 @@ finish-args:
 modules:
   - shared-modules/libsecret/libsecret.json
 
+  - name: zypak
+    sources:
+      - type: git
+        url: https://github.com/refi64/zypak.git
+        tag: v2021.02
+
   - name: vivaldi
     buildsystem: simple
     build-commands:
       - mkdir -p /app/{bin,lib}
       - cp /usr/bin/ar /app/bin
-      - cp /usr/lib/*/libbfd-*.so /app/lib
+      - cp /usr/lib/$(gcc -print-multiarch)/libbfd-*.so /app/lib
       - install -Dm755 apply_extra.sh /app/bin/apply_extra
       - install -Dm755 vivaldi.sh /app/bin/vivaldi
+      - install -Dm755 stub_sandbox.sh /app/bin/stub_sandbox
       - install -Dm644 -t /app/share/appdata/ $FLATPAK_ID.appdata.xml
     sources:
       - type: script
@@ -42,11 +49,18 @@ modules:
           - sed "s|Exec=/usr/bin/vivaldi-stable|Exec=vivaldi|g" -i export/share/applications/$FLATPAK_ID.desktop
           - sed "s|Icon=vivaldi|Icon=$FLATPAK_ID|g" -i export/share/applications/$FLATPAK_ID.desktop
           - rm -r etc usr opt vivaldi.deb
+          - cp /app/bin/stub_sandbox vivaldi/vivaldi-sandbox
 
       - type: script
         dest-filename: vivaldi.sh
         commands:
-          - exec /app/extra/vivaldi/vivaldi --no-sandbox $@
+          - exec zypak-wrapper.sh /app/extra/vivaldi/vivaldi "$@"
+
+      - type: script
+        dest-filename: stub_sandbox.sh
+        commands:
+          - 'echo "Stub sandbox ignoring command: $@"'
+          - exit 1
 
       - type: file
         path: com.vivaldi.Vivaldi.appdata.xml
