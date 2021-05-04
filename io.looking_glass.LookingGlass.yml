@@ -19,9 +19,13 @@ build-options:
   append-path: /usr/lib/sdk/mingw-w64/bin
 modules:
   - name: LookingGlass
+    build-options:
+      cflags: '-Wno-error=maybe-uninitialized'
+      cxxflags: '-Wno-error=maybe-uninitialized'
     buildsystem: cmake-ninja
     builddir: true
     config-opts:
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
       - -DENABLE_BACKTRACE:BOOL=OFF
     post-install:
       - install -Dm644 ../../resources/icon-128x128.png ${FLATPAK_DEST}/share/icons/hicolor/128x128/apps/looking-glass.png
