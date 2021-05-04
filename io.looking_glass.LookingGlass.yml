@@ -13,10 +13,6 @@ finish-args:
 command: looking-glass-client
 rename-desktop-file: looking-glass-client.desktop
 rename-icon: looking-glass
-sdk-extensions:
-  - org.freedesktop.Sdk.Extension.mingw-w64
-build-options:
-  append-path: /usr/lib/sdk/mingw-w64/bin
 modules:
   - name: LookingGlass
     build-options:
@@ -46,81 +42,3 @@ modules:
             url: https://www.spice-space.org/download/releases/spice-protocol-0.14.3.tar.xz
             sha256: f986e5bc2a1598532c4897f889afb0df9257ac21c160c083703ae7c8de99487a
 
-  - name: LookingGlass-host-windows
-    build-options:
-      ldflags: ""
-      ldflags-override: true
-    buildsystem: cmake
-    builddir: true
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
-      - -DCMAKE_TOOLCHAIN_FILE=../toolchain-mingw64.cmake
-      - -DCMAKE_C_STANDARD_LIBRARIES=-Wl,-Bstatic -lssp -Wl,-Bdynamic
-      - -DCMAKE_CXX_STANDARD_LIBRARIES=-Wl,-Bstatic -lssp -Wl,-Bdynamic
-    build-commands:
-      - git describe --tags --always --long > ../VERSION
-      - makensis platform/Windows/installer.nsi
-      - install -Dm755 platform/Windows/looking-glass-host-setup.exe -t /app/share/looking-glass
-      - install -Dm755 looking-glass-host.exe -t /app/share/looking-glass
-    no-make-install: true
-    subdir: host
-    sources:
-      - *LookingGlass-source
-    modules:
-
-      - name: mingw-nsis
-        buildsystem: simple
-        build-commands:
-          - scons
-              PREFIX=/app
-              PREFIX_CONF=/app/etc
-              ZLIB_W32=/app/i686-w64-mingw32
-              SKIPUTILS='NSIS Menu'
-              STRIP_CP=false
-              NSIS_MAX_STRLEN=8192
-              NSIS_CONFIG_LOG=yes
-              install
-        sources:
-          - type: archive
-            url: http://downloads.sourceforge.net/nsis/nsis-3.06.1-src.tar.bz2
-            sha256: 9b5d68bf1874a7b393432410c7e8c376f174d2602179883845d2508152153ff0
-        cleanup:
-          - "*"
-        modules:
-
-          - name: mingw-zlib
-            build-options:
-              cflags: ""
-              cflags-override: true
-              cxxflags: ""
-              cxxflags-override: true
-              ldflags: ""
-              ldflags-override: true
-              env:
-                CHOST: i686-w64-mingw32
-            no-parallel-make: true
-            config-opts:
-              - --prefix=/app/i686-w64-mingw32
-              - --static
-              - --shared
-            sources:
-              - type: archive
-                url: http://www.zlib.net/zlib-1.2.11.tar.xz
-                sha256: 4ff941449631ace0d4d203e3483be9dbc9da454084111f97ea0a2114e19bf066
-              - type: patch
-                paths:
-                  - patches/zlib/01-zlib-1.2.11-1-buildsys.mingw.patch
-            cleanup:
-              - "*"
-
-          - name: scons
-            buildsystem: simple
-            build-commands:
-              - python3 setup.py build
-              - python3 setup.py install --prefix=/app --root=/ --skip-build
-            sources:
-              - type: archive
-                url: http://downloads.sourceforge.net/scons/scons-4.0.1.tar.gz
-                sha256: 722ed104b5c624ecdc89bd4e02b094d2b14d99d47b5d0501961e47f579a2007c
-            cleanup:
-              - "*"
