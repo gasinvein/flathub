@@ -50,10 +50,8 @@ modules:
           - rm -r etc usr opt vivaldi.deb
           - cp /app/bin/stub_sandbox vivaldi/vivaldi-sandbox
 
-      - type: script
-        dest-filename: vivaldi.sh
-        commands:
-          - exec zypak-wrapper.sh /app/extra/vivaldi/vivaldi "$@"
+      - type: file
+        path: vivaldi.sh
 
       - type: script
         dest-filename: stub_sandbox.sh
