@@ -1,0 +1,154 @@
+id: com.visualstudio.code.tool.apt
+default-branch: "20.08"
+build-extension: true
+sdk: org.freedesktop.Sdk//20.08
+runtime: com.visualstudio.code-oss
+runtime-version: stable
+separate-locales: false
+appstream-compose: false
+build-options:
+  prefix: /app/tools/apt
+  env:
+    C_INCLUDE_PATH: /app/tools/apt/include
+    CPLUS_INCLUDE_PATH: /app/tools/apt/include
+    PYTHONPATH: /app/tools/apt/lib/python3.8/site-packages
+    PERL5LIB: /app/tools/apt/lib/perl5/vendor_perl/5.32.0
+  prepend-path: /app/tools/apt/bin
+  prepend-ld-library-path: /app/tools/apt/lib
+  prepend-pkg-config-path: /app/tools/apt/lib/pkgconfig
+  ldflags: -L/app/tools/apt/lib
+  ldflags-override: true
+  strip: true
+cleanup:
+  - "*.a"
+  - "*.la"
+  - /share/man
+modules:
+
+  - name: python-apt
+    buildsystem: simple
+    build-commands:
+      - python3 setup.py build
+      - python3 setup.py install --prefix=${FLATPAK_DEST} --root=/
+    sources:
+      - type: archive
+        url: http://deb.debian.org/debian/pool/main/p/python-apt/python-apt_2.2.1.tar.xz
+        sha256: b9336cc92dc0a3bcc7be05b40f6752d10220cc968b19061f6c7fc12bf22a97f2
+        x-checker-data:
+          type: debian-repo
+          root: http://deb.debian.org/debian
+          dist: bullseye
+          component: main
+          package-name: python-apt
+          source: true
+    modules:
+
+      - name: apt
+        buildsystem: cmake-ninja
+        config-opts:
+          - -DWITH_DOC:BOOL=OFF
+          - -DUSE_NLS:BOOL=OFF
+          - -DROOT_GROUP=root
+          - -DCMAKE_INSTALL_LOCALSTATEDIR:PATH=/var
+          - -DCMAKE_INSTALL_SYSCONFDIR:PATH=/etc
+        sources:
+          - type: archive
+            url: http://deb.debian.org/debian/pool/main/a/apt/apt_2.2.4.tar.xz
+            sha256: 6eecd04a4979bd2040b22a14571c15d342c4e1802b2023acb5aa19649b1f64ea
+            x-checker-data:
+              type: debian-repo
+              root: http://deb.debian.org/debian
+              dist: bullseye
+              component: main
+              package-name: apt
+              source: true
+          - type: shell
+            commands:
+              - sed '/add_subdirectory(doc)/d' -i CMakeLists.txt
+        modules:
+
+          - name: googletest
+            buildsystem: cmake-ninja
+            builddir: true
+            sources:
+              - type: archive
+                url: https://github.com/google/googletest/archive/release-1.8.1.tar.gz
+                sha256: 9bf1fe5182a604b4135edc1a425ae356c9ad15e9b23f9f12a02e80184c3a249c
+            cleanup:
+              - '*'
+
+          - name: libdb
+            config-opts:
+              - --enable-cxx
+              - --enable-shared
+              - --disable-static
+              - --enable-dbm
+              - --enable-stl
+            subdir: build_unix
+            sources:
+              - type: archive
+                url: http://download.oracle.com/berkeley-db/db-5.3.28.tar.gz
+                sha256: e0a992d740709892e81f9d93f06daf305cf73fb81b545afe72478043172c3628
+              - type: patch
+                paths:
+                  - patches/db-5.3.28-atomic_compare_exchange.patch
+              - type: shell
+                commands:
+                  - |
+                    # Update config files to understand aarch64
+                    for dir in dist lang/sql/sqlite lang/sql/jdbc lang/sql/odbc; do
+                      cp -v /usr/share/gnu-config/config.{guess,sub} "$dir/"
+                    done
+              - type: script
+                dest: build_unix
+                dest-filename: configure
+                commands:
+                  - exec ../dist/configure "$@"
+            cleanup:
+              - /bin
+              - /docs
+
+          - name: dpkg
+            build-options:
+              ldflags: -ltinfo
+            config-opts:
+              - --sbindir=/app/tools/apt/bin
+              - --localstatedir=/var
+            sources:
+              - type: archive
+                url: http://deb.debian.org/debian/pool/main/d/dpkg/dpkg_1.20.9.tar.xz
+                sha256: 5ce242830f213b5620f08e6c4183adb1ef4dc9da28d31988a27c87c71fe534ce
+                x-checker-data:
+                  type: debian-repo
+                  root: http://deb.debian.org/debian
+                  dist: bullseye
+                  component: main
+                  package-name: dpkg
+                  source: true
+
+          - name: triehash
+            buildsystem: simple
+            build-commands:
+              - install -Dm755 triehash.pl $FLATPAK_DEST/bin/triehash
+            sources:
+              - type: archive
+                url: https://github.com/julian-klode/triehash/archive/v0.3.tar.gz
+                sha256: 289a0966c02c2008cd263d3913a8e3c84c97b8ded3e08373d63a382c71d2199c
+
+          - name: xxhash
+            no-autogen: true
+            make-install-args:
+              - PREFIX=$(FLATPAK_DEST)
+            sources:
+              - type: archive
+                url: https://github.com/Cyan4973/xxHash/archive/v0.8.0.tar.gz
+                sha256: 7054c3ebd169c97b64a92d7b994ab63c70dd53a06974f1f630ab782c28db0f4f
+
+  - name: bundle-setup
+    buildsystem: simple
+    build-commands:
+      - install -Dm644 ${FLATPAK_ID}.metainfo.xml -t ${FLATPAK_DEST}/share/metainfo
+      - appstream-compose --basename=${FLATPAK_ID} --prefix=${FLATPAK_DEST} --origin=flatpak ${FLATPAK_ID}
+    sources:
+      - type: file
+        path: com.visualstudio.code.tool.apt.metainfo.xml

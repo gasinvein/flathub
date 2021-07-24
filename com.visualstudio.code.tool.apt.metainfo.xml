@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="runtime">
+  <id>com.visualstudio.code.tool.apt</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0 and LGPL-2.0</project_license>
+  <name>APT tools</name>
+  <summary>APT package manager development tools</summary>
+  <url type="homepage">https://tracker.debian.org/pkg/apt</url>
+</component>
