@@ -1,0 +1,69 @@
+id: io.github.streamlink.TwitchGUI
+sdk: org.freedesktop.Sdk
+runtime: org.freedesktop.Platform
+runtime-version: '20.08'
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.node14
+build-options:
+  append-path: /usr/lib/sdk/node14/bin
+command: /app/main/streamlink-twitch-gui
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --device=dri
+  - --socket=pulseaudio
+  - --share=network
+modules:
+  - name: yarn
+    buildsystem: simple
+    build-commands:
+      - mkdir -p /app/share/yarn/
+      - cp -a * /app/share/yarn/
+      - mkdir -p /app/bin
+      - ln -s /app/share/yarn/bin/yarn /app/bin/yarn
+      - ln -s /app/share/yarn/bin/yarnpkg /app/bin/yarnpkg
+    cleanup:
+      - '*'
+    sources:
+      - type: archive
+        url: https://github.com/yarnpkg/yarn/releases/download/v1.22.11/yarn-v1.22.11.tar.gz
+        sha256: 2c320de14a6014f62d29c34fec78fdbb0bc71c9ccba48ed0668de452c1f5fe6c
+        x-checker-data:
+          type: json
+          url: https://api.github.com/repos/yarnpkg/yarn/releases/latest
+          tag-query: .tag_name
+          version-query: $tag | sub("^v"; "")
+          url-query: .assets[] | select(.name=="yarn-\($tag).tar.gz") | .browser_download_url
+
+  - name: streamlink-twitch-gui
+    build-options:
+      arch:
+        x86_64:
+          env:
+            _nw_target: linux64
+      env:
+        CI: 'true'
+    buildsystem: simple
+    build-commands:
+      - yarn --frozen-lockfile
+      - yarn run grunt webpack:prod
+      - yarn run grunt compile:${_nw_target}
+      - cp -a build/releases/streamlink-twitch-gui/${_nw_target} /app/main
+    subdir: main
+    sources:
+      - type: git
+        url: https://github.com/streamlink/streamlink-twitch-gui.git
+        tag: v1.12.0
+        dest: main
+
+      - type: file
+        url: data:yarn-offline-mirror%20/run/build/streamlink-twitch-gui/flatpak-node/yarn-mirror%0A--install.offline%20true%0A--run.offline%20true%0A
+        dest-filename: .yarnrc
+
+      # flatpak-node-generator.py yarn --nwjs-version 0.52.2 -r .../streamlink-twitch-gui/yarn.lock
+      - generated-sources.json
+
+      # Link nwjs downloaded cache to the app source
+      - type: shell
+        commands:
+          - ln -sr flatpak-node/nwjs-cache main/build/cache
