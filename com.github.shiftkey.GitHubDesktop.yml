@@ -18,9 +18,9 @@ command: github-desktop
 rename-desktop-file: github-desktop.desktop
 rename-icon: github-desktop
 sdk-extensions:
-  - org.freedesktop.Sdk.Extension.node10
+  - org.freedesktop.Sdk.Extension.node14
 build-options:
-  append-path: /usr/lib/sdk/node10/bin
+  append-path: /usr/lib/sdk/node14/bin
 cleanup:
   - "*.a"
   - "*.la"
@@ -30,20 +30,6 @@ cleanup:
 modules:
 
   - shared-modules/libsecret/libsecret.json
-
-  - name: yarn
-    buildsystem: simple
-    build-commands:
-      - mkdir -p /app/share/yarn/
-      - cp -a * /app/share/yarn/
-      - ln -s /app/share/yarn/bin/yarn /app/bin/yarn
-      - ln -s /app/share/yarn/bin/yarnpkg /app/bin/yarnpkg
-    cleanup:
-      - "*"
-    sources:
-      - type: archive
-        url: "https://github.com/yarnpkg/yarn/releases/download/v1.22.4/yarn-v1.22.4.tar.gz"
-        sha256: bc5316aa110b2f564a71a3d6e235be55b98714660870c5b6b2d2d3f12587fb58
 
   - name: github-desktop
     build-options:
