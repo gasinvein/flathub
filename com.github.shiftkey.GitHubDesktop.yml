@@ -93,17 +93,6 @@ modules:
 
       - generated-sources.json
 
-      - type: shell
-        dest: flatpak-node/cache/node-gyp
-        commands:
-          - |
-            set -e
-            version=$(node --version | sed 's/^v//')
-            nodedir=$(dirname $(dirname $(which node)))
-            mkdir -p $version
-            ln -s $nodedir/include $version/include
-            echo 9 > $version/installVersion
-
       - type: file
         path: github-desktop.desktop
 
