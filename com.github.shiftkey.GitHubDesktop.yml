@@ -77,6 +77,11 @@ modules:
         path: yarnrc
         dest-filename: .yarnrc
 
+      - type: shell
+        dest: main
+        commands:
+          - rm app/.npmrc
+
       - generated-sources.json
 
       - type: file
