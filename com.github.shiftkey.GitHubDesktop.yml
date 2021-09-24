@@ -69,8 +69,8 @@ modules:
       - type: git
         dest: main
         url: "https://github.com/shiftkey/desktop.git"
-        branch: linux
-        commit: ee4bd956e7aeb019b22be05337e7243b13af1830
+        tag: release-2.9.3-linux1
+        commit: d5700f6a75cb030290378295d1d49fd6e2b1ad1b
 
       - type: file
         dest: main
