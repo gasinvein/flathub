@@ -65,11 +65,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/brezerk/q4wine.git
-        tag: v1.3.12
-        commit: 99f9bbac372c56e3f1719682c5871b1ca6063ed1
-      - type: patch
-        paths:
-          - patches/q4wine/0001-Unhardcode-all-XDG-standard-paths.patch
+        tag: v1.3.13
+        commit: 6b9831ce41841b1e08fa43f7214f3829b8952171
       - type: file
         path: ua.org.brezblock.q4wine.appdata.xml
     modules:
