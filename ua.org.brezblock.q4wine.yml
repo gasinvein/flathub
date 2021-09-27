@@ -1,7 +1,7 @@
 id: ua.org.brezblock.q4wine
 runtime: org.kde.Platform
 sdk: org.kde.Sdk
-runtime-version: "5.15"
+runtime-version: 5.15-21.08
 base: org.winehq.Wine
 base-version: stable
 command: q4wine
