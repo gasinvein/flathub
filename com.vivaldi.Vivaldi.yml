@@ -39,10 +39,13 @@ modules:
       - cp /usr/lib/$(gcc -print-multiarch)/libbfd-*.so /app/lib
       - install -Dm755 apply_extra.sh /app/bin/apply_extra
       - install -Dm755 -t /app/share vivaldi-wrapper.patch
-      - ln -sr /app/extra/vivaldi/vivaldi /app/bin/vivaldi
+      - install -Dm755 vivaldi.sh /app/bin/vivaldi
       - install -Dm755 stub_sandbox.sh /app/bin/stub_sandbox
       - install -Dm644 -t /app/share/appdata/ $FLATPAK_ID.appdata.xml
     sources:
+      - type: file
+        path: vivaldi.sh
+
       - type: file
         path: apply_extra.sh
 
