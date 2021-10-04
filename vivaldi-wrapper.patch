@@ -1,0 +1,14 @@
+diff --git a/vivaldi b/vivaldi
+index ffa3cac..1316c77 100755
+--- a/vivaldi
++++ b/vivaldi
+@@ -59,5 +59,7 @@ exec < /dev/null
+ exec > >(exec cat)
+ exec 2> >(exec cat >&2)
+ 
+-# Note: exec -a below is a bashism.
+-exec -a "$0" "$HERE/vivaldi-bin" "$@"
++export ZYPAK_SANDBOX_FILENAME=vivaldi-sandbox
++export ZYPAK_LD_PRELOAD="$LD_PRELOAD"
++unset LD_PRELOAD
++exec zypak-wrapper.sh "$HERE/vivaldi-bin" "$@"

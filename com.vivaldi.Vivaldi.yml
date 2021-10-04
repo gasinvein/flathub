@@ -25,6 +25,11 @@ modules:
         url: https://github.com/refi64/zypak.git
         tag: v2021.09.1
 
+  - name: patch
+    buildsystem: simple
+    build-commands:
+      - install -t /app/bin -Dm755 /usr/bin/patch
+
   - name: vivaldi
     buildsystem: simple
     build-commands:
@@ -32,7 +37,8 @@ modules:
       - cp /usr/bin/ar /app/bin
       - cp /usr/lib/$(gcc -print-multiarch)/libbfd-*.so /app/lib
       - install -Dm755 apply_extra.sh /app/bin/apply_extra
-      - install -Dm755 vivaldi.sh /app/bin/vivaldi
+      - install -Dm755 -t /app/share vivaldi-wrapper.patch
+      - ln -sr /app/extra/vivaldi/vivaldi /app/bin/vivaldi
       - install -Dm755 stub_sandbox.sh /app/bin/stub_sandbox
       - install -Dm644 -t /app/share/appdata/ $FLATPAK_ID.appdata.xml
     sources:
@@ -42,6 +48,7 @@ modules:
           - export FLATPAK_ID=com.vivaldi.Vivaldi
           - ar p vivaldi.deb data.tar.xz | tar -xJf -
           - mv opt/vivaldi .
+          - patch -d vivaldi -p1 < /app/share/vivaldi-wrapper.patch
           - install -Dm644 usr/share/applications/vivaldi-stable.desktop export/share/applications/$FLATPAK_ID.desktop
           - for s in 16 22 24 32 48 64 128 256; do install -Dm644 vivaldi/product_logo_$s.png
             export/share/icons/hicolor/${s}x${s}/apps/$FLATPAK_ID.png; done
@@ -51,7 +58,7 @@ modules:
           - cp /app/bin/stub_sandbox vivaldi/vivaldi-sandbox
 
       - type: file
-        path: vivaldi.sh
+        path: vivaldi-wrapper.patch
 
       - type: script
         dest-filename: stub_sandbox.sh
