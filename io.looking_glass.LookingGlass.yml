@@ -1,7 +1,7 @@
 id: io.looking_glass.LookingGlass
 sdk: org.freedesktop.Sdk
 runtime: org.freedesktop.Platform
-runtime-version: "20.08"
+runtime-version: "21.08"
 finish-args:
   - --share=ipc
   - --socket=fallback-x11
