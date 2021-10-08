@@ -23,6 +23,8 @@ modules:
     config-opts:
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
       - -DENABLE_BACKTRACE:BOOL=OFF
+      - -DENABLE_X11:BOOL=ON
+      - -DENABLE_WAYLAND:BOOL=ON
     post-install:
       - install -Dm644 ../../resources/icon-128x128.png ${FLATPAK_DEST}/share/icons/hicolor/128x128/apps/looking-glass.png
       - install -Dm644 ../../looking-glass-client.desktop -t ${FLATPAK_DEST}/share/applications
@@ -31,10 +33,11 @@ modules:
       - &LookingGlass-source
         type: git
         url: https://github.com/gnif/LookingGlass.git
-        tag: B3
+        tag: B4
       - type: file
         path: looking-glass-client.desktop
     modules:
+
       - name: spice-protocol
         buildsystem: meson
         sources:
