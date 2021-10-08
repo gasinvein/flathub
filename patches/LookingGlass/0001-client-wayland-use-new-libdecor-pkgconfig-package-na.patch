@@ -1,0 +1,25 @@
+From b26067b0a02389656953c934f329f9eccc73835e Mon Sep 17 00:00:00 2001
+From: Quantum <quantum2048@gmail.com>
+Date: Fri, 23 Jul 2021 00:30:02 -0400
+Subject: [PATCH] [client] wayland: use new libdecor pkgconfig package name
+
+---
+ client/displayservers/Wayland/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/client/displayservers/Wayland/CMakeLists.txt b/client/displayservers/Wayland/CMakeLists.txt
+index ee18f02a..b62e22bd 100644
+--- a/client/displayservers/Wayland/CMakeLists.txt
++++ b/client/displayservers/Wayland/CMakeLists.txt
+@@ -13,7 +13,7 @@ set(displayserver_Wayland_SHELL_SRC "")
+ 
+ if (ENABLE_LIBDECOR)
+ 	pkg_check_modules(DISPLAYSERVER_Wayland_LIBDECOR REQUIRED
+-		libdecor-0.1
++		libdecor-0
+ 	)
+ 	list(APPEND DISPLAYSERVER_Wayland_PKGCONFIG_LIBRARIES ${DISPLAYSERVER_Wayland_LIBDECOR_LIBRARIES})
+ 	list(APPEND DISPLAYSERVER_Wayland_PKGCONFIG_INCLUDE_DIRS ${DISPLAYSERVER_Wayland_LIBDECOR_INCLUDE_DIRS})
+-- 
+2.31.1
+

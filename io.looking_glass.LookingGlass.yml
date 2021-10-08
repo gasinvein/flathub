@@ -23,6 +23,7 @@ modules:
     config-opts:
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
       - -DENABLE_BACKTRACE:BOOL=OFF
+      - -DENABLE_LIBDECOR:BOOL=ON
       - -DENABLE_X11:BOOL=ON
       - -DENABLE_WAYLAND:BOOL=ON
     post-install:
@@ -34,6 +35,9 @@ modules:
         type: git
         url: https://github.com/gnif/LookingGlass.git
         tag: B4
+      - type: patch
+        paths:
+          - patches/LookingGlass/0001-client-wayland-use-new-libdecor-pkgconfig-package-na.patch
       - type: file
         path: looking-glass-client.desktop
     modules:
@@ -45,3 +49,9 @@ modules:
             url: https://www.spice-space.org/download/releases/spice-protocol-0.14.3.tar.xz
             sha256: f986e5bc2a1598532c4897f889afb0df9257ac21c160c083703ae7c8de99487a
 
+      - name: libdecor
+        buildsystem: meson
+        sources:
+          - type: git
+            url: https://gitlab.gnome.org/jadahl/libdecor.git
+            tag: "0.1.0"
