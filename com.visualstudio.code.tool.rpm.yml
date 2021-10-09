@@ -57,15 +57,15 @@ modules:
   - name: rpmdevtools
     sources:
       - type: archive
-        url: "https://releases.pagure.org/rpmdevtools/rpmdevtools-8.10.tar.xz"
-        sha256: dddf6649f2bcbe0204bd59316a387a59bb9056aaa14593e1b4dcdfe8c05dafcc
-      - type: patch
-        paths:
-          - patches/rpmdevtools/0001-bumpspec-checksig-Avoid-python-3.6-regex-related-dep.patch
-          - patches/rpmdevtools/0001-Limit-newVersion-s-re.sub-to-a-single-replacement.patch
+        url: "https://releases.pagure.org/rpmdevtools/rpmdevtools-9.1.tar.xz"
+        sha256: 649487d72515de6fa7141cfed32809e6439591076cbfd30218696f6cc2e207ab
       - type: shell
         commands:
           - grep -lF "/usr/bin/python " * | xargs sed -i -e "s|/usr/bin/python |/usr/bin/python3 |"
+    modules:
+
+      - python3-progressbar2.json
+      - python3-requests_download.json
 
   - name: rpmlint
     no-autogen: true

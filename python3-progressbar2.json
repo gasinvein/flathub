@@ -1,0 +1,27 @@
+{
+    "name": "python3-progressbar2",
+    "buildsystem": "simple",
+    "build-commands": [
+        "pip3 install --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"progressbar2\""
+    ],
+    "sources": [
+        {
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/ee/ff/48bde5c0f013094d729fe4b0316ba2a24774b3ff1c52d924a8a4cb04078a/six-1.15.0-py2.py3-none-any.whl",
+            "sha256": "8b74bedcbbbaca38ff6d7491d76f2b06b3592611af620f8426e82dddb04a5ced"
+        },
+        {
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/d9/ff/623dfa533f3277199957229f053fdb2c73a9c18048680e1899c9a5c95e6b/python_utils-2.4.0-py2.py3-none-any.whl",
+            "sha256": "ebaadab29d0cb9dca0a82eab9c405f5be5125dbbff35b8f32cc433fa498dbaa7"
+        },
+        {
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/73/70/b6c3c7295ee52d0e1ba5b128134c9d073e7548a7f90fc6c0f71aa3c09029/progressbar2-3.52.1-py2.py3-none-any.whl",
+            "sha256": "a859a145cf5e129a39659ffa1d4fc8bc2f21889bfbb76253646658a510bf502a"
+        }
+    ],
+    "cleanup": [
+        "*"
+    ]
+}
