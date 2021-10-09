@@ -1,7 +1,7 @@
 id: com.visualstudio.code.tool.rpm
-default-branch: stable
+branch: '21.08'
 build-extension: true
-sdk: org.freedesktop.Sdk//19.08
+sdk: org.freedesktop.Sdk//21.08
 runtime: com.visualstudio.code
 runtime-version: stable
 separate-locales: false
@@ -11,6 +11,7 @@ build-options:
   env:
     C_INCLUDE_PATH: /app/tools/rpm/include
     CPLUS_INCLUDE_PATH: /app/tools/rpm/include
+    PYTHONPATH: /app/tools/rpm/lib/python3.9/site-packages
   prepend-path: /app/tools/rpm/bin
   prepend-ld-library-path: /app/tools/rpm/lib
   prepend-pkg-config-path: /app/tools/rpm/lib/pkgconfig
@@ -54,9 +55,6 @@ modules:
       - shared-modules/lua5.3/lua-5.3.5.json
 
   - name: rpmdevtools
-    build-options:
-      env:
-        PYTHONPATH: /app/tools/rpm/lib/python3.7/site-packages
     sources:
       - type: archive
         url: "https://releases.pagure.org/rpmdevtools/rpmdevtools-8.10.tar.xz"
@@ -96,7 +94,7 @@ modules:
         commands:
           - export PATH=$PATH:/app/tools/rpm/bin
           - |
-            rpm_sdk_python=/app/tools/rpm/lib/python3.7/site-packages
+            rpm_sdk_python=/app/tools/rpm/lib/python3.9/site-packages
             if [ -z "$PYTHONPATH" ]; then
               export PYTHONPATH=$rpm_sdk_python
             else
