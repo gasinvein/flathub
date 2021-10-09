@@ -54,6 +54,12 @@ modules:
 
       - shared-modules/lua5.3/lua-5.3.5.json
 
+      - name: popt
+        sources:
+          - type: archive
+            url: https://github.com/rpm-software-management/popt/archive/refs/tags/popt-1.18-release.tar.gz
+            sha256: 36245242c59b5a33698388e415a3e1efa2d48fc4aead91aeb2810b4c0744f4e3
+
   - name: rpmdevtools
     sources:
       - type: archive
