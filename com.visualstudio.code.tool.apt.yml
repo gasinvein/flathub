@@ -1,7 +1,7 @@
 id: com.visualstudio.code.tool.apt
-default-branch: "20.08"
+default-branch: "21.08"
 build-extension: true
-sdk: org.freedesktop.Sdk//20.08
+sdk: org.freedesktop.Sdk//21.08
 runtime: com.visualstudio.code-oss
 runtime-version: stable
 separate-locales: false
@@ -11,8 +11,8 @@ build-options:
   env:
     C_INCLUDE_PATH: /app/tools/apt/include
     CPLUS_INCLUDE_PATH: /app/tools/apt/include
-    PYTHONPATH: /app/tools/apt/lib/python3.8/site-packages
-    PERL5LIB: /app/tools/apt/lib/perl5/vendor_perl/5.32.0
+    PYTHONPATH: /app/tools/apt/lib/python3.9/site-packages
+    PERL5LIB: /app/tools/apt/lib/perl5/vendor_perl/5.34.0
   prepend-path: /app/tools/apt/bin
   prepend-ld-library-path: /app/tools/apt/lib
   prepend-pkg-config-path: /app/tools/apt/lib/pkgconfig
