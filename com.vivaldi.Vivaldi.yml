@@ -16,7 +16,8 @@ finish-args:
   - --system-talk-name=org.freedesktop.Avahi
   - --system-talk-name=org.freedesktop.UPower
   - --system-talk-name=org.freedesktop.NetworkManager
-  - --persist=.local/lib
+  # Should be `--persist=.local/lib`, but it doesn't work for sub-sandboxes
+  - --filesystem=~/.local/lib/vivaldi:create
 modules:
   - shared-modules/libsecret/libsecret.json
 
