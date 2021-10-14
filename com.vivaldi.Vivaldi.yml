@@ -24,7 +24,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/refi64/zypak.git
-        tag: v2021.09.1
+        commit: 58cfc12a1b2aba79e2b92b62e7746e40177dba5f
 
   - name: patch
     buildsystem: simple
