@@ -107,8 +107,8 @@ modules:
     buildsystem: cmake-ninja
     sources:
       - type: archive
-        url: "https://github.com/KDE/konsole/archive/v18.12.1.tar.gz"
-        sha256: d267af253daa4756579f1011db530b1259940bdfffadcf4762ed6a9c9a218379
+        url: "https://github.com/KDE/konsole/archive/v21.08.2.tar.gz"
+        sha256: cbdfbd9ccd65be29bee543ea9a63d25c54d67ed0637b20a4428a723fcaa4d979
     cleanup:
       - /share/applications
       - /share/metainfo
