@@ -65,10 +65,10 @@ modules:
       - type: extra-data
         only-arches:
           - x86_64
-        url: http://repo.vivaldi.com/stable/deb/pool/main/vivaldi-stable_4.2.2406.54-1_amd64.deb
+        url: http://repo.vivaldi.com/stable/deb/pool/main/vivaldi-stable_4.3.2439.56-1_amd64.deb
         filename: vivaldi.deb
-        size: 85980896
-        sha256: 02c3a2a28b0e53bed563a94f3e504ec72dd206cd83cbaa141319b427dcf23c79
+        size: 88024500
+        sha256: 65a842931cc5c3ff2b12c24c42ddb0bcf29e02403005e01bf1d30eb40a4793d5
         x-checker-data: &x-checker-data
           type: debian-repo
           root: http://repo.vivaldi.com/stable/deb/
@@ -88,8 +88,8 @@ modules:
       - type: extra-data
         only-arches:
           - arm
-        url: http://repo.vivaldi.com/stable/deb/pool/main/vivaldi-stable_4.2.2406.54-1_armhf.deb
+        url: http://repo.vivaldi.com/stable/deb/pool/main/vivaldi-stable_4.3.2439.56-1_armhf.deb
         filename: vivaldi.deb
-        size: 77346280
-        sha256: c9057dc0a74eaa64f0eaf936186230cb0ec0b6a777c15acdabd9cec32262c7c4
+        size: 78990996
+        sha256: 58b8d94017c59689912c8b474dab1bd95c3863a326ff1df1d47740eb68d303f0
         x-checker-data: *x-checker-data
