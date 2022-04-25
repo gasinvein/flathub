@@ -1,14 +1,15 @@
 id: land.deno.Deno
 sdk: org.freedesktop.Sdk
 runtime: org.freedesktop.Platform
-runtime-version: "19.08"
+runtime-version: "21.08"
 finish-args:
   - --share=network
 command: deno
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.rust-stable
+  - org.freedesktop.Sdk.Extension.llvm12
 build-options:
-  append-path: /usr/lib/sdk/rust-stable/bin
+  append-path: /usr/lib/sdk/rust-stable/bin:/usr/lib/sdk/llvm12/bin
 cleanup:
   - /include
   - /lib/pkgconfig
@@ -21,7 +22,7 @@ modules:
         CARGO_HOME: /run/build/deno/cargo
         V8_FROM_SOURCE: "1"
         GN: /app/bin/gn
-        CLANG_BASE_PATH: /usr
+        CLANG_BASE_PATH: /usr/lib/sdk/llvm12
         GN_ARGS: cc_wrapper="ccache" no_inline_line_tables=false
     buildsystem: simple
     build-commands:
@@ -42,18 +43,6 @@ modules:
 
       - generated-sources.json
     modules:
-
-      - name: lld
-        buildsystem: cmake-ninja
-        builddir: true
-        cleanup:
-          - /lib
-          - /include
-        sources:
-          - type: archive
-            url: "https://github.com/llvm/llvm-project/releases/download/llvmorg-8.0.1/lld-8.0.1.src.tar.xz"
-            sha256: 9fba1e94249bd7913e8a6c3aadcb308b76c8c3d83c5ce36c99c3f34d73873d88
-
       - name: gn
         build-options:
           env:
