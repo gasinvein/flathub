@@ -6,9 +6,9 @@ finish-args:
   - --share=network
 command: deno
 sdk-extensions:
-  - org.freedesktop.Sdk.Extension.rust-nightly
+  - org.freedesktop.Sdk.Extension.rust-stable
 build-options:
-  append-path: /usr/lib/sdk/rust-nightly/bin
+  append-path: /usr/lib/sdk/rust-stable/bin
 cleanup:
   - /include
   - /lib/pkgconfig
