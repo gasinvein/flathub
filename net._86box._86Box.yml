@@ -1,0 +1,105 @@
+id: net._86box._86Box
+sdk: org.kde.Sdk
+runtime: org.kde.Platform
+runtime-version: 5.15-21.08
+finish-args:
+  - --share=ipc
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --device=dri
+  - --socket=pulseaudio
+  - --share=network
+command: 86Box
+rename-icon: 86Box
+rename-desktop-file: 86Box.desktop
+modules:
+  - name: 86box
+    buildsystem: cmake-ninja
+    post-install:
+      - mv ${FLATPAK_DEST}/bin/86Box{,.bin}
+      - install -Dm755 86Box.sh ${FLATPAK_DEST}/bin/86Box
+      - |
+        set -x -e
+        ICO_SRC=src/win/icons/86Box-green.ico
+        while read -a ARGS; do
+          for ARG in "${ARGS[@]}"; do
+            case "$ARG" in
+              --width=*)
+                WIDTH=${ARG#--*=}
+              ;;
+              --height=*)
+                HEIGHT=${ARG#--*=}
+              ;;
+            esac
+          done
+          [ -n "$WIDTH" -a -n "$HEIGHT" -a "$WIDTH" = "$HEIGHT" ]
+          ICON_DEST=${FLATPAK_DEST}/share/icons/hicolor/${WIDTH}x${HEIGHT}/apps
+          mkdir -p "$ICON_DEST"
+          icotool -x -o "$ICON_DEST/86Box.png" "${ARGS[1]}" "$ICO_SRC" ||:
+        done < <(icotool -l "$ICO_SRC")
+      - install -Dm644 -t ${FLATPAK_DEST}/share/applications 86Box.desktop
+    sources:
+      - type: git
+        url: https://github.com/86Box/86Box.git
+        tag: v3.6
+        x-checker-data:
+          type: git
+        commit: ad8ea20e14c9b5d0e2c54d1d44f59a5f33572cb0
+      - type: script
+        dest-filename: 86Box.sh
+        commands:
+          - mkdir -p ${XDG_CONFIG_HOME}/86box
+          - exec 86Box.bin --vmpath ${XDG_CONFIG_HOME}/86box "$@"
+      - type: file
+        path: 86Box.desktop
+    modules:
+      - name: rtmidi
+        buildsystem: cmake-ninja
+        config-opts:
+          - -DRTMIDI_API_JACK=OFF
+        sources:
+          - type: git
+            url: https://github.com/thestk/rtmidi.git
+            tag: 5.0.0
+
+      - name: fluidsynth
+        buildsystem: cmake-ninja
+        sources:
+          - type: git
+            url: https://github.com/FluidSynth/fluidsynth.git
+            tag: v2.2.8
+
+      - name: faudio
+        buildsystem: cmake-ninja
+        sources:
+          - type: git
+            url: https://github.com/FNA-XNA/FAudio.git
+            tag: '22.07'
+
+      - name: libevdev
+        sources:
+          - type: archive
+            url: https://www.freedesktop.org/software/libevdev/libevdev-1.12.0.tar.xz
+            sha256: 2f729e3480695791f9482e8388bd723402b89f0eaf118057bbdea3cecee9b237
+
+      - name: icoutils
+        sources:
+          - type: archive
+            url: http://savannah.nongnu.org/download/icoutils/icoutils-0.32.3.tar.bz2
+            sha256: 17abe02d043a253b68b47e3af69c9fc755b895db68fdc8811786125df564c6e0
+        #cleanup:
+        #  - '*'
+
+  - name: 86Box-roms
+    buildsystem: simple
+    build-commands:
+      - mkdir -p ${FLATPAK_DEST}/share/86Box/roms
+      - cp -a * ${FLATPAK_DEST}/share/86Box/roms/
+    sources:
+      - type: git
+        url: https://github.com/86Box/roms.git
+        tag: '20220701'
+        x-checker-data:
+          type: git
+          tag-pattern: (\d{8})
+        commit: 25b1e6ad8c624416a102051f3945f41a35b9ff08

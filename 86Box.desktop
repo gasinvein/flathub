@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=86Box
+GenericName=Emulator of x86-based machines based on PCem
+Exec=86Box
+Icon=86Box
+Categories=System;Emulator;
